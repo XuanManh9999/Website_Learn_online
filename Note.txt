@@ -1,0 +1,23 @@
+Tổng thời gian gồm có 7 tuần
+Mỗi tuần báo cáo một lần qua class zoom
+
+Xây dựng website học trực tuyến.
+
+Sử dụng các công nghệ sau:
+
+Backend: Spring boot, jpa, spring data jpa, spring security
+
+Front-end: Html, scss, reactjs, ant, react router dom, redux.
+
+CSDL: Mysql
+
+-------------------------------------------------------------------Phân tích yêu cầu--------------------------------------------------------------------
+Những chức năng dự kiến sẽ có:
+Admin: Quản lý người dùng, quản lý khóa học, quản lý bài viết.
+User: Đăng nhập, đăng ký, quên mật khẩu, cập nhật thông tin, đăng ký khóa học, xem bài viết, bình luận bài viết. 
+
+Khi đăng ký khóa học sẽ có lộ trình học, các video sẽ khóa, chỉ khi nào học xong một video kia thì nó mới hiện video tiếp theo.
+Trong video sẽ có tài liệu. Học hết một video sẽ có điểm để đua top. Đăng ký khóa học.
+Có % hiển thị để xem tiến độ hoàn thành khóa học.
+Xây dựng chức năng bình luận.
+

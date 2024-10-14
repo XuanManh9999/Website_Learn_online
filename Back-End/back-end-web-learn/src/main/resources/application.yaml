@@ -1,0 +1,17 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: project-website-learn-online
+  datasource:
+    url: jdbc:mysql://localhost:3306/hotel-booking
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+
