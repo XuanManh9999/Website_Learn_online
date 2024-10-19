@@ -41,10 +41,6 @@ public class Course extends BaseEntity {
 
     @Column(name = "order_number")
     private Integer orderNumber = 0;
-    public void prePersist() {
-        CourseServiceImpl courseService = new CourseServiceImpl();
-        this.orderNumber = courseService.getNextOrderNumber();
-    }
     @Column(name = "featured_course")
     private Integer featuredCourse = 0;
 
