@@ -4,7 +4,7 @@ spring:
   application:
     name: project-website-learn-online
   datasource:
-    url: jdbc:mysql://localhost:3306/hotel-booking
+    url: jdbc:mysql://localhost:3306/learing-online
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -13,5 +13,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+    show-sql: true
 
