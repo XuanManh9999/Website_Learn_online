@@ -13,6 +13,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
-
+jwt:
+  EXPIRATION_TIME: 86400000  # 1000 * 60 * 60 * 24 (1 ngày tính bằng mili giây)

@@ -2,6 +2,8 @@ package com.toilamanh.toilamanh.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,8 @@ import java.util.function.Function;
 @Service
 public class JWTUtils {
     private String secreteString = "YFBRaoJ7LxB2VB10cGWI5MIua1/xHvnpcOXDLIephhzpmpS2qPb+ijVeiCVhT0dK";
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;//for 7 days
+    @Value("${jwt.EXPIRATION_TIME}")
+    private Long EXPIRATION_TIME;//for 7 days
     private final SecretKey Key;
 
     public JWTUtils () {
@@ -26,6 +29,7 @@ public class JWTUtils {
     public String generateToken (UserDetails userDetails) {
         return Jwts.builder()
                 .subject(userDetails.getUsername())
+                .claim("role", userDetails.getAuthorities().iterator().next().getAuthority())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(Key)
@@ -35,6 +39,7 @@ public class JWTUtils {
     public String extractUsername (String token) {
         return extractClaims(token, Claims::getSubject);
     }
+
 
     private <T> T extractClaims (String token, Function<Claims, T> claimsResolver) {
         return claimsResolver.apply(Jwts.parser().verifyWith(Key).build().parseSignedClaims(token).getPayload());
