@@ -1,8 +1,9 @@
+import TYPE_APP from "../type"
 export const up = () => ({
-    type: "UP",
+    type: TYPE_APP.UP,
     value: 1
 })
 export const down = () => ({
-    type: "DOWN",
+    type: TYPE_APP.DOWN,
     value: 1
 })
