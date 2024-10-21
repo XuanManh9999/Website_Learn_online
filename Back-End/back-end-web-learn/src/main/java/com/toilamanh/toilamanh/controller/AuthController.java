@@ -1,24 +1,18 @@
 package com.toilamanh.toilamanh.controller;
 
-import com.toilamanh.toilamanh.dto.request.InfoRequest;
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
 import com.toilamanh.toilamanh.dto.response.RegisterResponse;
-import com.toilamanh.toilamanh.dto.response.UserDTO;
 import com.toilamanh.toilamanh.service.interfac.AuthService;
-import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,7 +22,7 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping(value = "/login")
-    public ResponseEntity<LoginResponse> login (@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginResponse> login (@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUserName();
         String password = loginRequest.getPassword();
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
@@ -72,16 +66,19 @@ public class AuthController {
     }
 
 
-    @PostMapping(value = "/info")
-    @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<RegisterResponse> myInfo (@RequestBody InfoRequest infoRequest) {
-        if (!infoRequest.getToken().isBlank()) {
-            RegisterResponse response = authService.myinfo(infoRequest);
+    @GetMapping(value = "/info")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<RegisterResponse> myInfo (HttpServletRequest request) {
+        // Lấy token từ header Authorization
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String token = authorizationHeader.substring(7); // Lấy token từ header
+            RegisterResponse response = authService.myinfo(token); // Gọi service với token
             return ResponseEntity.status(response.getStatus()).body(response);
-        }else {
+        } else {
             RegisterResponse response = RegisterResponse.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
-                    .message("token is required")
+                    .message("Token is required")
                     .build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }

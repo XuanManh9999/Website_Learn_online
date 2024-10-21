@@ -1,6 +1,5 @@
 package com.toilamanh.toilamanh.service.impl;
 
-import com.toilamanh.toilamanh.dto.request.InfoRequest;
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
@@ -71,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
             return LoginResponse.builder()
                     .token(token)
                     .status(HttpStatus.OK.value())
+                    .role(user.getRole())
                     .expirationTime("7 Days")
                     .message("Login Success")
                     .build();
@@ -83,9 +83,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterResponse myinfo(InfoRequest infoRequest) {
+    public RegisterResponse myinfo(String token) {
         try {
-            String userName = jwtUtilsObjectFactory.getObject().extractUsername(infoRequest.getToken());
+            String userName = jwtUtilsObjectFactory.getObject().extractUsername(token);
             User user = userRepository.findByUserName(userName).orElseThrow(() -> new OurException("userName is not found") );
             UserDTO userDTO = mapperObjectFactory.getObject().map(user, UserDTO.class);
             return RegisterResponse.builder()

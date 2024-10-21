@@ -13,6 +13,7 @@ public class LoginResponse {
     private Integer status;
     private String message;
     private String token;
+    private String role;
     private String refreshToken;
     private String expirationTime;
 }

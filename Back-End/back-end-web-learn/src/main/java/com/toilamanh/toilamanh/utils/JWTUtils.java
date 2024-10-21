@@ -2,7 +2,6 @@ package com.toilamanh.toilamanh.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,13 +15,11 @@ import java.util.function.Function;
 
 @Service
 public class JWTUtils {
-    private String secreteString = "YFBRaoJ7LxB2VB10cGWI5MIua1/xHvnpcOXDLIephhzpmpS2qPb+ijVeiCVhT0dK";
     @Value("${jwt.EXPIRATION_TIME}")
     private Long EXPIRATION_TIME;//for 7 days
     private final SecretKey Key;
-
-    public JWTUtils () {
-        byte[] keyBytes = Base64.getDecoder().decode(secreteString.getBytes(StandardCharsets.UTF_8));
+    public JWTUtils (@Value("${jwt.SECRETE}") String secret) {
+        byte[] keyBytes = Base64.getDecoder().decode(secret.getBytes(StandardCharsets.UTF_8));
         this.Key = new SecretKeySpec(keyBytes, "HmacSHA256");
     }
 
