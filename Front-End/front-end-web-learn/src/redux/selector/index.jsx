@@ -1,0 +1,1 @@
+export const couterSelector = (state => state.couter)
