@@ -1,9 +1,7 @@
 package com.toilamanh.toilamanh.exception;
 
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
-import com.toilamanh.toilamanh.exception.custom.CustomException;
-import com.toilamanh.toilamanh.exception.custom.OurException;
-import com.toilamanh.toilamanh.exception.custom.TokenExpiredException;
+import com.toilamanh.toilamanh.exception.custom.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,11 +26,18 @@ public class GlobalException {
         return ResponseEntity.internalServerError().body(apiResponse);
     }
 
-    @ExceptionHandler(value = ExpiredJwtException.class)
-    ResponseEntity<ApiResponse> handlingException(ExpiredJwtException exception){
+    @ExceptionHandler(value = OtpNotFound.class)
+    ResponseEntity<ApiResponse> handlingException(OtpNotFound exception){
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setMessage("JWT token has expired. Please log in again.");
-        apiResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiResponse);
+        apiResponse.setMessage(exception.getMessage());
+        apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+    @ExceptionHandler(value = UserAciveNotFound.class)
+    ResponseEntity<ApiResponse> handlingException(UserAciveNotFound exception){
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage(exception.getMessage());
+        apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
     }
 }

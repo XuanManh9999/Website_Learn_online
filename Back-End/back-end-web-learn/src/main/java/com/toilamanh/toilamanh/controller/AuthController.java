@@ -1,10 +1,13 @@
 package com.toilamanh.toilamanh.controller;
 
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
+import com.toilamanh.toilamanh.dto.request.OtpRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
+import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
 import com.toilamanh.toilamanh.dto.response.RegisterResponse;
 import com.toilamanh.toilamanh.service.interfac.AuthService;
+import com.toilamanh.toilamanh.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -60,11 +63,14 @@ public class AuthController {
                             .status(HttpStatus.BAD_REQUEST.value()).build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(registerResponse);
         }
+        String otp_code = Utils.generateOTP();
+
+        authService.sendOTPEmail(email, otp_code);
+        authService.saveOTP(email, otp_code);
 
         response = authService.register(registerRequest);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
-
 
     @GetMapping(value = "/info")
     @PreAuthorize("hasAuthority('USER')")
@@ -83,6 +89,31 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
+
+    @PostMapping(value = "/verify-otp")
+    public ResponseEntity<ApiResponse> verifyOtp(@RequestBody OtpRequest otpRequest) {
+
+        String email = otpRequest.getEmail();
+        String otp = otpRequest.getOtp();
+        if (email == null || otp == null || otp.isEmpty()) {
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
+                   .status(HttpStatus.BAD_REQUEST.value())
+                   .message("email/otp is required")
+                   .build());
+        }
+        boolean isValid = authService.isValidOTP(otpRequest.getEmail(), otpRequest.getOtp());
+        if (isValid) {
+            ApiResponse response =  authService.UpdateStatusUser(email, otp);
+            return ResponseEntity.status(response.getStatus()).body(response);
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .message("otp is Expired")
+                    .build());
+        }
+    }
+
 
 }
 

@@ -16,7 +16,7 @@ public abstract class BaseEntity {
     private Long id;
 
     @Column(name = "active")
-    private Integer active = 1;  // Giá trị mặc định là 1
+    private Integer active = 0;  // Giá trị mặc định là 0
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
