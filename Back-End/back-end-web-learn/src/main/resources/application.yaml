@@ -1,6 +1,13 @@
 server:
   port: 8080
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 47916404883-mi6ii5eh6fn82ulqdojrvjohg32fnkfr.apps.googleusercontent.com
+            client-secret: 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
   application:
     name: project-website-learn-online
   datasource:
@@ -27,7 +34,7 @@ spring:
           auth: true
           starttls:
             enable: true
-
+#            config login email
 
 jwt:
   EXPIRATION_TIME: 86400000   # 1000 * 60 * 60 * 24 (1 ngày tính bằng mili giây)

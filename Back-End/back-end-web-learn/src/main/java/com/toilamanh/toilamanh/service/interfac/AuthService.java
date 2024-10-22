@@ -13,6 +13,9 @@ public interface AuthService {
     void saveOTP(String email, String otp);
     boolean isValidOTP(String email, String otp);
     void sendOTPEmail(String toEmail, String otp);
-    ApiResponse UpdateStatusUser(String email, String otp);
+    void updateStatusUser(String email, String otp);
+    void forgotPassword(String email);
+    void sendNewPasswordWithEmail(String toEmail, String password);
+    void sendPasswordUser(String email, String otp);
 
 }

@@ -1,5 +1,6 @@
 package com.toilamanh.toilamanh.controller;
 
+import com.toilamanh.toilamanh.dto.request.ForgotPasswordRequest;
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
 import com.toilamanh.toilamanh.dto.request.OtpRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
@@ -7,7 +8,6 @@ import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
 import com.toilamanh.toilamanh.dto.response.RegisterResponse;
 import com.toilamanh.toilamanh.service.interfac.AuthService;
-import com.toilamanh.toilamanh.utils.Utils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,10 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthController {
     AuthService authService;
-
     @PostMapping(value = "/login")
     public ResponseEntity<LoginResponse> login (@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUserName();
@@ -63,11 +65,6 @@ public class AuthController {
                             .status(HttpStatus.BAD_REQUEST.value()).build();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(registerResponse);
         }
-        String otp_code = Utils.generateOTP();
-
-        authService.sendOTPEmail(email, otp_code);
-        authService.saveOTP(email, otp_code);
-
         response = authService.register(registerRequest);
         return ResponseEntity.status(response.getStatus()).body(response);
     }
@@ -90,35 +87,90 @@ public class AuthController {
         }
     }
 
-
-    @PostMapping(value = "/verify-otp")
-    public ResponseEntity<ApiResponse> verifyOtp(@RequestBody OtpRequest otpRequest) {
+    @PostMapping(value = "/verify-otp-register")
+    public ResponseEntity<ApiResponse> verifyOtpRegister(@RequestBody OtpRequest otpRequest) {
 
         String email = otpRequest.getEmail();
         String otp = otpRequest.getOtp();
         if (email == null || otp == null || otp.isEmpty()) {
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
-                   .status(HttpStatus.BAD_REQUEST.value())
-                   .message("email/otp is required")
-                   .build());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message("email/otp is required")
+                    .build());
         }
         boolean isValid = authService.isValidOTP(otpRequest.getEmail(), otpRequest.getOtp());
         if (isValid) {
-            ApiResponse response =  authService.UpdateStatusUser(email, otp);
-            return ResponseEntity.status(response.getStatus()).body(response);
+            authService.updateStatusUser(email, otp);
+            return ResponseEntity.status(HttpStatus.OK.value()).body(
+                    ApiResponse.builder()
+                            .status(HttpStatus.OK.value())
+                            .message("Register User Done")
+                            .build()
+            );
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
                     .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .message("otp is Expired")
+                    .message("OTP is Expired")
                     .build());
         }
     }
 
 
-    @PostMapping(value = "/forgot-password")
-    public ResponseEntity<ApiResponse> forgotPassword(@RequestBody String email) {
-        return null;
+    @PostMapping(value = "/verify-otp-forgot-password")
+    public ResponseEntity<ApiResponse> verifyOtpForgotPassword(@RequestBody OtpRequest otpRequest) {
+
+        String email = otpRequest.getEmail();
+        String otp = otpRequest.getOtp();
+        if (email == null || otp == null || otp.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message("email/otp is required")
+                    .build());
+        }
+        boolean isValid = authService.isValidOTP(email, otp);
+        if (isValid) {
+            authService.sendPasswordUser(email, otp);
+            return ResponseEntity.status(HttpStatus.OK.value()).body(
+                    ApiResponse.builder()
+                            .status(HttpStatus.OK.value())
+                            .message("Change Password Done")
+                            .build()
+            );
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    .message("OTP is Expired")
+                    .build());
+        }
     }
 
+    @PostMapping(value = "/forgot-password")
+    public ResponseEntity<ApiResponse> forgotPassword(@RequestBody ForgotPasswordRequest passwordRequest) {
+        String email = passwordRequest.getEmail();
+        if (email == null || email.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                    .body(
+                            ApiResponse.builder()
+                                    .status(HttpStatus.BAD_REQUEST.value())
+                                    .message("email is required")
+                                    .build()
+                    );
+        }
+        authService.forgotPassword(email);
+        return ResponseEntity.status(HttpStatus.OK.value())
+                .body(
+                        ApiResponse.builder()
+                                .message("Active forgot-password check done")
+                                .status(HttpStatus.OK.value())
+                                .build()
+                );
+    }
+
+
+//    Login gooole
+    @GetMapping("/signingoole")
+    public Map<String, Object> currentUser (OAuth2AuthenticationToken oAuth2AuthenticationToken) {
+        return  oAuth2AuthenticationToken.getPrincipal().getAttributes();
+    }
 }
 

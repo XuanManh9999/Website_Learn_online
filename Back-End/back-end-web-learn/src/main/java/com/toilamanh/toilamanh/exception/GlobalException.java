@@ -14,7 +14,7 @@ public class GlobalException {
     ResponseEntity<ApiResponse> handlingRuntimeException(OurException exception){
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setMessage(exception.getMessage());
-        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
         return ResponseEntity.badRequest().body(apiResponse);
     }
 
@@ -39,5 +39,13 @@ public class GlobalException {
         apiResponse.setMessage(exception.getMessage());
         apiResponse.setStatus(HttpStatus.NOT_FOUND.value());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiResponse);
+    }
+
+    @ExceptionHandler(value = ExitsException.class)
+    ResponseEntity<ApiResponse> handlingException(ExitsException exception){
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage(exception.getMessage());
+        apiResponse.setStatus(HttpStatus.CONFLICT.value());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
     }
 }
