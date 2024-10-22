@@ -149,8 +149,8 @@ public class AuthServiceImpl implements AuthService {
     }
     @Override
     public boolean isValidOTP(String email, String otp) {
-        Optional<Otp> otpEntity = otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp);
-        if (otpEntity.isPresent() && otpEntity.get().getExpiresAt().isAfter(LocalDateTime.now())) {
+        Otp otpEntity = otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OurException("OTP Không đúng, vui lòng nhập lại."));
+        if ( otpEntity.getExpiresAt().isAfter(LocalDateTime.now())) {
             return true;
         }
         return false;

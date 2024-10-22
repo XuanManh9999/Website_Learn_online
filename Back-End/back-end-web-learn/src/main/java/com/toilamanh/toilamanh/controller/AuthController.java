@@ -115,5 +115,10 @@ public class AuthController {
     }
 
 
+    @PostMapping(value = "/forgot-password")
+    public ResponseEntity<ApiResponse> forgotPassword(@RequestBody String email) {
+        return null;
+    }
+
 }
 
