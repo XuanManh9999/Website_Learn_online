@@ -1,9 +1,8 @@
-import Couter from "./components/public/Couter";
-
+import React from "react";
+import AppRoutes from "./routes";
 function App() {
   return (
-    <Couter>
-    </Couter>
+    <AppRoutes/>
   );
 }
 
