@@ -1,9 +1,6 @@
 package com.toilamanh.toilamanh.controller;
 
-import com.toilamanh.toilamanh.dto.request.ForgotPasswordRequest;
-import com.toilamanh.toilamanh.dto.request.LoginRequest;
-import com.toilamanh.toilamanh.dto.request.OtpRequest;
-import com.toilamanh.toilamanh.dto.request.RegisterRequest;
+import com.toilamanh.toilamanh.dto.request.*;
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
 import com.toilamanh.toilamanh.dto.response.RegisterResponse;
@@ -15,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -166,11 +165,38 @@ public class AuthController {
                 );
     }
 
-
 //    Login gooole
-    @GetMapping("/signingoole")
-    public Map<String, Object> currentUser (OAuth2AuthenticationToken oAuth2AuthenticationToken) {
-        return  oAuth2AuthenticationToken.getPrincipal().getAttributes();
+    @GetMapping(value = "/signingoole")
+    public String currentUser (OAuth2AuthenticationToken oAuth2AuthenticationToken) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof OAuth2AuthenticationToken) {
+             oAuth2AuthenticationToken.getPrincipal().getName();
+        } else {
+            // Người dùng chưa đăng nhập bằng OAuth2
+            return "No authenticated user found";
+        }
+        return null;
+    }
+
+
+    // change password
+    @PostMapping(value = "/change-password")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<ApiResponse> handleChangePassword (HttpServletRequest request, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ") || changePasswordRequest != null) {
+            String token = authorizationHeader.substring(7); // Lấy token từ header
+            ApiResponse apiResponse = authService.handleChangePassword(changePasswordRequest, token);
+            return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
+                    .body(ApiResponse.builder()
+                            .message("Token/password is required")
+                            .status(HttpStatus.BAD_REQUEST.value())
+                            .build()
+                    );
+
+        }
     }
 }
 

@@ -2,14 +2,23 @@ package com.toilamanh.toilamanh.exception;
 
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.exception.custom.*;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
 @ControllerAdvice
 public class GlobalException {
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ApiResponse> handlingException(Exception exception) {
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage(exception.getMessage());
+        apiResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return ResponseEntity.internalServerError().body(apiResponse);
+    }
+
+
     @ExceptionHandler(value = OurException.class)
     ResponseEntity<ApiResponse> handlingRuntimeException(OurException exception){
         ApiResponse apiResponse = new ApiResponse();
@@ -48,4 +57,20 @@ public class GlobalException {
         apiResponse.setStatus(HttpStatus.CONFLICT.value());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(apiResponse);
     }
+
+    @ExceptionHandler(value = BadException.class)
+    ResponseEntity<ApiResponse> handlingException(BadException exception){
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage(exception.getMessage());
+        apiResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiResponse);
+    }
+    @ExceptionHandler(value = ServerException.class)
+    ResponseEntity<ApiResponse> handlingException(ServerException exception){
+        ApiResponse apiResponse = new ApiResponse();
+        apiResponse.setMessage(exception.getMessage());
+        apiResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
+    }
+
 }

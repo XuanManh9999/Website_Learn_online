@@ -1,5 +1,6 @@
 package com.toilamanh.toilamanh.service.interfac;
 
+import com.toilamanh.toilamanh.dto.request.ChangePasswordRequest;
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
@@ -17,5 +18,6 @@ public interface AuthService {
     void forgotPassword(String email);
     void sendNewPasswordWithEmail(String toEmail, String password);
     void sendPasswordUser(String email, String otp);
+    ApiResponse handleChangePassword(ChangePasswordRequest changePasswordRequest, String token);
 
 }

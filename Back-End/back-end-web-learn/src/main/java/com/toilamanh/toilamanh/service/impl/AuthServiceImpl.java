@@ -1,7 +1,9 @@
 package com.toilamanh.toilamanh.service.impl;
 
+import com.toilamanh.toilamanh.dto.request.ChangePasswordRequest;
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
+import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
 import com.toilamanh.toilamanh.dto.response.RegisterResponse;
 import com.toilamanh.toilamanh.dto.response.UserDTO;
@@ -42,45 +44,66 @@ public class AuthServiceImpl implements AuthService {
     ObjectFactory<OtpRepository> otpRepositoryObjectFactory;
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
-        Optional<User> user = userRepository.findByUserNameAndActive(registerRequest.getUsername(), 1);
-        if (user.isPresent()) {
-            throw new ExitsException("Username already exist");
+        try {
+            Optional<User> user = userRepository.findByUserNameAndActive(registerRequest.getUsername(), 1);
+            if (user.isPresent()) {
+                throw new ExitsException("Username already exist");
+            }
+            User newUser = new User();
+            newUser.setEmail(registerRequest.getEmail());
+            newUser.setUserName(registerRequest.getUsername());
+            newUser.setPassword(objectFactory.getObject().encode(registerRequest.getPassword()));
+            User saveUser = userRepository.save(newUser);
+            UserDTO userDTO = mapperObjectFactory.getObject().map(saveUser, UserDTO.class);
+
+            String OTP = Utils.generateOTP();
+            // Save OTP WITH DB
+            saveOTP(registerRequest.getEmail(), OTP);
+
+            // SEND OTP WITH EMAIL
+            sendOTPEmail(registerRequest.getEmail(), OTP);
+
+            return RegisterResponse.builder()
+                    .status(HttpStatus.CREATED.value())
+                    .message("Create User Success")
+                    .userDTO(userDTO).build();
+        }catch (ExitsException e) {
+            throw e;
+        }catch (Exception e) {
+            throw new ServerException("An error from server with api register: " + e);
         }
-        User newUser = new User();
-        newUser.setEmail(registerRequest.getEmail());
-        newUser.setUserName(registerRequest.getUsername());
-        newUser.setPassword(objectFactory.getObject().encode(registerRequest.getPassword()));
-        User saveUser = userRepository.save(newUser);
-        UserDTO userDTO = mapperObjectFactory.getObject().map(saveUser, UserDTO.class);
-
-        String OTP = Utils.generateOTP();
-        // Save OTP WITH DB
-        saveOTP(registerRequest.getEmail(), OTP);
-
-        // SEND OTP WITH EMAIL
-        sendOTPEmail(registerRequest.getEmail(), OTP);
-
-        return RegisterResponse.builder()
-                .status(HttpStatus.CREATED.value())
-                .message("Create User Success")
-                .userDTO(userDTO).build();
     }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
-        var user = userRepository.findByUserNameAndActive(loginRequest.getUserName(), 1).orElseThrow(() -> new UserAciveNotFound("User name: " + loginRequest.getUserName() + " Not Found"));
-        authenticationManagerObjectFactory.getObject()
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
+        try {
+            var user = userRepository.findByUserNameAndActive(loginRequest.getUserName(), 1).orElseThrow(() -> new UserAciveNotFound("User name: " + loginRequest.getUserName() + " Not Found"));
+            boolean isPassword = objectFactory.getObject().matches(loginRequest.getPassword(), user.getPassword());
+            if (!isPassword) {
+                throw new ServerException("Wrong password");
+            }
 
-        var token = jwtUtilsObjectFactory.getObject().generateToken(user);
+            authenticationManagerObjectFactory.getObject()
+                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
 
-        return LoginResponse.builder()
-                .token(token)
-                .status(HttpStatus.OK.value())
-                .role(user.getRole())
-                .expirationTime("7 Days")
-                .message("Login Success")
-                .build();
+            var token = jwtUtilsObjectFactory.getObject().generateToken(user);
+
+            return LoginResponse.builder()
+                    .token(token)
+                    .status(HttpStatus.OK.value())
+                    .role(user.getRole())
+                    .expirationTime("7 Days")
+                    .message("Login Success")
+                    .build();
+        }
+        catch (UserAciveNotFound e) {
+            throw e;
+        }catch (ServerException e) {
+            throw e;
+        }
+            catch (Exception e) {
+            throw new ServerException("An error from server with api login: " + e);
+        }
     }
 
     @Override
@@ -100,6 +123,36 @@ public class AuthServiceImpl implements AuthService {
         }
     }
     @Override
+    public ApiResponse handleChangePassword(ChangePasswordRequest changePasswordRequest, String token) {
+        try {
+            String userName = jwtUtilsObjectFactory.getObject().extractUsername(token);
+            User user =  userRepository.findByUserNameAndActive(userName, 1).orElseThrow(() -> new UserAciveNotFound("userName is not found") );
+            // so sanh password
+            Boolean isPassword = objectFactory.getObject().matches(changePasswordRequest.getPassword(), user.getPassword());
+            Boolean isPasswordDefi = objectFactory.getObject().matches(changePasswordRequest.getNewPassword(), user.getPassword());
+            if (!isPassword) {
+                throw new BadException("Mật khẩu cung cấp không khớp. Vui lòng kiểm tra lại.");
+            }
+            if (isPasswordDefi) {
+                throw new BadException("Mật khẩu mới phải khác với mật khẩu cũ.");
+            }
+
+            user.setPassword(objectFactory.getObject().encode(changePasswordRequest.getNewPassword()));
+            userRepository.save(user);
+            return ApiResponse.builder()
+                    .message("Thay đổi mật khẩu thành công.")
+                    .status(HttpStatus.OK.value())
+                    .build();
+        }catch (UserAciveNotFound e) {
+            throw e;
+        }catch (BadException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new ServerException("An error from server with api handleChangePassword: " + e.getMessage());
+        }
+    }
+    @Override
     public void sendOTPEmail(String toEmail, String otp) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -108,7 +161,7 @@ public class AuthServiceImpl implements AuthService {
             message.setText("Your OTP code is: " + otp);
             mailSenderFactory.getObject().send(message);
         } catch (Exception e) {
-            System.out.println("Failed to send email: " + e.getMessage());
+            throw new ServerException("Failed to send email:: " + e.getMessage());
         }
     }
 
@@ -121,52 +174,88 @@ public class AuthServiceImpl implements AuthService {
             message.setText("Your new password is: " + password);
             mailSenderFactory.getObject().send(message);
         } catch (Exception e) {
-            System.out.println("Failed to send email: " + e.getMessage());
+            throw new ServerException("Failed to send email:: " + e.getMessage());
         }
     }
 
     @Override
     public void updateStatusUser(String email, String otp) {
-        Otp otpEntity =  otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OtpNotFound("Otp is not found"));
-        User user = userRepository.findByEmailAndActive(otpEntity.getEmail(), 0).orElseThrow(() -> new UserAciveNotFound("User is not found"));
-        user.setActive(1);
-        userRepository.save(user);
+        try {
+            Otp otpEntity =  otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OtpNotFound("Otp is not found"));
+            User user = userRepository.findByEmailAndActive(otpEntity.getEmail(), 0).orElseThrow(() -> new UserAciveNotFound("User is not found"));
+            user.setActive(1);
+            userRepository.save(user);
+        }catch (OtpNotFound e) {
+            throw e;
+        }
+        catch (UserAciveNotFound e) {
+            throw e;
+        }
+        catch (Exception e) {
+            throw new ServerException("Failed to update status:: " + e.getMessage());
+        }
     }
 
     @Override
     public void forgotPassword(String email) {
-        userRepository.findByEmailAndActive(email, 1).orElseThrow(() -> new UserAciveNotFound("User is not found"));
-        String otp = Utils.generateOTP();
-        saveOTP(email, otp);
-        sendOTPEmail(email, otp);
+        try {
+            userRepository.findByEmailAndActive(email, 1).orElseThrow(() -> new UserAciveNotFound("User is not found"));
+            String otp = Utils.generateOTP();
+            saveOTP(email, otp);
+            sendOTPEmail(email, otp);
+        }catch (UserAciveNotFound e) {
+            throw e;
+        }catch (Exception e) {
+            throw new ServerException("Failed to forgotPassword:: " + e.getMessage());
+        }
     }
 
     @Override
     public void sendPasswordUser(String email, String otp) {
-        Otp otpEntity =  otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OtpNotFound("OTP is not found"));
-        User user = userRepository.findByEmailAndActive(otpEntity.getEmail(), 1).orElseThrow(() -> new UserAciveNotFound("User is not found"));
-        String newPassword = Utils.generatePassword(8);
-        String decodePassword = objectFactory.getObject().encode(newPassword);
-        user.setPassword(decodePassword);
-        userRepository.save(user);
-        sendNewPasswordWithEmail(email, newPassword);
+      try {
+          Otp otpEntity =  otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OtpNotFound("OTP is not found"));
+          User user = userRepository.findByEmailAndActive(otpEntity.getEmail(), 1).orElseThrow(() -> new UserAciveNotFound("User is not found"));
+          String newPassword = Utils.generatePassword(8);
+          String decodePassword = objectFactory.getObject().encode(newPassword);
+          user.setPassword(decodePassword);
+          userRepository.save(user);
+          sendNewPasswordWithEmail(email, newPassword);
+      }catch (OtpNotFound e) {
+          throw e;
+      }catch (UserAciveNotFound e) {
+          throw e;
+      }catch (Exception e) {
+          throw new ServerException("Failed to sendPasswordUser:: " + e.getMessage());
+      }
     }
+
+
 
     @Override
     public void saveOTP(String email, String otp) {
-        Otp otpEntity = new Otp();
-        otpEntity.setEmail(email);
-        otpEntity.setOtpCode(otp);
-        otpEntity.setExpiresAt(LocalDateTime.now().plusMinutes(2)); // OTP có hiệu lực trong 2 phút
-        otpRepositoryObjectFactory.getObject().save(otpEntity);
+       try {
+           Otp otpEntity = new Otp();
+           otpEntity.setEmail(email);
+           otpEntity.setOtpCode(otp);
+           otpEntity.setExpiresAt(LocalDateTime.now().plusMinutes(2)); // OTP có hiệu lực trong 2 phút
+           otpRepositoryObjectFactory.getObject().save(otpEntity);
+       }catch (Exception e) {
+           throw new ServerException("Failed to saveOTP:: " + e.getMessage());
+       }
     }
     @Override
     public boolean isValidOTP(String email, String otp) {
-        Otp otpEntity = otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OurException("OTP Không đúng, vui lòng nhập lại."));
-        if ( otpEntity.getExpiresAt().isAfter(LocalDateTime.now())) {
-            return true;
-        }
-        return false;
+       try {
+           Otp otpEntity = otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OurException("OTP Không đúng, vui lòng nhập lại."));
+           if ( otpEntity.getExpiresAt().isAfter(LocalDateTime.now())) {
+               return true;
+           }
+           return false;
+       }catch (OurException e) {
+           throw e;
+       }catch (Exception e) {
+           throw new ServerException("Failed to isValidOTP: " + e.getMessage());
+       }
     }
 }
 
