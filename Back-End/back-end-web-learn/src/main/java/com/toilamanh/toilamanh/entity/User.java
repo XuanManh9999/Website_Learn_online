@@ -58,7 +58,7 @@ public class User extends BaseEntity implements UserDetails {
     private List<Blog> blogList;
 
     @OneToMany(mappedBy = "user")
-    private List<UserRegisterCourse> commentList;
+    private List<UserRegisterCourse> registerCourseList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
