@@ -34,7 +34,41 @@
         cursor: pointer;
         font-size: 14px;
         color: #000;
+        display: flex;
+        span {
+          flex: 1;
+          font-size: 14px;
+          font-weight: 600;
+        }
       }
+    }
+  }
+  .container-model__footer {
+    margin-top: 34px;
+    p {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+      .container-model__footer--btn {
+        padding: unset;
+        font-size: 14px;
+        text-decoration: underline;
+        font-weight: 600;
+        color: #f05123;
+        &:hover {
+          color: #f05123;
+        }
+      }
+    }
+    .container-model__footer--service {
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 10px;
+      font-size: 11px;
+      color: #666;
+      width: min(360px, 100%);
+      text-align: center;
     }
   }
 }

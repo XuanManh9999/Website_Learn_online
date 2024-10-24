@@ -33,12 +33,24 @@ const items = [
 ]
 
 function LayoutHome() {
-    const [open, setOpen] = React.useState(false);
-    const [loading, setLoading] = React.useState(true);
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [textModel, setTextModel] = useState({
+        title: "",
+        subTitle: "",
+        footer_desc: ""
+    })
+
 
     const handleLogin = () => {
         setOpen(true);
         setLoading(true);
+        setTextModel((prev) => ({
+            ...prev,
+            title: "Đăng nhập vào CODE ZEN",
+            subTitle: "Đăng nhập",
+            footer_desc: "Bạn chưa có tài khoản?"
+        }))
 
         // Simple loading mock. You should add cleanup logic in real world.
         setTimeout(() => {
@@ -49,7 +61,12 @@ function LayoutHome() {
     const handleRegister = () => {
         setOpen(true);
         setLoading(true);
-
+        setTextModel((prev) => ({
+            ...prev,
+            title: "Đăng ký tài khoản CODE ZEN",
+            subTitle: "Đăng ký",
+            footer_desc: "Bạn đã có tài khoản?"
+        }))
         // Simple loading mock. You should add cleanup logic in real world.
         setTimeout(() => {
             setLoading(false);
@@ -73,7 +90,7 @@ function LayoutHome() {
                         </Col>
                         <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8}>
                             <div className='wrapper-layout-header-home__right'>
-                                <Button type='text' className='wrapper-layout-header-home__right--login' onClick={handleLogin} >Đăng nhập</Button>
+                                <Button type='link' className='wrapper-layout-header-home__right--login' onClick={handleLogin} >Đăng nhập</Button>
                                 <Button className='wrapper-layout-header-home__right--register' onClick={handleRegister}>Đăng ký</Button>
                             </div>
                         </Col>
@@ -91,7 +108,7 @@ function LayoutHome() {
             <footer>
                 Footer
             </footer>
-            <ModelAuth open={open} loading={loading} setOpen={setOpen} />
+            <ModelAuth text={textModel} open={open} loading={loading} setOpen={setOpen} />
         </>
     )
 }
