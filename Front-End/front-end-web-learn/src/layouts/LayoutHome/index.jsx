@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 import { Layout, Col, Button, Row, Menu } from "antd";
+import ModelAuth from '../../components/share/ModelAuth/ModelAuth';
 import "./LayOutCss.scss"
 
 const items = [
     {
-        label: <Link to={"/trang-chu"}>Trang chủ</Link>,
+        label: <Link to={"/"}>Trang chủ</Link>,
         key: 'trang-chu',
     },
     {
@@ -32,6 +33,28 @@ const items = [
 ]
 
 function LayoutHome() {
+    const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = React.useState(true);
+
+    const handleLogin = () => {
+        setOpen(true);
+        setLoading(true);
+
+        // Simple loading mock. You should add cleanup logic in real world.
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+    }
+
+    const handleRegister = () => {
+        setOpen(true);
+        setLoading(true);
+
+        // Simple loading mock. You should add cleanup logic in real world.
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+    }
     return (
         <>
             <header>
@@ -50,8 +73,8 @@ function LayoutHome() {
                         </Col>
                         <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8}>
                             <div className='wrapper-layout-header-home__right'>
-                                <Link className='wrapper-layout-header-home__right--login'>Đăng nhập</Link>
-                                <Button className='wrapper-layout-header-home__right--register'>Đăng ký</Button>
+                                <Button type='text' className='wrapper-layout-header-home__right--login' onClick={handleLogin} >Đăng nhập</Button>
+                                <Button className='wrapper-layout-header-home__right--register' onClick={handleRegister}>Đăng ký</Button>
                             </div>
                         </Col>
                     </Row>
@@ -68,6 +91,7 @@ function LayoutHome() {
             <footer>
                 Footer
             </footer>
+            <ModelAuth open={open} loading={loading} setOpen={setOpen} />
         </>
     )
 }
