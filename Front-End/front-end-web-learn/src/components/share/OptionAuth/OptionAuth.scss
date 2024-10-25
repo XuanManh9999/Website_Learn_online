@@ -1,0 +1,47 @@
+.container__option-auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  label {
+    margin: 10px 0 10px 8px;
+    font-size: 14px;
+    color: #292929;
+    font-weight: 600;
+    display: block;
+  }
+
+  .container__option-auth--email__option,
+  .container__option-auth--register__option,
+  .container__option-auth--login__option {
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .container__option-auth--register__input,
+    .container__option-auth--login__input {
+      border: 1.5px solid #dee3e9;
+      border-radius: 44px;
+      width: 100%;
+      padding: 12px 10px 12px 20px;
+      font-size: 16px;
+    }
+  }
+  .container__option-auth--submid {
+    margin-top: 30px;
+    width: 360px;
+    height: 45px;
+    border-radius: 999px;
+
+    font-size: 16px;
+    white-space: nowrap;
+    font-weight: 600;
+    background: linear-gradient(90deg, #26a69a, #80deea);
+    color: #fff;
+    font-weight: 600;
+    transition: color 0.25s;
+    &:hover {
+      background: linear-gradient(90deg, #80deea, #26a69a);
+    }
+  }
+}

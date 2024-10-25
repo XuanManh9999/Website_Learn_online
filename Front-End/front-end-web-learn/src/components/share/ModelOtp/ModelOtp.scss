@@ -1,0 +1,17 @@
+.container__model-otp {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .container__model-otp--btn {
+    margin-top: 15px;
+  }
+  .otp-message-sucsses {
+    font-weight: 500;
+    color: green;
+  }
+  .otp-message-error {
+    font-weight: 500;
+    color: red;
+  }
+}

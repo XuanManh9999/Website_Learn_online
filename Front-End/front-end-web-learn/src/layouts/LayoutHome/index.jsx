@@ -44,9 +44,7 @@ function LayoutHome() {
 
     const handleLogin = () => {
         setOpen(true);
-        setLoading(true);
-        setTextModel((prev) => ({
-            ...prev,
+        setTextModel(() => ({
             title: "Đăng nhập vào CODE ZEN",
             subTitle: "Đăng nhập",
             footer_desc: "Bạn chưa có tài khoản?"
@@ -60,9 +58,7 @@ function LayoutHome() {
 
     const handleRegister = () => {
         setOpen(true);
-        setLoading(true);
         setTextModel((prev) => ({
-            ...prev,
             title: "Đăng ký tài khoản CODE ZEN",
             subTitle: "Đăng ký",
             footer_desc: "Bạn đã có tài khoản?"
@@ -74,13 +70,14 @@ function LayoutHome() {
     }
     return (
         <>
-            <header>
+            <header style={{
+            }}>
                 <Layout className='wrapper-layout-header-home' >
                     <Row className='container__header' align={"middle"} justify={"space-between"} gutter={30}>
                         <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8}>
                             <Link className='wrapper-layout-header-home__left'>
-                                <img src='https://i.ibb.co/WGwmWhQ/DALL-E-2024-10-24-18-11-13-A-logo-of-a-circular-shape-resembling-a-stylized-C-in-harmonious-gradient.webp' alt='logo' />
-                                <h1>Học lập trình, tạo dựng tương lai!.</h1>
+                                <img src='https://i.ibb.co/WGwmWhQ/DALL-E-2024-10-24-18-11-13-A-logo-of-a-circular-shape-resembling-a-stylized-C-in-harmonious-gradient.webp' title='Học lập trình, tạo dựng tương lai!' alt='Học lập trình, tạo dựng tương lai!' />
+                                <h1 className='wrapper-layout-header-home__title'>Học lập trình, tạo dựng tương lai!</h1>
                             </Link>
                         </Col>
                         <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8}>
@@ -92,23 +89,27 @@ function LayoutHome() {
                             <div className='wrapper-layout-header-home__right'>
                                 <Button type='link' className='wrapper-layout-header-home__right--login' onClick={handleLogin} >Đăng nhập</Button>
                                 <Button className='wrapper-layout-header-home__right--register' onClick={handleRegister}>Đăng ký</Button>
+
                             </div>
                         </Col>
                     </Row>
                 </Layout>
             </header>
-            <main>
+            <main style={{
+                marginTop: "66px"
+            }}>
                 <nav>
-                    Nav
+
                 </nav>
                 <article>
+                    dsadsa
                     <Outlet />
                 </article>
             </main>
             <footer>
                 Footer
             </footer>
-            <ModelAuth text={textModel} open={open} loading={loading} setOpen={setOpen} />
+            <ModelAuth text={textModel} open={open} setOpen={setOpen} handleLogin={handleLogin} handleRegister={handleRegister} />
         </>
     )
 }
