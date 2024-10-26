@@ -20,7 +20,6 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
-
     @Override
     public ApiResponse deleteUser(Long id) {
         try {

@@ -8,6 +8,8 @@ spring:
           google:
             client-id: 47916404883-mi6ii5eh6fn82ulqdojrvjohg32fnkfr.apps.googleusercontent.com
             client-secret: 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
+            scope: email, profile
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
   application:
     name: project-website-learn-online
   datasource:

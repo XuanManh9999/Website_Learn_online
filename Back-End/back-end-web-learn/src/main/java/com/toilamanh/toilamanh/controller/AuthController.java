@@ -1,5 +1,4 @@
 package com.toilamanh.toilamanh.controller;
-
 import com.toilamanh.toilamanh.dto.request.*;
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
@@ -101,13 +100,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.OK.value()).body(
                     ApiResponse.builder()
                             .status(HttpStatus.OK.value())
-                            .message("Register User Done")
+                            .message("Xác thực thành công, tài khoản của bạn đã hoàn tất quá trình đăng ký")
                             .build()
             );
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
                     .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .message("OTP is Expired")
+                    .message("OTP đã hết hạn, vui lòng đăng ký tài khoản lại")
                     .build());
         }
     }
@@ -121,7 +120,7 @@ public class AuthController {
         if (email == null || otp == null || otp.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
                     .status(HttpStatus.BAD_REQUEST.value())
-                    .message("email/otp is required")
+                    .message("email/otp bắt buộc phải có để thực hiện yêu cầu")
                     .build());
         }
         boolean isValid = authService.isValidOTP(email, otp);
@@ -130,13 +129,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.OK.value()).body(
                     ApiResponse.builder()
                             .status(HttpStatus.OK.value())
-                            .message("Change Password Done")
+                            .message("Bạn đã thay đổi mật khẩu thành công")
                             .build()
             );
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( ApiResponse.builder()
                     .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    .message("OTP is Expired")
+                    .message("OTP đã hết hạn, vui lòng thao tác lại.")
                     .build());
         }
     }
@@ -149,7 +148,7 @@ public class AuthController {
                     .body(
                             ApiResponse.builder()
                                     .status(HttpStatus.BAD_REQUEST.value())
-                                    .message("email is required")
+                                    .message("Email chưa được cung cấp, vui lòng kiểm tra lại")
                                     .build()
                     );
         }
@@ -157,7 +156,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK.value())
                 .body(
                         ApiResponse.builder()
-                                .message("Active forgot-password check done")
+                                .message("Kích hoạt quên mật khẩu thành công, vui lòng xác nhận OTP đã được gửi tới email của bạn để hoàn tất")
                                 .status(HttpStatus.OK.value())
                                 .build()
                 );

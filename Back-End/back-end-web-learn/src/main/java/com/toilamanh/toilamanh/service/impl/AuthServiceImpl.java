@@ -45,10 +45,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public RegisterResponse register(RegisterRequest registerRequest) {
         try {
-            Optional<User> user = userRepository.findByUserNameAndActive(registerRequest.getUsername(), 1);
-            if (user.isPresent()) {
-                throw new ExitsException("Username already exist");
+            Optional<User> user = userRepository.findByUserNameAndActiveAndEmail(registerRequest.getUsername(), 1, registerRequest.getEmail());
+            Optional<User> user_ = userRepository.findByUserNameAndActive(registerRequest.getUsername(), 1);
+            Optional<User> userNotActive = userRepository.findByUserNameAndActiveAndEmail(registerRequest.getUsername(), 0, registerRequest.getEmail());
+            Optional<User> checkAccount = userRepository.findByEmail(registerRequest.getEmail());
+
+            if (userNotActive.isPresent()) {
+                String OTP = Utils.generateOTP();
+                otpRepositoryObjectFactory.getObject().deleteAllByEmail(registerRequest.getEmail());
+                saveOTP(registerRequest.getEmail(), OTP);
+                sendOTPEmail(registerRequest.getEmail(), OTP);
+                throw new UserNotActive("Người dùng chưa được kích hoạt vui lòng kích hoạt tài khoản thông qua OTP được gửi trong email.");
             }
+
+            if (checkAccount.isPresent()) {
+                throw new ExitsException("Email này đã tồn tại tài khoản trong hệ thống vui lòng kiểm tra lại.");
+            }
+            if (user.isPresent() || user_.isPresent()) {
+                throw new ExitsException("Tên người dùng đã tồn tại trên hệ thống, vui lòng chọn tên khác.");
+            }
+
             User newUser = new User();
             newUser.setEmail(registerRequest.getEmail());
             newUser.setUserName(registerRequest.getUsername());
@@ -65,22 +81,25 @@ public class AuthServiceImpl implements AuthService {
 
             return RegisterResponse.builder()
                     .status(HttpStatus.CREATED.value())
-                    .message("Create User Success")
+                    .message("Thêm người dùng thành công. Chúng tôi đã gửi OTP tới email của bạn vui lòng xác nhận OTP để hoàn tất quá trình đăng ký")
                     .userDTO(userDTO).build();
-        }catch (ExitsException e) {
+        } catch (UserNotActive e) {
+            throw e;
+        }
+        catch (ExitsException e) {
             throw e;
         }catch (Exception e) {
-            throw new ServerException("An error from server with api register: " + e);
+            throw new ServerException("Đã xảy ra lỗi khi tạo người dùng: " + e);
         }
     }
 
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         try {
-            var user = userRepository.findByUserNameAndActive(loginRequest.getUserName(), 1).orElseThrow(() -> new UserAciveNotFound("User name: " + loginRequest.getUserName() + " Not Found"));
+            var user = userRepository.findByUserNameAndActive(loginRequest.getUserName(), 1).orElseThrow(() -> new UserAciveNotFound("Tên người dùng: " + loginRequest.getUserName() + " Không tồn tại"));
             boolean isPassword = objectFactory.getObject().matches(loginRequest.getPassword(), user.getPassword());
             if (!isPassword) {
-                throw new ServerException("Wrong password");
+                throw new ServerException("Sai mật khẩu vui lòng kiểm tra lại");
             }
 
             authenticationManagerObjectFactory.getObject()
@@ -92,8 +111,8 @@ public class AuthServiceImpl implements AuthService {
                     .token(token)
                     .status(HttpStatus.OK.value())
                     .role(user.getRole())
-                    .expirationTime("7 Days")
-                    .message("Login Success")
+                    .expirationTime("60 Days")
+                    .message("Đăng nhập tài khoản thành công.")
                     .build();
         }
         catch (UserAciveNotFound e) {
@@ -181,8 +200,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void updateStatusUser(String email, String otp) {
         try {
-            Otp otpEntity =  otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OtpNotFound("Otp is not found"));
-            User user = userRepository.findByEmailAndActive(otpEntity.getEmail(), 0).orElseThrow(() -> new UserAciveNotFound("User is not found"));
+            Otp otpEntity =  otpRepositoryObjectFactory.getObject().findByEmailAndOtpCode(email, otp).orElseThrow(() -> new OtpNotFound("OTP Không khớp vui lòng kiểm tra, và thử lại."));
+            User user = userRepository.findByEmailAndActive(otpEntity.getEmail(), 0).orElseThrow(() -> new UserAciveNotFound("Tài khoản không tồn tại trong hệ thống, vui lòng kiểm tra lại"));
             user.setActive(1);
             userRepository.save(user);
         }catch (OtpNotFound e) {
@@ -192,21 +211,21 @@ public class AuthServiceImpl implements AuthService {
             throw e;
         }
         catch (Exception e) {
-            throw new ServerException("Failed to update status:: " + e.getMessage());
+            throw new ServerException("Xác thực người dùng không thành công " + e.getMessage());
         }
     }
 
     @Override
     public void forgotPassword(String email) {
         try {
-            userRepository.findByEmailAndActive(email, 1).orElseThrow(() -> new UserAciveNotFound("User is not found"));
+            userRepository.findByEmailAndActive(email, 1).orElseThrow(() -> new UserAciveNotFound("Không tìm thấy người dùng trong hệ thống"));
             String otp = Utils.generateOTP();
             saveOTP(email, otp);
             sendOTPEmail(email, otp);
         }catch (UserAciveNotFound e) {
             throw e;
         }catch (Exception e) {
-            throw new ServerException("Failed to forgotPassword:: " + e.getMessage());
+            throw new ServerException("Đã xảy ra lỗi khi thực hiện yêu cầu: " + e.getMessage());
         }
     }
 
@@ -254,7 +273,7 @@ public class AuthServiceImpl implements AuthService {
        }catch (OurException e) {
            throw e;
        }catch (Exception e) {
-           throw new ServerException("Failed to isValidOTP: " + e.getMessage());
+           throw new ServerException("Đã xảy ra lỗi không mong muốn, vui lòng thử lại sau: " + e.getMessage());
        }
     }
 }
