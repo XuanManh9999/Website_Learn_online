@@ -34,7 +34,6 @@ const items = [
 
 function LayoutHome() {
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
     const [textModel, setTextModel] = useState({
         title: "",
         subTitle: "",
@@ -49,11 +48,6 @@ function LayoutHome() {
             subTitle: "Đăng nhập",
             footer_desc: "Bạn chưa có tài khoản?"
         }))
-
-        // Simple loading mock. You should add cleanup logic in real world.
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
     }
 
     const handleRegister = () => {
@@ -63,10 +57,6 @@ function LayoutHome() {
             subTitle: "Đăng ký",
             footer_desc: "Bạn đã có tài khoản?"
         }))
-        // Simple loading mock. You should add cleanup logic in real world.
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
     }
     return (
         <>
@@ -109,7 +99,7 @@ function LayoutHome() {
             <footer>
                 Footer
             </footer>
-            <ModelAuth text={textModel} open={open} setOpen={setOpen} handleLogin={handleLogin} handleRegister={handleRegister} />
+            <ModelAuth text={textModel} open={open} setOpen={setOpen} handleLogin={handleLogin} handleRegister={handleRegister} setTextModel={setTextModel} />
         </>
     )
 }

@@ -1,34 +1,169 @@
 import React, { useRef, useState } from 'react'
 import "./OptionAuth.scss"
 import { Input, Button } from 'antd'
-import { UserOutlined } from "@ant-design/icons"
 import ModelOtp from '../ModelOtp'
-export default function OptionAuth({ login, text, register, forgotPassword }) {
+import useNotify from '../Notification'
+import { apiLogin, apiRegister, apiForgotPassword } from "../../../services/public/auth"
+import { validateEmail } from '../../../utils/validation'
+export default function OptionAuth({ login, text, register, forgotPassword, textForgotPassword, setOpen, handleBackToDefault }) {
 
+    const { notify, contextHolder } = useNotify();
     const btnSubmid = useRef(null)
+    const [isLoading, setIsLoading] = useState(false)
+
     const [showOtpModal, setShowOtpModal] = useState(false); // Trạng thái hiển thị modal OTP
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const [passwordConfirm, setPasswordConfirm] = useState(false)
+    const [passwordConfirm, setPasswordConfirm] = useState(false);
+    const [dataLogin, setDataLogin] = useState({
+        userName: "",
+        password: ""
+    })
+
+    const [dataRegister, setDataRegister] = useState({
+        email: "",
+        username: "",
+        password: "",
+        confirmPassword: ""
+    })
+
+    const [dataForgotPassword, setDataForgotPassword] = useState(null)
+
+    const handleOnchangeInputLogin = (event) => {
+        const { name, value } = event.target;
+        setDataLogin((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
 
 
+    const hanelOnChangeInputRegister = (event) => {
+        const { name, value } = event.target;
+        setDataRegister((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
 
-    const handleSubmid = () => {
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSubmid()
+        }
+    };
+
+    const handleSubmid = async () => {
+        let isCheck;
         if (btnSubmid.current.textContent === "Đăng ký") {
-            setShowOtpModal(true); // Bật modal OTP khi đăng ký
-        }else if (btnSubmid.current.textContent === "Quên mật khẩu") {
-            setShowOtpModal(true); // Bật modal OTP khi đăng ký
-        }else {
+            setDataForgotPassword(null)
+            isCheck = true
+            const { email, username, password, confirmPassword } = dataRegister
 
+            if (username.length <= 4) {
+                isCheck = false
+                notify("warning", "Tên người dùng phải từ 5 kí tự trở lên")
+                return;
+            }
+            if (!validateEmail(email)) {
+                isCheck = false
+                notify("warning", "Vui lòng nhập đúng định dạng email để tiếp tục")
+                return;
+            }
+
+            if (!password || password.length == 0 || password.length < 6) {
+                isCheck = false
+                notify("warning", "Mật khẩu phải từ 6 ký tự trở lên")
+                return;
+            }
+            if (password !== confirmPassword) {
+                isCheck = false
+                notify("warning", "Xác nhận mật khẩu không khớp vui lòng kiểm tra lại")
+                return;
+            }
+            if (isCheck) {
+                setIsLoading(true)
+                setTimeout(async () => {
+                    const { status, message } = await apiRegister(dataRegister)
+                    if (status === 201 || status === 400) {
+                        status === 201 ? notify("success", message, true, 4) : notify("warning", message, true, 4)
+                        setTimeout(() => {
+                            setShowOtpModal(true); // Bật modal OTP khi đăng ký
+                        }, 4000);
+                    } else {
+                        notify("error", message)
+                    }
+                    setIsLoading(false)
+                }, 1000);
+            }
+
+        } else if (btnSubmid.current.textContent === "Quên mật khẩu") {
+            if (!validateEmail(dataForgotPassword)) {
+                notify("warning", "Vui lòng nhập đúng định dạng email để tiếp tục")
+                return;
+            }
+            setIsLoading(true)
+            setTimeout(async () => {
+                const { status, message } = await apiForgotPassword({ email: dataForgotPassword })
+                if (status === 200) {
+                    notify("success", message, true, 4)
+                    setTimeout(() => {
+                        setShowOtpModal(true); // Bật modal OTP khi đăng ký
+                    }, 4000);
+                } else {
+                    notify("error", message)
+                }
+                setIsLoading(false)
+            }, 1000)
+        } else if (btnSubmid.current.textContent === "Đăng nhập") {
+            const { userName, password } = dataLogin;
+            isCheck = true
+            if (!userName || userName.length == 0 || userName.length <= 4) {
+                isCheck = false
+                notify("warning", "Tên người dùng phải từ 5 kí tự trở lên")
+                return;
+            }
+
+            if (!password || password.length == 0 || password.length < 6) {
+                isCheck = false
+                notify("warning", "Mật khẩu phải từ 6 ký tự trở lên")
+                return;
+            }
+            if (isCheck) {
+                setIsLoading(true)
+                setTimeout(async () => {
+                    const response = await apiLogin(dataLogin)
+                    if (response?.status === 200) {
+
+                        localStorage.setItem("token", response?.token)
+                        notify("success", response?.message)
+                        setTimeout(() => {
+                            setOpen(false)
+
+                            handleBackToDefault()
+                        }, 2500)
+                    } else {
+                        notify("error", response?.message)
+                    }
+                    setIsLoading(false)
+                }, 1000)
+
+            }
         }
     }
+
+
+
+
     return (
         <>
+            {contextHolder}
             <div className='container__option-auth'>
                 {login &&
                     <>
                         <div className='container__option-auth--login__option'>
                             <label htmlFor="user-name">Tên đăng nhập?</label>
-                            <Input size="large" id='user-name' placeholder="Tên đăng nhập..." className='container__option-auth--login__input' />
+                            <Input size="large" id='user-name' name='userName'
+                                onChange={handleOnchangeInputLogin}
+                                placeholder="Tên đăng nhập..." className='container__option-auth--login__input' />
                         </div>
                         <div className='container__option-auth--login__option'>
                             <label htmlFor="password">Mật khẩu?</label>
@@ -36,6 +171,8 @@ export default function OptionAuth({ login, text, register, forgotPassword }) {
                                 className='container__option-auth--login__input'
                                 id='password'
                                 placeholder="Nhập vào mật khẩu..."
+                                name='password'
+                                onChange={handleOnchangeInputLogin}
                                 visibilityToggle={{
                                     visible: passwordVisible,
                                     onVisibleChange: setPasswordVisible,
@@ -48,12 +185,12 @@ export default function OptionAuth({ login, text, register, forgotPassword }) {
                     <>
                         <div className='container__option-auth--register__option'>
                             <label htmlFor="user-name">Tên người dùng?</label>
-                            <Input size="large" id='user-name' placeholder="Tên người dùng..." className='container__option-auth--login__input' />
+                            <Input size="large" id='user-name' name='username' onChange={hanelOnChangeInputRegister} placeholder="Tên người dùng..." className='container__option-auth--login__input' />
                         </div>
 
                         <div className='container__option-auth--register__option'>
                             <label htmlFor="email">Email?</label>
-                            <Input size="large" type='email' id='email' placeholder="Nhập vào email..." className='container__option-auth--login__input' />
+                            <Input size="large" type='email' id='email' name='email' onChange={hanelOnChangeInputRegister} placeholder="Nhập vào email..." className='container__option-auth--login__input' />
                         </div>
 
                         <div className='container__option-auth--register__option'>
@@ -62,6 +199,8 @@ export default function OptionAuth({ login, text, register, forgotPassword }) {
                                 className='container__option-auth--register__input'
                                 id='password'
                                 placeholder="Nhập vào mật khẩu..."
+                                onChange={hanelOnChangeInputRegister}
+                                name='password'
                                 visibilityToggle={{
                                     visible: passwordVisible,
                                     onVisibleChange: setPasswordVisible,
@@ -70,11 +209,13 @@ export default function OptionAuth({ login, text, register, forgotPassword }) {
                         </div>
 
                         <div className='container__option-auth--register__option'>
-                            <label htmlFor="confirmPassword">Xác nhận mật khẩu</label>
+                            <label htmlFor="confirmPassword">Xác nhận mật khẩu?</label>
                             <Input.Password
                                 className='container__option-auth--register__input'
                                 id='confirmPassword'
                                 placeholder="Xác nhận mật khẩu..."
+                                name='confirmPassword'
+                                onChange={hanelOnChangeInputRegister}
                                 visibilityToggle={{
                                     visible: passwordConfirm,
                                     onVisibleChange: setPasswordConfirm,
@@ -87,19 +228,19 @@ export default function OptionAuth({ login, text, register, forgotPassword }) {
                 {
                     forgotPassword &&
                     <>
-                      <div className='container__option-auth--email__option'>
-                            <label htmlFor="user-name">Email:</label>
-                            <Input size="large" id='user-name' placeholder="Nhập vào email..." className='container__option-auth--login__input' />
+                        <div className='container__option-auth--email__option'>
+                            <label htmlFor="user-name">Email?</label>
+                            <Input size="large" id='user-name' name='email' onChange={(e) => setDataForgotPassword(e.target.value)} placeholder="Nhập vào email..." className='container__option-auth--login__input' />
                         </div>
-                    
+
                     </>
                 }
 
-                {(login || register || forgotPassword) && <Button ref={btnSubmid} onClick={handleSubmid} className='container__option-auth--submid'>{text.subTitle || "Quên mật khẩu"}</Button>}
+                {(login || register || forgotPassword) && <Button loading={isLoading} ref={btnSubmid} onKeyDown={handleKeyDown} onClick={handleSubmid} className='container__option-auth--submid'>{textForgotPassword != null ? textForgotPassword.subTitle : text.subTitle}</Button>}
 
 
             </div>
-            {showOtpModal && <ModelOtp visible={showOtpModal} setVisible={setShowOtpModal} />}
+            {showOtpModal && <ModelOtp visible={showOtpModal} register={register} forgotPassword={forgotPassword} setVisible={setShowOtpModal} email={dataForgotPassword ?? dataRegister.email} handleBackToDefault={handleBackToDefault} />}
         </>
 
 

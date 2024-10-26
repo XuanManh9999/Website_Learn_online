@@ -1,39 +1,48 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import "./ModelAuth.scss"
 import { Button, Col, Layout, Modal, Row } from "antd"
 import OptionAuth from '../OptionAuth'
-function ModelAuth({ open, setOpen, text, handleLogin, handleRegister }) {
+import { LeftOutlined } from "@ant-design/icons"
+function ModelAuth({ open, setOpen, text, handleLogin, handleRegister, setTextModel }) {
     const [isHideOption, setIsHideOption] = useState(false)
     const [isLogin, setIsLogin] = useState(false)
-    const [isForgotPassword, setIsForgotPassword] = useState(false)
-
     const [isRegister, setIsRegister] = useState(false)
+    const [isForgotPassword, setIsForgotPassword] = useState(false)
+    const [isShowBackToDefault, setShowBackToDefault] = useState(false)
+    const [textForgotPassword, setTextForgotPassword] = useState(null)
+
 
     const handleWithAccountUserName = () => {
         setIsHideOption(true)
         if (text.subTitle == "Đăng nhập") {
             setIsLogin(true)
             setIsRegister(false)
+            setShowBackToDefault(true)
         } else {
             setIsLogin(false)
             setIsRegister(true)
+            setShowBackToDefault(true)
         }
 
     }
 
     const handleLoginAndRegister = () => {
+        setTextForgotPassword(null)
         text.subTitle == "Đăng ký" ? handleLogin() : handleRegister()
         if (text.subTitle == "Đăng ký") {
-            setIsHideOption(true)
-            setIsLogin(true)
+            setIsHideOption(false)
+            setIsLogin(false)
             setIsRegister(false)
             setIsForgotPassword(false)
+            setShowBackToDefault(false)
         } else {
-            setIsHideOption(true)
+            setIsHideOption(false)
             setIsLogin(false)
-            setIsRegister(true)
+            setIsRegister(false)
             setIsForgotPassword(false)
+            setShowBackToDefault(false)
         }
+
     }
 
 
@@ -42,20 +51,35 @@ function ModelAuth({ open, setOpen, text, handleLogin, handleRegister }) {
         setIsLogin(false)
         setIsRegister(false)
         setIsForgotPassword(true)
-        text.subTitle = "Quên mật khẩu"
+        setShowBackToDefault(true)
+        setTextForgotPassword({
+            title: "Quên mật khẩu tại CODE ZEN",
+            subTitle: "Quên mật khẩu",
+            footer_desc: "Bạn chưa có tài khoản?"
+        })
     }
 
+    const handleBackToDefault = () => {
+        setTextForgotPassword(null)
+        setIsLogin(false)
+        setIsRegister(false)
+        setIsForgotPassword(false)
+        setIsHideOption(false)
+        setShowBackToDefault(false)
+        setTextModel({ ...text })
+    }
 
     return (
         <>
             <Modal
-                // loading={loading}
                 open={open}
                 onCancel={() => setOpen(() => {
                     setIsHideOption(false)
                     setIsLogin(false)
                     setIsRegister(false)
                     setIsForgotPassword(false)
+                    setTextForgotPassword(null)
+                    setShowBackToDefault(false)
                     return false;
                 })}
                 centered
@@ -63,11 +87,15 @@ function ModelAuth({ open, setOpen, text, handleLogin, handleRegister }) {
                 width={540}
             >
                 <div className='container-model'>
+                    <div onClick={handleBackToDefault} className={`container-model__back-to-default ${isShowBackToDefault && "container-model__back-to-default--active"}`}>
+                        <LeftOutlined />
+                        <span>Quay lại</span>
+                    </div>
                     <main className='container-content'>
                         <figure className='container-content__logo'>
                             <img src="https://i.ibb.co/WGwmWhQ/DALL-E-2024-10-24-18-11-13-A-logo-of-a-circular-shape-resembling-a-stylized-C-in-harmonious-gradient.webp" alt="logo" />
                         </figure>
-                        <h1 className='container-content__title'>{text.title}</h1>
+                        <h1 className='container-content__title' >{textForgotPassword == null ? text.title : textForgotPassword.title}</h1>
                         <div className={`container-content__option ${isHideOption && 'hide'}`}>
                             <Button style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                                 <img src="data:image/svg+xml,%3csvg%20width='18'%20height='18'%20viewBox='0%200%2018%2018'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20transform=''%3e%3cg%20fill-rule='evenodd'%3e%3cpath%20d='m17.64%209.2a10.341%2010.341%200%200%200%20-.164-1.841h-8.476v3.481h4.844a4.14%204.14%200%200%201%20-1.8%202.716v2.264h2.909a8.777%208.777%200%200%200%202.687-6.62z'%20fill='%234285f4'/%3e%3cpath%20d='m9%2018a8.592%208.592%200%200%200%205.956-2.18l-2.909-2.258a5.43%205.43%200%200%201%20-8.083-2.852h-3.007v2.332a9%209%200%200%200%208.043%204.958z'%20fill='%2334a853'/%3e%3cpath%20d='m3.964%2010.71a5.321%205.321%200%200%201%200-3.42v-2.332h-3.007a9.011%209.011%200%200%200%200%208.084z'%20fill='%23fbbc05'/%3e%3cpath%20d='m9%203.58a4.862%204.862%200%200%201%203.44%201.346l2.581-2.581a8.649%208.649%200%200%200%20-6.021-2.345%209%209%200%200%200%20-8.043%204.958l3.007%202.332a5.364%205.364%200%200%201%205.036-3.71z'%20fill='%23ea4335'/%3e%3c/g%3e%3cpath%20d='m0%200h18v18h-18z'%20fill='none'/%3e%3c/g%3e%3c/svg%3e" alt="Google" />
@@ -86,11 +114,11 @@ function ModelAuth({ open, setOpen, text, handleLogin, handleRegister }) {
                                 <span>{text.subTitle} tên tài khoản</span>
                             </Button>
                         </div>
-                        <OptionAuth login={isLogin} register={isRegister} forgotPassword={isForgotPassword} text={text} setOpen={setOpen} />
+                        <OptionAuth login={isLogin} setOpen={setOpen} register={isRegister} forgotPassword={isForgotPassword} text={text} textForgotPassword={textForgotPassword} handleBackToDefault={handleBackToDefault} />
                     </main>
                     <footer className='container-model__footer'>
                         <p>{text.footer_desc}<Button type='link' className='container-model__footer--btn' onClick={handleLoginAndRegister}>{text.subTitle == "Đăng ký" ? "Đăng nhập" : "Đăng ký"}</Button></p>
-                        <p>Bạn không nhớ mật khẩu?<Button type='link' className='container-model__footer--btn' onClick={handleForgotPassword}>Quên mật khẩu?</Button></p>
+                        {textForgotPassword == null ? <p>Bạn không nhớ mật khẩu?<Button type='link' className='container-model__footer--btn' onClick={handleForgotPassword}>Quên mật khẩu?</Button></p> : ""}
                         <p className='container-model__footer--service'>Việc bạn tiếp tục sử dụng trang web này đồng nghĩa bạn đồng ý với điều khoản sử dụng của chúng tôi.</p>
                     </footer>
                 </div>

@@ -2,6 +2,21 @@
   margin-top: 30px;
   max-height: 460px;
   overflow: auto;
+  .container-model__back-to-default {
+    position: absolute;
+    top: 20px;
+    font-size: 16px;
+    color: #000;
+    display: none;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+  }
+  .container-model__back-to-default--active {
+    display: block;
+  }
   &::-webkit-scrollbar {
     width: 6px; /* Độ rộng của thanh cuộn dọc */
     height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
@@ -61,7 +76,7 @@
     }
   }
   .container-model__footer {
-    margin-top: 34px;
+    margin-top: 14px;
     p {
       display: flex;
       justify-content: center;
