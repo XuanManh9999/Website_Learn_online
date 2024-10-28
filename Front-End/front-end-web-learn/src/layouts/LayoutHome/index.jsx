@@ -34,18 +34,6 @@ const items = [
         key: 'youtube',
     }
 ]
-const myCourses = [
-    {
-        label: <Link className='header-container-my-course'>
-            <img src="https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png" alt="" />
-            <div className='header-container-my-course-desc'>
-                <strong>App "Đừng chạm tay lên mặt"</strong>
-                <span>Học cách đây 14 ngày trước</span>
-            </div>
-        </Link>,
-        key: '2'
-    }
-]
 
 function LayoutHome() {
     const selectorInfo = useSelector(selectorUser)
@@ -78,49 +66,7 @@ function LayoutHome() {
             footer_desc: "Bạn đã có tài khoản?"
         }))
     }
-    const dropDownMenu = [
-        {
-            key: '1',
-            label: <Link className='wrapper-layout-header-home__right-dropdown-account-header'>
-                <img src="https://files.fullstack.edu.vn/f8-prod/public-images/671cf6b5a9133.png" alt="Avatar" />
-                <div className='wrapper-layout-header-home__right-dropdown-account-section'>
-                    <span>Nguyễn Xuân Mạnh</span>
-                    <span>@manhnguyen36</span>
-                </div>
-            </Link>,
-        },
-        {
-            key: '2',
-            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Trang cá nhân</Link>,
-        },
-        {
-            key: '3',
-            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Khóa học của tôi</Link>,
-        },
-        {
-            key: '4',
-            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Viết blog</Link>
-        },
-        {
-            key: '5',
-            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Bài viết của tôi</Link>
-        },
-        {
-            key: '6',
-            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Bài viết đã lưu</Link>
-        },
-        {
-            key: '7',
-            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Cài đặt</Link>
-        },
-        {
-            key: '8',
-            label: <Link onClick={() => {
-                localStorage.removeItem("token")
-                handleLogin()
-            }} className='wrapper-layout-header-home__right-dropdown-account-option'>Đăng xuất</Link>
-        }
-    ];
+
 
     return (
         <>
@@ -141,10 +87,6 @@ function LayoutHome() {
                         </Col>
                         {isLogin ? <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8} className='wrapper-layout-header-home__right-active'>
                             <Dropdown
-                                menu={{
-                                    items: myCourses
-                                }}
-
                                 dropdownRender={() =>
                                     <>
                                         <div className="container-my-course">
@@ -152,16 +94,16 @@ function LayoutHome() {
                                                 <h6>Khóa học của tôi</h6>
                                                 <Link >Xem tất cả</Link>
                                             </div>
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
                                         </div>
 
                                     </>
@@ -173,12 +115,79 @@ function LayoutHome() {
                                 <Button onClick={(e) => e.preventDefault()} type='link' className='wrapper-layout-header-home__right-active-my-course'>Khóa học của tôi</Button>
                             </Dropdown>
 
-                            <Badge count={0} className='wrapper-layout-header-home__right-notify'>
-                                <BellOutlined className='wrapper-layout-header-home__right-bell' />
+                            <Badge count={1} className='wrapper-layout-header-home__right-notify'>
+                                <Dropdown
+                                    trigger={['click']}
+                                    dropdownRender={() =>
+                                        <>
+                                            <div className="container-my-course">
+                                                <div className="container-my-course-header">
+                                                    <h6>Thông báo</h6>
+                                                    <Link>Đánh dấu đã đọc</Link>
+                                                </div>
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Thông báo cập nhật khóa học năm 2024" nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Tọa đàm phương pháp học tập năm 2024" nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Mở lớp off tại Hà Nội cùng Xuân Mạnh" nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                            </div>
+
+                                        </>
+                                    }
+                                >
+                                    <BellOutlined onClick={(e) => e.preventDefault()} className='wrapper-layout-header-home__right-bell' />
+                                </Dropdown>
                             </Badge>
                             <Dropdown
                                 menu={{
-                                    items: dropDownMenu,
+                                    items: [
+                                        {
+                                            key: '1',
+                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-header'>
+                                                <img src="https://files.fullstack.edu.vn/f8-prod/public-images/671cf6b5a9133.png" alt="Avatar" />
+                                                <div className='wrapper-layout-header-home__right-dropdown-account-section'>
+                                                    <span>Nguyễn Xuân Mạnh</span>
+                                                    <span>@manhnguyen36</span>
+                                                </div>
+                                            </Link>,
+                                        },
+                                        {
+                                            key: '2',
+                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Trang cá nhân</Link>,
+                                        },
+                                        {
+                                            key: '3',
+                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Khóa học của tôi</Link>,
+                                        },
+                                        {
+                                            key: '4',
+                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Viết blog</Link>
+                                        },
+                                        {
+                                            key: '5',
+                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Bài viết của tôi</Link>
+                                        },
+                                        {
+                                            key: '6',
+                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Bài viết đã lưu</Link>
+                                        },
+                                        {
+                                            key: '7',
+                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Cài đặt</Link>
+                                        },
+                                        {
+                                            key: '8',
+                                            label: <Link onClick={() => {
+                                                localStorage.removeItem("token")
+                                                handleLogin()
+                                            }} className='wrapper-layout-header-home__right-dropdown-account-option'>Đăng xuất</Link>
+                                        }
+                                    ],
                                 }}
 
                                 trigger={['click']}

@@ -1,3 +1,4 @@
+import Component404 from "../components/share/404";
 import LayoutHome from "../layouts/LayoutHome";
 import LayoutInfo from "../layouts/LayoutInfo";
 import LayoutLearning from "../layouts/LayoutLearning";
@@ -19,6 +20,9 @@ const publicRoutes = [
         children: [
 
         ]
+    },
+    {
+        path: URL.PUBLIC.NOT_FOUND, element: <Component404 />
     }
     // Thêm các public route khác tại đây
 ];
