@@ -58,21 +58,25 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
         } else if (forgotPassword) {
             if (otp.length === 6) {
                 setIsLoading(true)
-                const { status, message } = await verifyOTPForgotPassword({
-                    email,
-                    otp
-                })
-                if (status === 200) {
-                    notify("success", message)
-                    setTimeout(() => {
-                        closeModal();
-                    }, 2000)
-                    setTimeout(() => {
-                        handleBackToDefault()
-                    }, 4000)
-                } else {
-                    notify("error", message)
-                }
+                setTimeout(async () => {
+                    const { status, message } = await verifyOTPForgotPassword({
+                        email,
+                        otp
+                    })
+                    if (status === 200) {
+                        notify("success", message)
+                        setTimeout(() => {
+                            closeModal();
+                        }, 2000)
+                        setTimeout(() => {
+                            handleBackToDefault()
+                        }, 4000)
+
+                    } else {
+                        notify("error", message)
+                    }
+                    setIsLoading(false)
+                }, 1000);
             } else {
                 notify("warning", "Vui lòng nhập đầy đủ mã OTP trước khi xác nhận")
             }

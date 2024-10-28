@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
-import { Layout, Col, Button, Row, Menu } from "antd";
+import { Layout, Col, Button, Row, Menu, Badge, Avatar, Dropdown } from "antd";
+import { BellOutlined } from "@ant-design/icons"
 import ModelAuth from '../../components/share/ModelAuth/ModelAuth';
+import { useSelector } from 'react-redux';
 import "./LayOutCss.scss"
-
+import { selectorUser } from '../../redux/selector';
 const items = [
     {
         label: <Link to={"/"}>Trang chủ</Link>,
@@ -31,15 +33,29 @@ const items = [
         key: 'youtube',
     }
 ]
+const myCourses = [
+    {
+        label: <div className='header-container-my-course'>
+            <h6>Khóa học của tôi</h6>
+            <Link>Xem tất cả</Link>
+        </div>,
+        key: '1',
+    }
+]
 
 function LayoutHome() {
+    const selectorInfo = useSelector(selectorUser)
     const [open, setOpen] = useState(false);
+    const [isLogin, setIsLogin] = useState(false)
     const [textModel, setTextModel] = useState({
         title: "",
         subTitle: "",
         footer_desc: ""
     })
-
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setIsLogin(!!token)
+    })
 
     const handleLogin = () => {
         setOpen(true);
@@ -58,6 +74,51 @@ function LayoutHome() {
             footer_desc: "Bạn đã có tài khoản?"
         }))
     }
+    const dropDownMenu = [
+        {
+            key: '1',
+            label: <Link className='wrapper-layout-header-home__right-dropdown-account-header'>
+                <img src="https://files.fullstack.edu.vn/f8-prod/public-images/671cf6b5a9133.png" alt="Avatar" />
+                <div className='wrapper-layout-header-home__right-dropdown-account-section'>
+                    <span>Nguyễn Xuân Mạnh</span>
+                    <span>@manhnguyen36</span>
+                </div>
+            </Link>,
+        },
+        {
+            key: '2',
+            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Trang cá nhân</Link>,
+        },
+        {
+            key: '3',
+            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Khóa học của tôi</Link>,
+        },
+        {
+            key: '4',
+            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Viết blog</Link>
+        },
+        {
+            key: '5',
+            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Bài viết của tôi</Link>
+        },
+        {
+            key: '6',
+            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Bài viết đã lưu</Link>
+        },
+        {
+            key: '7',
+            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Cài đặt</Link>
+        },
+        {
+            key: '8',
+            label: <Link onClick={() => {
+                localStorage.removeItem("token")
+                handleLogin()
+            }} className='wrapper-layout-header-home__right-dropdown-account-option'>Đăng xuất</Link>
+        }
+    ];
+    console.log("Xuan manh check selectorInfo", selectorInfo);
+    
     return (
         <>
             <header style={{
@@ -75,13 +136,42 @@ function LayoutHome() {
                                 <Menu defaultSelectedKeys={"trang-chu"} className='wrapper-layout-header-home__center--menu' mode='horizontal' items={items} />
                             </div>
                         </Col>
-                        <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8}>
+                        {isLogin ? <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8} className='wrapper-layout-header-home__right-active'>
+                            <Dropdown
+                                menu={{
+                                    items: myCourses
+                                }}
+                                trigger={['click']}
+                            >
+                                <Button onClick={(e) => e.preventDefault()} type='link' className='wrapper-layout-header-home__right-active-my-course'>Khóa học của tôi</Button>
+                            </Dropdown>
+
+                            <Badge count={0} className='wrapper-layout-header-home__right-notify'>
+                                <BellOutlined className='wrapper-layout-header-home__right-bell' />
+                            </Badge>
+                            <Dropdown
+                                menu={{
+                                    items: dropDownMenu,
+                                }}
+                                trigger={['click']}
+                                className='wrapper-layout-header-home__right-dropdown-account'
+                            >
+                                <Avatar
+                                    onClick={(e) => e.preventDefault()}
+                                    className='wrapper-layout-header-home__right-img'
+                                    src="https://files.fullstack.edu.vn/f8-prod/public-images/671cf6b5a9133.png"
+                                    alt='avatar'
+                                />
+                            </Dropdown>
+                        </Col> : <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8}  >
                             <div className='wrapper-layout-header-home__right'>
                                 <Button type='link' className='wrapper-layout-header-home__right--login' onClick={handleLogin} >Đăng nhập</Button>
                                 <Button className='wrapper-layout-header-home__right--register' onClick={handleRegister}>Đăng ký</Button>
-
                             </div>
-                        </Col>
+                        </Col>}
+
+
+
                     </Row>
                 </Layout>
             </header>

@@ -5,12 +5,15 @@ import ModelOtp from '../ModelOtp'
 import useNotify from '../Notification'
 import { apiLogin, apiRegister, apiForgotPassword } from "../../../services/public/auth"
 import { validateEmail } from '../../../utils/validation'
-export default function OptionAuth({ login, text, register, forgotPassword, textForgotPassword, setOpen, handleBackToDefault }) {
+import { useDispatch } from 'react-redux'
+import { apiGetInfo } from '../../../services/private/auth'
+import { save_user } from '../../../redux/action/auth'
 
+export default function OptionAuth({ login, text, register, forgotPassword, textForgotPassword, setOpen, handleBackToDefault }) {
+    const dispatch = useDispatch()
     const { notify, contextHolder } = useNotify();
     const btnSubmid = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
-
     const [showOtpModal, setShowOtpModal] = useState(false); // Trạng thái hiển thị modal OTP
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordConfirm, setPasswordConfirm] = useState(false);
@@ -132,14 +135,16 @@ export default function OptionAuth({ login, text, register, forgotPassword, text
                 setTimeout(async () => {
                     const response = await apiLogin(dataLogin)
                     if (response?.status === 200) {
-
                         localStorage.setItem("token", response?.token)
-                        notify("success", response?.message)
+                        const infoUser = await apiGetInfo()
+                        dispatch(save_user(infoUser && infoUser.user))
+                        notify("success", response?.message, true, 1.5)
                         setTimeout(() => {
                             setOpen(false)
-
                             handleBackToDefault()
-                        }, 2500)
+                        }, 1500)
+
+
                     } else {
                         notify("error", response?.message)
                     }

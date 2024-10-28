@@ -18,6 +18,15 @@
       }
     }
 
+    .container__header--dropdown {
+      min-width: 240px;
+      .container__header--dropdown__btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+    }
+
     .wrapper-layout-header-home__right {
       display: flex;
       align-items: center;
@@ -39,6 +48,48 @@
         cursor: pointer;
         transition: opacity 0.25s;
         border: none;
+      }
+    }
+
+    .wrapper-layout-header-home__right-active {
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      gap: 20px;
+      .wrapper-layout-header-home__right-active-my-course {
+        font-size: 14px;
+        color: #333;
+        cursor: pointer;
+        font-weight: 600;
+        opacity: 1;
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+      .wrapper-layout-header-home__right-notify {
+        width: 20px;
+        height: 20px;
+        font-size: 11px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+        .wrapper-layout-header-home__right-bell {
+          font-size: 20px;
+          cursor: pointer;
+        }
+      }
+
+      .wrapper-layout-header-home__right-dropdown-account {
+        cursor: pointer;
+        .wrapper-layout-header-home__right-img {
+          object-fit: cover;
+          border-radius: 50%;
+          width: 29px;
+          height: 29px;
+        }
+      }
+      .wrapper-layout-header-home__right-active--my-course {
       }
     }
     .wrapper-layout-header-home__left {
@@ -63,4 +114,40 @@
       }
     }
   }
+}
+.wrapper-layout-header-home__right-dropdown-account-header {
+  display: flex;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e8ebed;
+  span {
+    &:first-child {
+      font-size: 16px;
+      font-weight: 600;
+      color: #292929;
+    }
+    &:last-child {
+      // margin-top: 8px;
+      font-size: 14px;
+      color: #757575;
+    }
+  }
+  img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  .wrapper-layout-header-home__right-dropdown-account-section {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.wrapper-layout-header-home__right-dropdown-account-option {
+  font-size: 14px;
+  cursor: pointer;
+  color: #666 !important;
+}
+.header-container-my-course {
 }
