@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 
 import { Layout, Col, Button, Row, Menu, Badge, Avatar, Dropdown } from "antd";
+import MyCourseItem from '../../components/share/MyCourseItem';
 import { BellOutlined } from "@ant-design/icons"
 import ModelAuth from '../../components/share/ModelAuth/ModelAuth';
 import { useSelector } from 'react-redux';
@@ -35,11 +36,14 @@ const items = [
 ]
 const myCourses = [
     {
-        label: <div className='header-container-my-course'>
-            <h6>Khóa học của tôi</h6>
-            <Link>Xem tất cả</Link>
-        </div>,
-        key: '1',
+        label: <Link className='header-container-my-course'>
+            <img src="https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png" alt="" />
+            <div className='header-container-my-course-desc'>
+                <strong>App "Đừng chạm tay lên mặt"</strong>
+                <span>Học cách đây 14 ngày trước</span>
+            </div>
+        </Link>,
+        key: '2'
     }
 ]
 
@@ -117,8 +121,7 @@ function LayoutHome() {
             }} className='wrapper-layout-header-home__right-dropdown-account-option'>Đăng xuất</Link>
         }
     ];
-    console.log("Xuan manh check selectorInfo", selectorInfo);
-    
+
     return (
         <>
             <header style={{
@@ -141,6 +144,30 @@ function LayoutHome() {
                                 menu={{
                                     items: myCourses
                                 }}
+
+                                dropdownRender={() =>
+                                    <>
+                                        <div className="container-my-course">
+                                            <div className="container-my-course-header">
+                                                <h6>Khóa học của tôi</h6>
+                                                <Link >Xem tất cả</Link>
+                                            </div>
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} />
+                                        </div>
+
+                                    </>
+                                }
+
+
                                 trigger={['click']}
                             >
                                 <Button onClick={(e) => e.preventDefault()} type='link' className='wrapper-layout-header-home__right-active-my-course'>Khóa học của tôi</Button>
@@ -153,6 +180,7 @@ function LayoutHome() {
                                 menu={{
                                     items: dropDownMenu,
                                 }}
+
                                 trigger={['click']}
                                 className='wrapper-layout-header-home__right-dropdown-account'
                             >
