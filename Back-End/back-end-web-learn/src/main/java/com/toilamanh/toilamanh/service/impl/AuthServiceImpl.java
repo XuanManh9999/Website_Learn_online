@@ -130,7 +130,9 @@ public class AuthServiceImpl implements AuthService {
         try {
             String userName = jwtUtilsObjectFactory.getObject().extractUsername(token);
             User user = userRepository.findByUserNameAndActive(userName, 1).orElseThrow(() -> new UserAciveNotFound("userName is not found") );
+
             UserDTO userDTO = mapperObjectFactory.getObject().map(user, UserDTO.class);
+
             return RegisterResponse.builder()
                     .status(HttpStatus.OK.value())
                     .message("My Info Success")

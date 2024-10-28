@@ -1,13 +1,14 @@
 package com.toilamanh.toilamanh.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
+    @JsonProperty("user_name")
     private String userName;
-
     private String gender;
 
     private String email;
@@ -17,7 +18,6 @@ public class UserDTO {
     private String facebook;
 
     private String google;
-
     private String phonenumber;
 
     private String avatar;
