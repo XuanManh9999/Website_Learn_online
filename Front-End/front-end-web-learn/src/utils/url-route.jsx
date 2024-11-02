@@ -9,7 +9,10 @@ const URL = {
         NOT_FOUND: "*"
     },
     PRIVATE: {
-        HOME: "/admin"
+        HOME: "/admin",
+        SETTING: "/setting",
+        MY_INFOR: "my-info",
+        MY_PASSWORD: "change-password"
     }
 }
 export default URL;

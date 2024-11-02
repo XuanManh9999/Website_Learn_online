@@ -7,12 +7,6 @@ export const save_user = (payload) => {
     }
 }
 
-export const get_user = () => {
-    return {
-        type: TYPE_APP.GET_USER
-    }
-}
-
 export const clear_user = () => {
     return {
         type: TYPE_APP.CLEAR_USER

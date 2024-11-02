@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
+import { clear_user } from '../../redux/action/auth';
+
+
 const api = axios.create({
     baseURL: "http://localhost:8080" // Cần thêm http:// để axios nhận diện đúng địa chỉ
 });
@@ -7,8 +12,7 @@ const api = axios.create({
 // Add a request interceptor
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem("token");
-        
+        const token = Cookies.get("token");
         if (token) {
             config.headers.Authorization = `Bearer ${token}`; // Thêm token vào headers
         }
@@ -27,9 +31,7 @@ api.interceptors.response.use(
     (error) => {
         // Kiểm tra nếu lỗi là do token hết hạn hoặc không hợp lệ
         if (error.response && error.response.status === 401) {
-            // Token không hợp lệ hoặc hết hạn, thực hiện đăng xuất hoặc refresh token
-            localStorage.removeItem("token"); // Xóa token cũ
-            window.location.href = "/login"; // Chuyển hướng về trang login
+            window.location.href = ""; // Chuyển hướng về trang login
         }
         return Promise.reject(error); // Trả về lỗi để xử lý tiếp
     }

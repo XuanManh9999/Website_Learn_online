@@ -117,8 +117,6 @@
 .container-my-course {
   padding: 14px 20px 16px;
   min-width: 380px;
-  min-height: 100px;
-  max-height: 615px;
   padding-bottom: 12px;
   background: #fff;
   box-shadow: 0 -4px 32px #0003;
@@ -126,23 +124,7 @@
   border-radius: 10px;
   will-change: opacity, transform;
   color: #1d2129;
-  overflow: auto;
 
-  &::-webkit-scrollbar {
-    width: 6px; /* Độ rộng của thanh cuộn dọc */
-    height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #888; /* Màu sắc của thanh cuộn */
-    border-radius: 10px; /* Độ bo góc của thanh cuộn */
-  }
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Màu sắc khi hover vào thanh cuộn */
-  }
-  &::-webkit-scrollbar-track {
-    background-color: #f1f1f1; /* Màu nền của đường ray thanh cuộn */
-  }
   .container-my-course-header {
     display: flex;
     justify-content: space-between;
@@ -162,66 +144,85 @@
       }
     }
   }
-
-  .container-my-course__item-course {
-    cursor: pointer;
-    padding: 8px 12px;
-    transition: background-color 0.3s;
-    border-radius: 10px;
-    display: flex;
-    gap: 12px;
-
-    &:hover {
-      background-color: #1618230d;
+  .container-my-course-header__body {
+    min-height: 100px;
+    max-height: 335px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 6px; /* Độ rộng của thanh cuộn dọc */
+      height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
     }
-    img {
-      width: 120px;
-      min-height: 67px;
-      border-radius: 8px;
-      object-fit: cover;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #888; /* Màu sắc của thanh cuộn */
+      border-radius: 10px; /* Độ bo góc của thanh cuộn */
     }
-    .container-my-course__item--desc-course {
-      h3 {
-        font-size: 16px;
-        color: #333;
-        font-weight: 600;
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: #555; /* Màu sắc khi hover vào thanh cuộn */
+    }
+    &::-webkit-scrollbar-track {
+      background-color: #f1f1f1; /* Màu nền của đường ray thanh cuộn */
+    }
+    .container-my-course__item-course {
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: background-color 0.3s;
+      border-radius: 10px;
+      display: flex;
+      gap: 12px;
+
+      &:hover {
+        background-color: #1618230d;
       }
-      span {
-        color: #666;
-        font-size: 14px;
+      img {
+        width: 120px;
+        min-height: 67px;
+        border-radius: 8px;
+        object-fit: cover;
+      }
+      .container-my-course__item--desc-course {
+        h3 {
+          font-size: 16px;
+          color: #333;
+          font-weight: 600;
+        }
+        span {
+          color: #666;
+          font-size: 14px;
+        }
       }
     }
-  }
-  // Bell
+    // Bell
 
-  .container-my-course__item-bell {
-    cursor: pointer;
-    padding: 8px 12px;
-    transition: background-color 0.3s;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    .container-my-course__item-bell {
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: background-color 0.3s;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
 
-    &:hover {
-      background-color: #1618230d;
-    }
-    img {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .container-my-course__item--desc-bell {
-      strong {
-        font-size: 16px;
-        color: #333;
-        display: block;
-        word-break: break-word;
+      &:hover {
+        background-color: #1618230d;
       }
-      span {
-        color: #666;
-        font-size: 14px;
+      img {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      .container-my-course__item--desc-bell {
+        strong {
+          font-size: 16px;
+          color: #333;
+          display: block;
+          word-break: break-word;
+        }
+        span {
+          color: #666;
+          font-size: 14px;
+        }
       }
     }
   }

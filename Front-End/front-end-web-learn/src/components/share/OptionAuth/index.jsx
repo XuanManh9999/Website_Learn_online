@@ -8,6 +8,9 @@ import { validateEmail } from '../../../utils/validation'
 import { useDispatch } from 'react-redux'
 import { apiGetInfo } from '../../../services/private/auth'
 import { save_user } from '../../../redux/action/auth'
+import Cookies from 'js-cookie'
+
+
 
 export default function OptionAuth({ login, text, register, forgotPassword, textForgotPassword, setOpen, handleBackToDefault }) {
     const dispatch = useDispatch()
@@ -28,7 +31,6 @@ export default function OptionAuth({ login, text, register, forgotPassword, text
         password: "",
         confirmPassword: ""
     })
-
     const [dataForgotPassword, setDataForgotPassword] = useState(null)
 
     const handleOnchangeInputLogin = (event) => {
@@ -135,9 +137,12 @@ export default function OptionAuth({ login, text, register, forgotPassword, text
                 setTimeout(async () => {
                     const response = await apiLogin(dataLogin)
                     if (response?.status === 200) {
-                        localStorage.setItem("token", response?.token)
-                        const infoUser = await apiGetInfo()
-                        dispatch(save_user(infoUser && infoUser.user))
+                        const { token } = response
+                        Cookies.set("token", token)
+                        const info = await apiGetInfo()
+                        dispatch(save_user(
+                            info.user
+                        ))
                         notify("success", response?.message, true, 1.5)
                         setTimeout(() => {
                             setOpen(false)
@@ -154,6 +159,8 @@ export default function OptionAuth({ login, text, register, forgotPassword, text
             }
         }
     }
+
+
 
 
 

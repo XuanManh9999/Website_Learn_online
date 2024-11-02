@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
-
+import Cookies from 'js-cookie';
 import { Layout, Col, Button, Row, Menu, Badge, Avatar, Dropdown } from "antd";
 import MyCourseItem from '../../components/share/MyCourseItem';
 import { BellOutlined } from "@ant-design/icons"
 import ModelAuth from '../../components/share/ModelAuth/ModelAuth';
-import { useSelector } from 'react-redux';
-import "./LayOutCss.scss"
+import { useDispatch, useSelector } from 'react-redux';
 import { selectorUser } from '../../redux/selector';
+import { clear_user, save_user } from '../../redux/action/auth';
+import { apiGetInfo } from '../../services/private/auth';
+import "./LayOutCss.scss"
 const items = [
     {
         label: <Link to={"/"}>Trang chủ</Link>,
@@ -36,20 +38,31 @@ const items = [
 ]
 
 function LayoutHome() {
-    const selectorInfo = useSelector(selectorUser)
+    const dispatch = useDispatch()
+
+    const { isLoggedIn } = useSelector(selectorUser)
+
     const [open, setOpen] = useState(false);
-    const [isLogin, setIsLogin] = useState(false)
     const [textModel, setTextModel] = useState({
         title: "",
         subTitle: "",
         footer_desc: ""
     })
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        setIsLogin(!!token)
-    })
+        const fetching = async () => {
+            const response = await apiGetInfo();
+            if (response && response?.status == 200) {
+                dispatch(save_user(response.user))
+            } else {
+                dispatch(clear_user())
+                handleLogin()
+            }
+        }
+        fetching();
+    }, [])
 
-    const handleLogin = () => {
+
+    function handleLogin() {
         setOpen(true);
         setTextModel(() => ({
             title: "Đăng nhập vào CODE ZEN",
@@ -85,7 +98,7 @@ function LayoutHome() {
                                 <Menu defaultSelectedKeys={"trang-chu"} className='wrapper-layout-header-home__center--menu' mode='horizontal' items={items} />
                             </div>
                         </Col>
-                        {isLogin ? <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8} className='wrapper-layout-header-home__right-active'>
+                        {isLoggedIn ? <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8} className='wrapper-layout-header-home__right-active'>
                             <Dropdown
                                 dropdownRender={() =>
                                     <>
@@ -94,16 +107,18 @@ function LayoutHome() {
                                                 <h6>Khóa học của tôi</h6>
                                                 <Link >Xem tất cả</Link>
                                             </div>
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
-                                            <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            <div className='container-my-course-header__body'>
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                                <MyCourseItem img={"https://files.fullstack.edu.vn/f8-prod/courses/4/61a9e9e701506.png"} nameClass={"course"} />
+                                            </div>
                                         </div>
 
                                     </>
@@ -125,16 +140,18 @@ function LayoutHome() {
                                                     <h6>Thông báo</h6>
                                                     <Link>Đánh dấu đã đọc</Link>
                                                 </div>
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Thông báo cập nhật khóa học năm 2024" nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Tọa đàm phương pháp học tập năm 2024" nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Mở lớp off tại Hà Nội cùng Xuân Mạnh" nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
-                                                <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                <div className='container-my-course-header__body'>
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Thông báo cập nhật khóa học năm 2024" nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Tọa đàm phương pháp học tập năm 2024" nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} title="Mở lớp off tại Hà Nội cùng Xuân Mạnh" nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                    <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
+                                                </div>
                                             </div>
 
                                         </>
@@ -178,12 +195,12 @@ function LayoutHome() {
                                         },
                                         {
                                             key: '7',
-                                            label: <Link className='wrapper-layout-header-home__right-dropdown-account-option'>Cài đặt</Link>
+                                            label: <Link to={"/setting/my-info"} className='wrapper-layout-header-home__right-dropdown-account-option'>Cài đặt</Link>
                                         },
                                         {
                                             key: '8',
                                             label: <Link onClick={() => {
-                                                localStorage.removeItem("token")
+                                                dispatch(clear_user())
                                                 handleLogin()
                                             }} className='wrapper-layout-header-home__right-dropdown-account-option'>Đăng xuất</Link>
                                         }

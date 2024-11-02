@@ -11,7 +11,6 @@ function ModelAuth({ open, setOpen, text, handleLogin, handleRegister, setTextMo
     const [isShowBackToDefault, setShowBackToDefault] = useState(false)
     const [textForgotPassword, setTextForgotPassword] = useState(null)
 
-
     const handleWithAccountUserName = () => {
         setIsHideOption(true)
         if (text.subTitle == "Đăng nhập") {

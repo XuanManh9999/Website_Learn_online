@@ -16,3 +16,9 @@ export const validatePhoneNumber = (phoneNumber) => {
     const phoneRegex = /^\+?[0-9]{10,15}$/;
     return phoneRegex.test(phoneNumber);
 };
+
+function isValidJWT(token) {
+    // Regex kiểm tra định dạng JWT
+    const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+    return jwtRegex.test(token);
+}
