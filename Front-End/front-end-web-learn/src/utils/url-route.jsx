@@ -6,7 +6,7 @@ const URL = {
         HOME: "/",
         LEARNING: "/learning",
         INFO: "/info",
-        NOT_FOUND: "*"
+        NOT_FOUND: "*",
     },
     PRIVATE: {
         HOME: "/admin",

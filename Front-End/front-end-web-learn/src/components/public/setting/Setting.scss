@@ -15,7 +15,6 @@
         top: 0; /* Vị trí cố định khi cuộn */
         padding-right: 40px;
         border-right: 1px solid #dee3e9;
-        height: 120vh; /* Chiều cao toàn phần */
         overflow: hidden; /* Ngăn cuộn phần bên trái */
 
         img {
@@ -60,8 +59,7 @@
       .container-setting__content--reight {
         padding-right: 40px;
         flex: 1;
-        height: 120vh;
-        max-height: 120vh; /* Chiều cao tối đa để cuộn */
+
 
       
         .container-setting__content--reight-icon {

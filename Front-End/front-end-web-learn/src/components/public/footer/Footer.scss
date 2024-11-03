@@ -1,0 +1,96 @@
+.wrapper-banner-footer {
+  position: relative;
+  color: #fff;
+  .wrapper-banner-footer--container {
+    padding: 40px 28px;
+    background-color: #181821;
+    .wrapper-banner-footer-wraper {
+      display: flex;
+      gap: 10px;
+      h2 {
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+      span {
+        font-weight: 600;
+        color: #a9b3bb;
+      }
+      a {
+        color: #a9b3bb;
+        line-height: 1.6;
+        font-size: 15px;
+      }
+      ul {
+        margin-top: 20px;
+      }
+      .wrapper-banner-footer-wraper-1 {
+        .wrapper-banner-footer-wraper-1-header {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          img {
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+            object-fit: contain;
+            border-radius: 8px;
+          }
+        }
+        .wrapper-banner-footer-wraper-1-content {
+          margin-top: 20px;
+          line-height: 1.6;
+          font-size: 15px;
+        }
+        .wrapper-banner-footer-wraper-1-footer {
+          margin-top: 20px;
+        }
+      }
+      .wrapper-banner-footer-wraper-3,
+      .wrapper-banner-footer-wraper-2,
+      .wrapper-banner-footer-wraper-4,
+      .wrapper-banner-footer-wraper-5 {
+        margin-top: 20px;
+      }
+      .wrapper-banner-footer-wraper-5 {
+        ul {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          li {
+            list-style-type: none;
+            line-height: 1.6;
+            color: #a9b3bb;
+          }
+        }
+      }
+    }
+    .wrapper-banner-footer-botton {
+      font-size: 14px;
+      color: #a9b3bb;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      .wrapper-banner-footer-botton-info {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        gap: 15px;
+        span {
+          font-size: 32px;
+          cursor: pointer;
+          &:nth-child(1) {
+            color: #ff0000;
+          }
+          &:nth-child(2) {
+            color: #1877f2;
+          }
+          &:nth-child(3) {
+            color: #25f4ee;
+          }
+        }
+      }
+    }
+  }
+}

@@ -3,11 +3,15 @@ import LayoutHome from "../layouts/LayoutHome";
 import LayoutInfo from "../layouts/LayoutInfo";
 import LayoutLearning from "../layouts/LayoutLearning";
 import URL from "../utils/url-route";
+import Section from "../components/share/Section";
 const publicRoutes = [
     {
         path: URL.PUBLIC.HOME, element: <LayoutHome />,
         children: [
-
+            {
+                index: true, // Đặt Section là phần tử mặc định
+                element: <Section />
+            }
         ]
     },
     {

@@ -6,7 +6,8 @@ import { useDispatch } from "react-redux";
 import { apiGetInfo } from "../services/private/auth";
 import { save_user } from "../redux/action/auth";
 import { useEffect, useState } from "react";
-
+import { Flex, Spin } from 'antd';
+import SpinLoading from "../components/share/SpinLoading";
 
 const PrivateUserRoute = ({ element }) => {
     const token = Cookies.get("token");
@@ -27,12 +28,14 @@ const PrivateUserRoute = ({ element }) => {
 
         setTimeout(() => {
             fetchUserInfo();
-        }, 500);
+        }, 1000);
     }, [dispatch, token]);
 
     if (isLoading) {
         // Có thể thêm một loading spinner ở đây nếu cần
-        return <div>Loading...</div>;
+        return (
+            <SpinLoading />
+        )
     }
 
     // Chuyển hướng sau khi kiểm tra hoàn tất
