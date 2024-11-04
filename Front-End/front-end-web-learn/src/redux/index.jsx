@@ -7,7 +7,7 @@ const persistConfig = {
     key: 'auth',
     storage,
     // Specify the reducers you want to persist
-    whitelist: ['user'],
+    whitelist: ['user', 'course'],
 };
 const persistedReducer = persistReducer(persistConfig, mainReducer);
 

@@ -6,6 +6,7 @@ const URL = {
         HOME: "/",
         LEARNING: "/learning",
         INFO: "/info",
+        COURSE_INFO: "/courses/*",
         NOT_FOUND: "*",
     },
     PRIVATE: {

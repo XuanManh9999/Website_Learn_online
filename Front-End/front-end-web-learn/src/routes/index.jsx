@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { apiGetInfo } from "../services/private/auth";
 import { save_user } from "../redux/action/auth";
 import { useEffect, useState } from "react";
-import { Flex, Spin } from 'antd';
 import SpinLoading from "../components/share/SpinLoading";
 
 const PrivateUserRoute = ({ element }) => {
@@ -23,7 +22,7 @@ const PrivateUserRoute = ({ element }) => {
                     setIsAuthenticated(true);
                 }
             }
-            setIsLoading(false); // Đánh dấu đã hoàn tất việc tải
+            setIsLoading(false); 
         };
 
         setTimeout(() => {

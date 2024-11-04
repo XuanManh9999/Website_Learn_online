@@ -1,7 +1,7 @@
 import React from 'react'
 import "./Section.scss"
 import { Col, Layout, Row } from 'antd'
-import { RightOutlined, UsergroupAddOutlined, ClockCircleOutlined, PlayCircleOutlined } from "@ant-design/icons"
+import { RightOutlined, ClockCircleOutlined, PlayCircleOutlined } from "@ant-design/icons"
 import { Link } from 'react-router-dom'
 function Section() {
     return (
@@ -21,7 +21,7 @@ function Section() {
                 <Row className='section-container-list-items' gutter={[20, 20]} >
                     <Col xxl={4} xl={6} lg={8} className='section-container-item'>
                         <div className='section-container-item__header'>
-                            <Link>
+                            <Link to={"/courses/kien-thuc-nhap-mon-it"}>
                                 <img src="https://files.fullstack.edu.vn/f8-prod/courses/7.png" alt="course-free" />
                             </Link>
                         </div>
