@@ -7,10 +7,9 @@ function InfoCourse() {
         <>
             <Header />
             <main>
-                <Outlet/>
+                <Outlet />
             </main>
             <Footer />
-
         </>
     )
 }

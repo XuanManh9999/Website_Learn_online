@@ -3,24 +3,22 @@ import LayoutHome from "../layouts/LayoutHome";
 import LayoutInfo from "../layouts/LayoutInfo";
 import URL from "../utils/url-route";
 import Section from "../components/share/Section";
-import InfoCourse from "../layouts/LayoutInfoCourse";
 import Romap from "../components/public/romap";
+import Introduction from "../components/share/Introduction";
 const publicRoutes = [
     {
         path: URL.PUBLIC.HOME, element: <LayoutHome />,
         children: [
             {
-                index: true, // Đặt Section là phần tử mặc định
-                element: <Section />
-            }
-        ]
-    },
-    {
-        path: URL.PUBLIC.COURSE_INFO, element: <InfoCourse />,
-        children: [
-            {
-                path: ':courseSlug',
+                path: "/course",
                 element: <Romap />
+            },
+            {
+                index: true, // Đặt Section là phần tử mặc định
+                element: <>
+                    <Introduction />
+                    <Section />
+                </>
             }
         ]
     }, {

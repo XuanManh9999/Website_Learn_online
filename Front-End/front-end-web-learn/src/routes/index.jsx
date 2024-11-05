@@ -22,13 +22,15 @@ const PrivateUserRoute = ({ element }) => {
                     setIsAuthenticated(true);
                 }
             }
-            setIsLoading(false); 
+            setIsLoading(false);
         };
 
         setTimeout(() => {
             fetchUserInfo();
         }, 1000);
     }, [dispatch, token]);
+
+
 
     if (isLoading) {
         // Có thể thêm một loading spinner ở đây nếu cần
@@ -45,10 +47,32 @@ const PrivateAdminRoute = ({ element }) => {
 
 }
 
+const PublicRoute = ({ element }) => {
 
+    const [isLoading, setIsLoading] = useState(true)
+    useEffect(() => {
+        setTimeout(() => {
+            setIsLoading(false)
+        }, 1000);
+    })
+    if (isLoading) {
+        // Có thể thêm một loading spinner ở đây nếu cần
+        return (
+            <SpinLoading />
+        )
+    }
+    return !isLoading ? element : <SpinLoading />
+}
 const AppRoutes = () => {
+    window.scroll({
+        top: 0,
+        behavior: "instant"
+    })
     const routes = [
-        ...publicRoutes,
+        ...publicRoutes.map(route => ({
+            ...route,
+            element: <PublicRoute element={route.element} />
+        })),
         ...privateUserRoutes.map(route => ({
             ...route,
             element: <PrivateUserRoute element={route.element} />

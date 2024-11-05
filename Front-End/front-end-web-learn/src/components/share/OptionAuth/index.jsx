@@ -5,15 +5,17 @@ import ModelOtp from '../ModelOtp'
 import useNotify from '../Notification'
 import { apiLogin, apiRegister, apiForgotPassword } from "../../../services/public/auth"
 import { validateEmail } from '../../../utils/validation'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { apiGetInfo } from '../../../services/private/auth'
 import { save_user } from '../../../redux/action/auth'
 import Cookies from 'js-cookie'
+import { selectorShowHide } from '../../../redux/selector'
 
 
 
-export default function OptionAuth({ login, text, register, forgotPassword, textForgotPassword, setOpen, handleBackToDefault }) {
+export default function OptionAuth() {
     const dispatch = useDispatch()
+    const state = useSelector(selectorShowHide)
     const { notify, contextHolder } = useNotify();
     const btnSubmid = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -161,39 +163,11 @@ export default function OptionAuth({ login, text, register, forgotPassword, text
     }
 
 
-
-
-
-
     return (
         <>
             {contextHolder}
             <div className='container__option-auth'>
-                {login &&
-                    <>
-                        <div className='container__option-auth--login__option'>
-                            <label htmlFor="user-name">Tên đăng nhập?</label>
-                            <Input size="large" id='user-name' name='userName'
-                                onChange={handleOnchangeInputLogin}
-                                placeholder="Tên đăng nhập..." className='container__option-auth--login__input' />
-                        </div>
-                        <div className='container__option-auth--login__option'>
-                            <label htmlFor="password">Mật khẩu?</label>
-                            <Input.Password
-                                className='container__option-auth--login__input'
-                                id='password'
-                                placeholder="Nhập vào mật khẩu..."
-                                name='password'
-                                onChange={handleOnchangeInputLogin}
-                                visibilityToggle={{
-                                    visible: passwordVisible,
-                                    onVisibleChange: setPasswordVisible,
-                                }}
-                            />
-                        </div>
-                    </>
-                }
-                {register &&
+                {state.isFormRegister &&
                     <>
                         <div className='container__option-auth--register__option'>
                             <label htmlFor="user-name">Tên người dùng?</label>
@@ -236,9 +210,33 @@ export default function OptionAuth({ login, text, register, forgotPassword, text
                         </div>
                     </>
                 }
+                {state.isFormLogin &&
+                    <>
+                        <div className='container__option-auth--login__option'>
+                            <label htmlFor="user-name">Tên đăng nhập?</label>
+                            <Input size="large" id='user-name' name='userName'
+                                onChange={handleOnchangeInputLogin}
+                                placeholder="Tên đăng nhập..." className='container__option-auth--login__input' />
+                        </div>
+                        <div className='container__option-auth--login__option'>
+                            <label htmlFor="password">Mật khẩu?</label>
+                            <Input.Password
+                                className='container__option-auth--login__input'
+                                id='password'
+                                placeholder="Nhập vào mật khẩu..."
+                                name='password'
+                                onChange={handleOnchangeInputLogin}
+                                visibilityToggle={{
+                                    visible: passwordVisible,
+                                    onVisibleChange: setPasswordVisible,
+                                }}
+                            />
+                        </div>
+                    </>
+                }
 
                 {
-                    forgotPassword &&
+                    state.isFormForgotpassword &&
                     <>
                         <div className='container__option-auth--email__option'>
                             <label htmlFor="user-name">Email?</label>
@@ -248,7 +246,7 @@ export default function OptionAuth({ login, text, register, forgotPassword, text
                     </>
                 }
 
-                {(login || register || forgotPassword) && <Button loading={isLoading} ref={btnSubmid} onKeyDown={handleKeyDown} onClick={handleSubmid} className='container__option-auth--submid'>{textForgotPassword != null ? textForgotPassword.subTitle : text.subTitle}</Button>}
+                {<Button loading={isLoading} ref={btnSubmid} onKeyDown={handleKeyDown} onClick={handleSubmid} className='container__option-auth--submid'>{state.textModel.subTitle}</Button>}
 
 
             </div>

@@ -91,6 +91,7 @@
       flex-direction: column;
       align-items: center;
       gap: 16px;
+      cursor: pointer;
       .container-romap-item__right-header {
         position: relative;
         background-image: url(https://files.fullstack.edu.vn/f8-prod/courses/21/63e1bcbaed1dd.png);
@@ -101,7 +102,6 @@
         background-size: 100% auto;
         border-radius: 16px;
         opacity: 0.74; /* Điều chỉnh độ mờ */
-
 
         .container-romap-item__right-header-icon {
           font-size: 60px;
@@ -140,22 +140,49 @@
         font-weight: 700;
       }
       .container-romap-item__right-bottom {
+        width: 100%;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        align-items: center;
+        gap: 16px;
         li {
           display: flex;
-          justify-content: flex-end;
+          align-items: center;
+          justify-content: center;
           gap: 5px;
+          font-size: 16px;
+          color: #494949;
           strong {
-            font-size: 16px;
-            color: #494949;
+            font-weight: bold;
           }
           span {
+            min-width: 10pxs;
             font-size: 14px;
           }
         }
       }
+    }
+  }
+}
+
+.container-preview-introduction-video {
+  padding: 12px 28px 28px;
+  h3 {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    position: absolute;
+    top: 5px;
+  }
+  .container-preview-introduction-video__content {
+    margin: 24px 0;
+    display: flex;
+    flex-direction: column;
+    h2 {
+      font-weight: 900;
+      font-size: 20px;
+      color: #333;
     }
   }
 }

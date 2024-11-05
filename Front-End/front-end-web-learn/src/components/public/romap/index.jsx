@@ -1,7 +1,11 @@
 import React, { useRef, useState } from 'react'
 import "./Romap.scss"
-import { Col, Layout, Row, Collapse, Button } from "antd"
-import { PlusOutlined, MinusOutlined, PlayCircleOutlined, ClockCircleOutlined } from "@ant-design/icons"
+import { Col, Layout, Row, Collapse, Button, Modal } from "antd"
+import { PlusOutlined, MinusOutlined, PlayCircleOutlined, ClockCircleOutlined, DashboardOutlined, PlaySquareOutlined, TrophyOutlined } from "@ant-design/icons"
+import { useSelector } from 'react-redux';
+import { selectorUser } from '../../../redux/selector';
+import Video from '../../share/Video';
+
 const text = `
   A dog is a type of domesticated animal.
   Known for its loyalty and faithfulness,
@@ -55,6 +59,12 @@ const items = [
     },
 ];
 function Romap() {
+    const { isLoggedIn } = useSelector(selectorUser)
+
+    console.log("Xuan manh check isLoggedIn", isLoggedIn);
+
+
+    const [isShowModel, setIsShowModel] = useState(false)
     const [activeKeys, setActiveKeys] = useState(['1']);
     const refCollapse = useRef()
     const toggleExpandAll = () => {
@@ -72,74 +82,90 @@ function Romap() {
         setActiveKeys(keys); // Cập nhật trực tiếp `activeKeys` với các key được mở
     };
 
+    const handleViewPrewView = () => {
+        setIsShowModel(true)
+    }
+
     return (
-        <Layout className='container-romap'>
-            <Row className='container-romap-list-item' gutter={[25, 25]}>
-                <Col xxl={18} xl={18} className='container-romap-item__left'>
-                    <h1>Lập trình C++ từ cơ bản đến nâng cao</h1>
-                    <p>Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.</p>
-                    <section className='container-romap-item__left--course'>
-                        <h2>Nội dung khóa học</h2>
-                        <div className="container-romap-item__left--desc-course">
-                            <ul>
-                                <li><strong>11</strong> chương</li>
-                                <li><strong>138</strong> bài học</li>
-                                <li>Thời lượng<strong> 10 giờ 29 phút</strong></li>
-                            </ul>
-                            <span onClick={toggleExpandAll} ref={refCollapse}>Mở rộng tất cả</span>
+        <>
+            <Layout className='container-romap'>
+                <Row className='container-romap-list-item' gutter={[25, 25]}>
+                    <Col xxl={18} xl={18} className='container-romap-item__left'>
+                        <h1>Lập trình C++ từ cơ bản đến nâng cao</h1>
+                        <p>Khóa học lập trình C++ từ cơ bản tới nâng cao dành cho người mới bắt đầu. Mục tiêu của khóa học này nhằm giúp các bạn nắm được các khái niệm căn cơ của lập trình, giúp các bạn có nền tảng vững chắc để chinh phục con đường trở thành một lập trình viên.</p>
+                        <section className='container-romap-item__left--course'>
+                            <h2>Nội dung khóa học</h2>
+                            <div className="container-romap-item__left--desc-course">
+                                <ul>
+                                    <li><strong>11</strong> chương</li>
+                                    <li><strong>138</strong> bài học</li>
+                                    <li>Thời lượng<strong> 10 giờ 29 phút</strong></li>
+                                </ul>
+                                <span onClick={toggleExpandAll} ref={refCollapse}>Mở rộng tất cả</span>
+                            </div>
+                        </section>
+                        <Collapse
+                            activeKey={activeKeys}
+                            onChange={handlePanelChange}
+                            className='container-romap-item__left-course--romap'
+                            expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
+                            items={items}
+                        >
+                        </Collapse>
+                    </Col>
+
+                    <Col xxl={6} xl={6} className='container-romap-item__right' >
+                        <div className='container-romap-item__right-header' onClick={handleViewPrewView}>
+                            <PlayCircleOutlined className='container-romap-item__right-header-icon' />
+                            <p className='container-romap-item__right-header-desc'>Xem giới thiệu khóa học</p>
                         </div>
-                    </section>
-                    <Collapse
-                        activeKey={activeKeys}
-                        onChange={handlePanelChange}
-                        className='container-romap-item__left-course--romap'
-                        expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
-                    >
-                        {items.map(item => (
-                            <Collapse.Panel key={item.key} header={item.label}>
-                                {item.children}
-                            </Collapse.Panel>
-                        ))}
-                    </Collapse>
-                </Col>
-                <Col xxl={6} xl={6} className='container-romap-item__right'>
-                    <div className='container-romap-item__right-header'>
-                        <PlayCircleOutlined className='container-romap-item__right-header-icon' />
-                        <p className='container-romap-item__right-header-desc'>Xem giới thiệu khóa học</p>
-                    </div>
-                    <div className="container-romap-item__right-header--type-course">
-                        <h5>Miễn phí</h5>
-                    </div>
-                    <Button type='primary'>Đăng ký khóa học</Button>
-                    <ul className='container-romap-item__right-bottom'>
-                        <li>
-                            <ClockCircleOutlined />
-                            <strong>
+                        <div className="container-romap-item__right-header--type-course">
+                            <h5>Miễn phí</h5>
+                        </div>
+                        <Button type='primary'>Đăng ký khóa học</Button>
+                        <ul className='container-romap-item__right-bottom'>
+                            <li>
+                                <DashboardOutlined />
                                 Trình độ cơ bản
-                            </strong>
-                        </li>
-                        <li>
-                            <ClockCircleOutlined />
-                            <strong>
-                                Trình độ cơ bản
-                            </strong>
-                        </li>
-                        <li>
-                            <ClockCircleOutlined />
-                            <strong>
-                                Trình độ cơ bản
-                            </strong>
-                        </li>
-                        <li>
-                            <ClockCircleOutlined />
-                            <strong>
-                                Trình độ cơ bản
-                            </strong>
-                        </li>
-                    </ul>
-                </Col>
-            </Row>
-        </Layout>
+                            </li>
+                            <li>
+                                <PlaySquareOutlined />
+                                Tổng số
+                                <strong>
+                                    12
+                                </strong>
+                                bài học
+                            </li>
+                            <li>
+                                <ClockCircleOutlined />
+                                Thời lượng
+                                <strong>
+                                    03 giờ 26 phút
+                                </strong>
+                            </li>
+                            <li>
+                                <TrophyOutlined />
+                                Học mọi lúc, mọi nơi
+                            </li>
+                        </ul>
+                    </Col>
+                </Row>
+            </Layout>
+            <Modal
+                className='container-preview-introduction-video'
+                open={isShowModel}
+                onCancel={() => setIsShowModel(false)}
+                centered
+                footer={null}
+                width={800}
+            >
+                <h3>Giới thiệu khóa học</h3>
+                <div className="container-preview-introduction-video__content">
+                    <h2>Kiến thức nhập môn IT</h2>
+                    <Video videoId="qAbOOxxNU64?si=iii2WRvu8Hgtv0Cc" />
+                </div>
+            </Modal>
+        </>
     )
 }
 

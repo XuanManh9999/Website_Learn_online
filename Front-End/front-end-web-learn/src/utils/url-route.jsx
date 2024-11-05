@@ -5,8 +5,8 @@ const URL = {
     PUBLIC: {
         HOME: "/",
         LEARNING: "/learning",
+        COURSE: "/course/*",
         INFO: "/info",
-        COURSE_INFO: "/courses/*",
         NOT_FOUND: "*",
     },
     PRIVATE: {
