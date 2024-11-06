@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Input, Button, Flex, Typography } from 'antd';
-const { Title } = Typography;
 import { verifyOTPRegister, verifyOTPForgotPassword } from '../../../services/public/auth';
 import useNotify from '../Notification';
 import "./ModelOtp.scss"
-export default function ModelOtp({ visible, setVisible, forgotPassword, register, email, handleBackToDefault }) {
+import { useDispatch, useSelector } from 'react-redux';
+import { selectorShowHide } from '../../../redux/selector';
+import { default_show_hide, hide_model_otp } from '../../../redux/action/show_hide';
+export default function ModelOtp({ email }) {
 
+
+    const state = useSelector(selectorShowHide)
+    const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
-
     const { notify, contextHolder } = useNotify();
     const [otp, setOtp] = useState(''); // Trạng thái lưu trữ mã OTP
     const [secondsToGo, setSecondsToGo] = useState(90); // Thời gian đếm ngược
@@ -19,8 +23,8 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
         onChange,
     };
     const closeModal = () => {
+        dispatch(hide_model_otp())
         clearInterval(timerRef.current);
-        setVisible(false);
         setOtp('');
         setSecondsToGo(90);
     };
@@ -30,7 +34,7 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
     };
 
     const handleOtpSubmit = async () => {
-        if (register) {
+        if (state.isFormRegister) {
             if (otp.length === 6) {
                 setIsLoading(true)
                 setTimeout(async () => {
@@ -44,7 +48,7 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
                             closeModal();
                         }, 2000)
                         setTimeout(() => {
-                            handleBackToDefault()
+                            dispatch(default_show_hide())
                         }, 4000)
                     } else {
                         notify("error", message)
@@ -55,7 +59,7 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
             } else {
                 notify("warning", "Vui lòng nhập đầy đủ mã OTP trước khi xác nhận")
             }
-        } else if (forgotPassword) {
+        } else if (state.isFormForgotpassword) {
             if (otp.length === 6) {
                 setIsLoading(true)
                 setTimeout(async () => {
@@ -69,7 +73,7 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
                             closeModal();
                         }, 2000)
                         setTimeout(() => {
-                            handleBackToDefault()
+                            dispatch(default_show_hide())
                         }, 4000)
 
                     } else {
@@ -85,7 +89,7 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
     };
 
     useEffect(() => {
-        if (visible) {
+        if (state.isShowModelOTP) {
             timerRef.current = setInterval(() => {
                 setSecondsToGo((prev) => {
                     if (prev <= 1) {
@@ -98,7 +102,7 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
 
             return () => clearInterval(timerRef.current);
         }
-    }, [visible]);
+    }, [state.isShowModelOTP]);
 
     return (
         <>
@@ -106,7 +110,7 @@ export default function ModelOtp({ visible, setVisible, forgotPassword, register
             <Modal
                 className='container__model-otp'
                 title="Xác thực OTP"
-                visible={visible}
+                open={state.isShowModelOTP}
                 onCancel={closeModal}
                 footer={null}
             >

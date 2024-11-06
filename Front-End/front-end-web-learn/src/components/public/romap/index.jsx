@@ -2,9 +2,10 @@ import React, { useRef, useState } from 'react'
 import "./Romap.scss"
 import { Col, Layout, Row, Collapse, Button, Modal } from "antd"
 import { PlusOutlined, MinusOutlined, PlayCircleOutlined, ClockCircleOutlined, DashboardOutlined, PlaySquareOutlined, TrophyOutlined } from "@ant-design/icons"
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectorUser } from '../../../redux/selector';
 import Video from '../../share/Video';
+import { show_login } from '../../../redux/action/show_hide';
 
 const text = `
   A dog is a type of domesticated animal.
@@ -59,11 +60,8 @@ const items = [
     },
 ];
 function Romap() {
-    const { isLoggedIn } = useSelector(selectorUser)
-
-    console.log("Xuan manh check isLoggedIn", isLoggedIn);
-
-
+    const { isLoggedIn, payload } = useSelector(selectorUser)
+    const dispatch = useDispatch()
     const [isShowModel, setIsShowModel] = useState(false)
     const [activeKeys, setActiveKeys] = useState(['1']);
     const refCollapse = useRef()
@@ -84,6 +82,14 @@ function Romap() {
 
     const handleViewPrewView = () => {
         setIsShowModel(true)
+    }
+
+    const handleRegisterCourse = () => {
+        if (!isLoggedIn) {
+            dispatch(show_login())
+        }else {
+            // check xem đã đăng ký chưa
+        }
     }
 
     return (
@@ -122,7 +128,7 @@ function Romap() {
                         <div className="container-romap-item__right-header--type-course">
                             <h5>Miễn phí</h5>
                         </div>
-                        <Button type='primary'>Đăng ký khóa học</Button>
+                        <Button type='primary' onClick={handleRegisterCourse}>Đăng ký khóa học</Button>
                         <ul className='container-romap-item__right-bottom'>
                             <li>
                                 <DashboardOutlined />

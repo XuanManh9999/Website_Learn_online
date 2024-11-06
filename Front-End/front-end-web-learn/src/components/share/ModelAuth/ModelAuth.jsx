@@ -36,12 +36,14 @@ function ModelAuth() {
     }
 
     const handleBackToDefault = () => {
-
+        dispatch(default_show_hide())
     }
 
     const handleCancel = () => {
         dispatch(default_show_hide())
     }
+    console.log("Xuan manh check", state.textModel.subTitle);
+
     return (
         <>
             <Modal
@@ -52,7 +54,7 @@ function ModelAuth() {
                 width={540}
             >
                 <div className='container-model'>
-                    <div onClick={handleBackToDefault} className={`container-model__back-to-default ${isShowBackToDefault && "container-model__back-to-default--active"}`}>
+                    <div onClick={handleBackToDefault} className={`container-model__back-to-default ${state.isBackDefault && "container-model__back-to-default--active"}`}>
                         <LeftOutlined />
                         <span>Quay lại</span>
                     </div>
@@ -84,7 +86,7 @@ function ModelAuth() {
                     </main>
                     <footer className='container-model__footer'>
                         <p>{state.textModel.footer_desc}<Button type='link' className='container-model__footer--btn' onClick={handleLoginAndRegister}>{state.textModel.subTitle == "Đăng nhập" ? "Đăng ký" : "Đăng nhập"}</Button></p>
-                        {<p>Bạn không nhớ mật khẩu?<Button type='link' className='container-model__footer--btn' onClick={handleForgotPassword}>Quên mật khẩu?</Button></p>}
+                        {(!state.isFormForgotpassword) ? <p>Bạn không nhớ mật khẩu?<Button type='link' className='container-model__footer--btn' onClick={handleForgotPassword}>Quên mật khẩu?</Button></p> : ""}
                         <p className='container-model__footer--service'>Việc bạn tiếp tục sử dụng trang web này đồng nghĩa bạn đồng ý với điều khoản sử dụng của chúng tôi.</p>
                     </footer>
                 </div>

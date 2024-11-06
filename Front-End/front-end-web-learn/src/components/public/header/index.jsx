@@ -4,8 +4,10 @@ import { BellOutlined } from "@ant-design/icons"
 import { Link } from 'react-router-dom'
 import MyCourseItem from '../../share/MyCourseItem'
 import "./Header.scss"
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { selectorUser } from '../../../redux/selector'
+import { show_login, show_register } from '../../../redux/action/show_hide'
+import { clear_user } from '../../../redux/action/auth'
 const items = [
     {
         label: <Link to={"/"}>Trang chủ</Link>,
@@ -32,15 +34,28 @@ const items = [
         key: 'youtube',
     }
 ]
-export default function Header({ handleLogin, handleRegister }) {
+export default function Header() {
+    const dispatch = useDispatch()
     const { isLoggedIn } = useSelector(selectorUser)
+
+    const handleLogin = () => {
+        dispatch(show_login())
+    }
+    const handleRegister = () => {
+        dispatch(show_register())
+    }
+
+    const handleLogout = () => {
+        dispatch(clear_user())
+        handleLogin()
+    }
     return (
         <header style={{
         }}>
             <Layout className='wrapper-layout-header-home' >
                 <Row className='container__header' align={"middle"} justify={"space-between"} gutter={30}>
                     <Col xxl={8} xl={8} lg={8} md={8} sm={8} xs={8}>
-                        <Link className='wrapper-layout-header-home__left'>
+                        <Link to={"/"} className='wrapper-layout-header-home__left'>
                             <img src='https://i.ibb.co/WGwmWhQ/DALL-E-2024-10-24-18-11-13-A-logo-of-a-circular-shape-resembling-a-stylized-C-in-harmonious-gradient.webp' title='Học lập trình, tạo dựng tương lai!' alt='Học lập trình, tạo dựng tương lai!' />
                             <h1 className='wrapper-layout-header-home__title'>Học lập trình, tạo dựng tương lai!</h1>
                         </Link>
@@ -75,8 +90,6 @@ export default function Header({ handleLogin, handleRegister }) {
 
                                 </>
                             }
-
-
                             trigger={['click']}
                         >
                             <Button onClick={(e) => e.preventDefault()} type='link' className='wrapper-layout-header-home__right-active-my-course'>Khóa học của tôi</Button>
@@ -151,10 +164,7 @@ export default function Header({ handleLogin, handleRegister }) {
                                     },
                                     {
                                         key: '8',
-                                        label: <Link onClick={() => {
-                                            dispatch(clear_user())
-                                            handleLogin()
-                                        }} className='wrapper-layout-header-home__right-dropdown-account-option'>Đăng xuất</Link>
+                                        label: <Link onClick={handleLogout} className='wrapper-layout-header-home__right-dropdown-account-option'>Đăng xuất</Link>
                                     }
                                 ],
                             }}

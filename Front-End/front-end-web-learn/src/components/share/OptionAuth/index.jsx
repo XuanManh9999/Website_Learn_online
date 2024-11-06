@@ -10,6 +10,7 @@ import { apiGetInfo } from '../../../services/private/auth'
 import { save_user } from '../../../redux/action/auth'
 import Cookies from 'js-cookie'
 import { selectorShowHide } from '../../../redux/selector'
+import { hide_all, show_model_otp } from '../../../redux/action/show_hide'
 
 
 
@@ -19,7 +20,6 @@ export default function OptionAuth() {
     const { notify, contextHolder } = useNotify();
     const btnSubmid = useRef(null)
     const [isLoading, setIsLoading] = useState(false)
-    const [showOtpModal, setShowOtpModal] = useState(false); // Trạng thái hiển thị modal OTP
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [passwordConfirm, setPasswordConfirm] = useState(false);
     const [dataLogin, setDataLogin] = useState({
@@ -33,7 +33,7 @@ export default function OptionAuth() {
         password: "",
         confirmPassword: ""
     })
-    const [dataForgotPassword, setDataForgotPassword] = useState(null)
+    const [dataForgotPassword, setDataForgotPassword] = useState("")
 
     const handleOnchangeInputLogin = (event) => {
         const { name, value } = event.target;
@@ -61,7 +61,6 @@ export default function OptionAuth() {
     const handleSubmid = async () => {
         let isCheck;
         if (btnSubmid.current.textContent === "Đăng ký") {
-            setDataForgotPassword(null)
             isCheck = true
             const { email, username, password, confirmPassword } = dataRegister
 
@@ -93,7 +92,7 @@ export default function OptionAuth() {
                     if (status === 201 || status === 400) {
                         status === 201 ? notify("success", message, true, 4) : notify("warning", message, true, 4)
                         setTimeout(() => {
-                            setShowOtpModal(true); // Bật modal OTP khi đăng ký
+                            dispatch(show_model_otp())
                         }, 4000);
                     } else {
                         notify("error", message)
@@ -113,7 +112,7 @@ export default function OptionAuth() {
                 if (status === 200) {
                     notify("success", message, true, 4)
                     setTimeout(() => {
-                        setShowOtpModal(true); // Bật modal OTP khi đăng ký
+                        dispatch(show_model_otp())
                     }, 4000);
                 } else {
                     notify("error", message)
@@ -147,8 +146,7 @@ export default function OptionAuth() {
                         ))
                         notify("success", response?.message, true, 1.5)
                         setTimeout(() => {
-                            setOpen(false)
-                            handleBackToDefault()
+                            dispatch(hide_all())
                         }, 1500)
 
 
@@ -245,12 +243,9 @@ export default function OptionAuth() {
 
                     </>
                 }
-
-                {<Button loading={isLoading} ref={btnSubmid} onKeyDown={handleKeyDown} onClick={handleSubmid} className='container__option-auth--submid'>{state.textModel.subTitle}</Button>}
-
-
+                {state.isBackDefault && <Button loading={isLoading} ref={btnSubmid} onKeyDown={handleKeyDown} onClick={handleSubmid} className='container__option-auth--submid'>{state.isFormForgotpassword ? "Quên mật khẩu" : state.textModel.subTitle}</Button>}
             </div>
-            {showOtpModal && <ModelOtp visible={showOtpModal} register={register} forgotPassword={forgotPassword} setVisible={setShowOtpModal} email={dataForgotPassword ?? dataRegister.email} handleBackToDefault={handleBackToDefault} />}
+            {<ModelOtp email={state.isFormRegister ? dataRegister.email : dataForgotPassword} />}
         </>
 
 

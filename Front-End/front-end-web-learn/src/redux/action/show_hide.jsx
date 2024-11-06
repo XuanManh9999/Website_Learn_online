@@ -47,6 +47,19 @@ const default_show_hide = () => ({
 })
 
 
+
+const show_model_otp = () => ({
+    type: TYPE_APP.SHOW_MODEL_OTP
+})
+
+const hide_model_otp = () => ({
+    type: TYPE_APP.HIDE_MODEL_OTP
+})
+
+const hide_all = () => ({
+    type: TYPE_APP.HIDE_ALL
+})
+
 export {
     show_login,
     hide_login,
@@ -60,5 +73,8 @@ export {
     hide_form_register,
     show_form_login,
     hide_form_login,
-    default_show_hide
+    default_show_hide,
+    show_model_otp,
+    hide_model_otp,
+    hide_all
 }

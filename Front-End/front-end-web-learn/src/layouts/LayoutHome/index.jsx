@@ -22,18 +22,9 @@ function LayoutHome() {
         }
         fetching();
     }, [])
-
-
-    function handleLogin() {
-        dispatch(show_login())
-    }
-
-    const handleRegister = () => {
-        dispatch(show_register())
-    }
     return (
         <>
-            <Header handleLogin={handleLogin} handleRegister={handleRegister} />
+            <Header />
             <main style={{
                 marginTop: "66px"
             }}>
@@ -42,7 +33,7 @@ function LayoutHome() {
                 </article>
             </main>
             <Footer />
-            <ModelAuth  />
+            <ModelAuth />
         </>
     )
 }

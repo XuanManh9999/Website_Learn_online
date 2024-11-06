@@ -13,7 +13,8 @@ const URL = {
         HOME: "/admin",
         SETTING: "/setting",
         MY_INFOR: "my-info",
-        MY_PASSWORD: "change-password"
+        MY_PASSWORD: "change-password",
+        LEARNING: "/learning/",
     }
 }
 export default URL;
