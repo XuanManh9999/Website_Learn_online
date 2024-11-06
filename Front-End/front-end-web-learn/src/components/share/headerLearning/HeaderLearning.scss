@@ -66,3 +66,95 @@
     }
   }
 }
+
+.container-footer-learning {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  background-color: #f0f0f0;
+  box-shadow: #0000001a 0 -2px 3px;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  .container-footer-learning__prev-subject {
+    min-width: 148px;
+    height: 32px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    background-color: #5ebbff;
+    color: #fff;
+    background: linear-gradient(#5ebbff80 40%, #a174ff80);
+    transition: opacity 0.2s;
+    outline: none;
+    border: none;
+    -webkit-user-select: none;
+    user-select: none;
+    padding: 0;
+    cursor: pointer;
+  }
+  .container-footer-learning__next-subject {
+    min-width: 148px;
+    height: 32px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.8;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+    color: #fff;
+  }
+  .container-footer-learning__track-title {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+    padding-right: 8px;
+    h3 {
+      font-size: 16px;
+      overflow: hidden;
+      word-wrap: break-word;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      color: #000;
+      font-weight: 600;
+
+    }
+    .container-footer-learning__track-title__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      background-color: #fff;
+      margin: 0 8px;
+      cursor: pointer;
+      span {
+        font-size: 18px;
+      }
+    }
+  }
+}
