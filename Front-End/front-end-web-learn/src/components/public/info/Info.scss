@@ -1,7 +1,23 @@
 .container-setting-info {
   margin: 80px 0;
   margin-left: 30px;
-
+  padding: 0 10px;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+  &::-webkit-scrollbar {
+    width: 6px; /* Độ rộng của thanh cuộn dọc */
+    height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #888; /* Màu sắc của thanh cuộn */
+    border-radius: 10px; /* Độ bo góc của thanh cuộn */
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Màu sắc khi hover vào thanh cuộn */
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Màu nền của đường ray thanh cuộn */
+  }
   h1 {
     font-size: 22px;
     font-weight: 600;

@@ -1,10 +1,10 @@
 import "./HeaderLearning.scss"
-import { LeftOutlined, FileOutlined, RightOutlined, ArrowRightOutlined } from "@ant-design/icons"
-import { Progress, Button } from "antd"
+import { LeftOutlined, FileOutlined } from "@ant-design/icons"
+import { Progress } from "antd"
 import { Link } from "react-router-dom"
 function HeaderLearning() {
     return (
-        <>
+        <div className="wrapper_learning">
             <header className="container-header-learning">
                 <div className="container-header-learning-left">
                     <Link to={"/"}>
@@ -29,20 +29,7 @@ function HeaderLearning() {
                     </div>
                 </div>
             </header>
-
-            <footer className="container-footer-learning">
-                <Button className="container-footer-learning__prev-subject" icon={<LeftOutlined />}>Bài trước</Button>
-                <Button className="container-footer-learning__next-subject" type="primary">
-                    Bài tiếp theo <RightOutlined />
-                </Button>
-                <div className="container-footer-learning__track-title">
-                    <h3>1. Khái niệm kỹ thuật cần biết</h3>
-                    <div className="container-footer-learning__track-title__icon">
-                        <ArrowRightOutlined />
-                    </div>
-                </div>
-            </footer>
-        </>
+        </div>
 
     )
 }

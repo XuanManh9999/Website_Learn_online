@@ -7,8 +7,6 @@ import { clear_user, save_user } from '../../redux/action/auth';
 import { apiGetInfo } from '../../services/private/auth';
 import Header from '../../components/public/header';
 import "./LayOutCss.scss"
-import { show_login, show_register } from '../../redux/action/show_hide';
-
 function LayoutHome() {
     const dispatch = useDispatch()
     useEffect(() => {
@@ -23,7 +21,7 @@ function LayoutHome() {
         fetching();
     }, [])
     return (
-        <>
+        <div className='layout__home'>
             <Header />
             <main style={{
                 marginTop: "66px"
@@ -34,7 +32,7 @@ function LayoutHome() {
             </main>
             <Footer />
             <ModelAuth />
-        </>
+        </div>
     )
 }
 export default LayoutHome
