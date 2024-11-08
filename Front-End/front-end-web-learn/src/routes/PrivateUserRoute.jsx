@@ -1,9 +1,8 @@
 import URL from "../utils/url-route";
 import Setting from "../components/public/setting";
 import Info from "../components/public/info";
-import PasswordSecurityInfo from "../components/public/password";
+import PasswordSecurityInfo from "../components/public/PasswordSecurity";
 import LayoutLearning from "../layouts/LayoutLearning";
-import ContentLearning from "../components/private/ContentLearning";
 const privateUserRoutes = [
   {
     path: URL.PRIVATE.SETTING,

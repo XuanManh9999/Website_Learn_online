@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Link, Outlet } from "react-router-dom";
 import Layout from "antd/es/layout/layout";
 import "./Setting.scss";
-import { Col, Row, Segmented, Menu } from "antd";
+import { Col, Row, Menu } from "antd";
 export default function Setting() {
   const navigate = useNavigate();
   useEffect(() => {

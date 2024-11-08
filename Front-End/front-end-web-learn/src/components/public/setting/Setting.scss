@@ -14,9 +14,9 @@
       .container-setting__content--left {
         top: 0; /* Vị trí cố định khi cuộn */
         padding-right: 40px;
+        min-height: calc(100vh - 50px);
         border-right: 1px solid #dee3e9;
-        overflow: hidden; /* Ngăn cuộn phần bên trái */
-
+        
         img {
           width: 70px;
           height: 70px;

@@ -81,6 +81,7 @@
     .learning__right {
       overflow-y: auto;
       max-height: calc(100vh - 120px); /* Điều chỉnh chiều cao để tránh tràn */
+      border-left: 1px solid #e7e7e7;
       &::-webkit-scrollbar {
         width: 6px; /* Độ rộng của thanh cuộn dọc */
         height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
@@ -126,14 +127,13 @@
             align-items: center;
             width: 100%;
             padding: 10px 25px;
-            &:hover {
+            &:not(.active_learning__course):hover {
               background: #f1f1f1;
               cursor: pointer;
             }
             .learning__right__item__content__left {
               max-width: 80%;
               .learning__right__item__content__left__title {
-                color: #000;
                 font-size: 14px;
                 line-height: 1.5;
                 font-weight: 600;
@@ -144,9 +144,6 @@
                 align-items: center;
                 gap: 3px;
                 font-size: 11px;
-                span {
-                  color: #000;
-                }
               }
             }
             .learning__right__item__content__right {
