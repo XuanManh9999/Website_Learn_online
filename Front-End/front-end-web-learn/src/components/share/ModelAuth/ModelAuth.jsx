@@ -5,12 +5,10 @@ import OptionAuth from '../OptionAuth'
 import { LeftOutlined } from "@ant-design/icons"
 import { useSelector, useDispatch } from 'react-redux'
 import { selectorShowHide } from '../../../redux/selector'
-import { default_show_hide, hide_login, show_forgotpassword, show_form_forgotpassword, show_form_login, show_form_register, show_login, show_register } from '../../../redux/action/show_hide'
+import { default_show_hide, show_form_forgotpassword, show_form_login, show_form_register, show_login, show_register } from '../../../redux/action/show_hide'
 function ModelAuth() {
     const dispatch = useDispatch()
     const state = useSelector(selectorShowHide)
-
-    const [isShowBackToDefault, setIsShowBackToDefault] = useState(false)
 
     const handleWithAccountUserName = () => {
         if (state.textModel.subTitle == "Đăng ký") {
@@ -30,7 +28,6 @@ function ModelAuth() {
 
     }
 
-
     const handleForgotPassword = () => {
         dispatch(show_form_forgotpassword())
     }
@@ -42,8 +39,6 @@ function ModelAuth() {
     const handleCancel = () => {
         dispatch(default_show_hide())
     }
-    console.log("Xuan manh check", state.textModel.subTitle);
-
     return (
         <>
             <Modal

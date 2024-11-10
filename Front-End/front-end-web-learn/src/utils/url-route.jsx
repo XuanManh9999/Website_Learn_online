@@ -15,6 +15,9 @@ const URL = {
         MY_INFOR: "my-info",
         MY_PASSWORD: "change-password",
         LEARNING: "/learning/",
+    },
+    ADMIN: {
+        HOME: "/admin"  
     }
 }
 export default URL;
