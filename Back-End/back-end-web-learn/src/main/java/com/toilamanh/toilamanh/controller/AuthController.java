@@ -66,7 +66,7 @@ public class AuthController {
     }
 
     @GetMapping(value = "/info")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity<RegisterResponse> myInfo (HttpServletRequest request) {
         // Lấy token từ header Authorization
         String authorizationHeader = request.getHeader("Authorization");

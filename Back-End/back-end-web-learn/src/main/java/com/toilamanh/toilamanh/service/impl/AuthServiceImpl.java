@@ -64,7 +64,6 @@ public class AuthServiceImpl implements AuthService {
             if (user.isPresent() || user_.isPresent()) {
                 throw new ExitsException("Tên người dùng đã tồn tại trên hệ thống, vui lòng chọn tên khác.");
             }
-
             User newUser = new User();
             newUser.setEmail(registerRequest.getEmail());
             newUser.setUserName(registerRequest.getUsername());

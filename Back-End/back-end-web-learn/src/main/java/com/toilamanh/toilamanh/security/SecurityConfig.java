@@ -33,13 +33,8 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**",  "/api/v1/**", "/login/**").permitAll()
+                        .requestMatchers("/auth/**",  "/api/v1/**", "/login/**", "/api/**").permitAll()
                         .anyRequest().authenticated())
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                .loginPage("/login")  // Đường dẫn đến trang login
-                                .defaultSuccessUrl("/home", true)  // Đường dẫn sau khi đăng nhập thành công
-                )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

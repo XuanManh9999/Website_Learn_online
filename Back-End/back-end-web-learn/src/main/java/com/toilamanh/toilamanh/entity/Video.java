@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "video")
 @Getter
@@ -31,4 +34,6 @@ public class Video extends BaseEntity {
     @JoinColumn(name = "id_chapter")
     private Chapter chapter;
 
+    @OneToMany(mappedBy = "video", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    List<UserWatchVideo> userWatchVideos = new ArrayList<>();
 }

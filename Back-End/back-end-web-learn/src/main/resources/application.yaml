@@ -42,3 +42,6 @@ jwt:
   EXPIRATION_TIME: 86400000   # 1000 * 60 * 60 * 24 (1 ngày tính bằng mili giây)
   SECRETE: "YFBRaoJ7LxB2VB10cGWI5MIua1/xHvnpcOXDLIephhzpmpS2qPb+ijVeiCVhT0dK"
 #86400000
+youtube:
+  api:
+    key: AIzaSyDsb5wa7fBTkow55HIvSVbrT1fBaS78b5o

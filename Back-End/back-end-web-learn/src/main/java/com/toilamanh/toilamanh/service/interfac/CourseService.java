@@ -1,5 +1,8 @@
 package com.toilamanh.toilamanh.service.interfac;
 
-public interface CourseService {
+import com.toilamanh.toilamanh.dto.request.CourseRequest;
+import com.toilamanh.toilamanh.dto.response.ApiResponse;
 
+public interface CourseService {
+    ApiResponse addCourse(CourseRequest courseRequest);
 }

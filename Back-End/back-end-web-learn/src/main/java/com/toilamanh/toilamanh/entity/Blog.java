@@ -8,7 +8,7 @@ import lombok.Setter;
 @Table(name = "blog")
 @Getter
 @Setter
-public class Blog extends BaseEntity {
+public class    Blog extends BaseEntity {
     @Column(name = "title")
     private String title;
     @Column(name = "description", columnDefinition = "TEXT")

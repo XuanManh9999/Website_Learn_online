@@ -34,7 +34,10 @@ public class Course extends BaseEntity {
     private String level = "Cơ bản";
 
     @Column(name = "author")
-    private String author = "Đội ngũ Java-team";
+    private String author = "Xuân Mạnh";
+
+    @Column(name = "author_img")
+    private String author_img;
 
     @Column(name = "icon_course")
     private String icon;
@@ -52,7 +55,7 @@ public class Course extends BaseEntity {
     @JoinColumn(name = "id_map")
     private Map map;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapterList;
 
 

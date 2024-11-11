@@ -3,6 +3,7 @@ package com.toilamanh.toilamanh.security;
 import com.toilamanh.toilamanh.service.CustomUserDetailsService;
 import com.toilamanh.toilamanh.utils.JWTUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,6 +61,17 @@ public class JWTAuthFilter extends OncePerRequestFilter{
             // Tạo thông báo lỗi JSON
             String jsonResponse = "{\"status\": 401, \"message\": \"JWT token has expired. Please log in again.\"}";
 
+            // Ghi thông báo lỗi vào response
+            response.getWriter().write(jsonResponse);
+
+            return; // Dừng filter tại đây
+        }catch(SignatureException e) {
+            // Thiết lập mã lỗi 401 Unauthorized
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json"); // Thiết lập kiểu nội dung là JSON
+            response.setCharacterEncoding("UTF-8"); // Đảm bảo mã hóa UTF-8 cho ký tự tiếng Việt nếu có
+            // Tạo thông báo lỗi JSON
+            String jsonResponse = "{\"status\": 401, \"message\": \"Token is not match.\"}";
             // Ghi thông báo lỗi vào response
             response.getWriter().write(jsonResponse);
 

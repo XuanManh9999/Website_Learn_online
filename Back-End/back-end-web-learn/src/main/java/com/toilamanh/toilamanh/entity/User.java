@@ -1,9 +1,6 @@
 package com.toilamanh.toilamanh.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,7 +40,7 @@ public class User extends BaseEntity implements UserDetails {
     private String phonenumber;
 
     @Column(name = "avatar", columnDefinition = "TEXT")
-    private String avatar;
+    private String avatar = "https://i.ibb.co/NZrHmQB/avatar-default.png";
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -59,6 +56,10 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<UserRegisterCourse> registerCourseList;
+
+
+   @OneToMany(mappedBy = "user")
+   private List<UserWatchVideo> userWatchVideoList;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
