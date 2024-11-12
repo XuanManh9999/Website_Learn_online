@@ -43,5 +43,7 @@ jwt:
   SECRETE: "YFBRaoJ7LxB2VB10cGWI5MIua1/xHvnpcOXDLIephhzpmpS2qPb+ijVeiCVhT0dK"
 #86400000
 youtube:
-  api:
-    key: AIzaSyDsb5wa7fBTkow55HIvSVbrT1fBaS78b5o
+  api_key: AIzaSyDsb5wa7fBTkow55HIvSVbrT1fBaS78b5o
+  api_url: https://www.googleapis.com/youtube/v3/videos
+
+

@@ -30,6 +30,12 @@ public class Video extends BaseEntity {
     @Column(name = "featured_video")
     private Integer featuredVideo = 0;
 
+    @Column(name = "time")
+    private String time;
+
+    @Column(name = "prev_order")
+    private Integer prevOrder = 0;
+
     @ManyToOne
     @JoinColumn(name = "id_chapter")
     private Chapter chapter;

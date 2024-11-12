@@ -22,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Transactional
+
 public class CourseTypeServiceImpl implements CourseTypeService {
     CourseTypeRepository courseTypeRepository;
     ModelMapper modelMapper;

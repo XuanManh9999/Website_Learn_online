@@ -47,12 +47,10 @@ public class CourseServiceImpl implements CourseService {
                     video.setUrlVideo(videoRequest.getUrlVideo());
                     video.setOrderNumber(order_number);
                     video.setActive(1);
-
                     // Liên kết chapter với video nếu cần
                     video.setChapter(chapter);
                     videoList.add(video);
                     order_number += 10;
-
                 }
                 chapter.setVideos(videoList);
                 chapters.add(chapter);
