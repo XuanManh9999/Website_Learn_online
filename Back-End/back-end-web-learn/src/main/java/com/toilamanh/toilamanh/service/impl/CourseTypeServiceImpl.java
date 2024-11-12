@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class CourseTypeServiceImpl implements CourseTypeService {
     @Override
     public ApiResponse getAllCourseTypes() {
         try {
-            List<CourseType> courseTypes = courseTypeRepository.findAll();
+            List<CourseType> courseTypes = courseTypeRepository.findAllByActive(1);
             List<CourseTypeDTO> courseTypeDTOS =  new ArrayList<>();
             for (CourseType courseType : courseTypes) {
                 CourseTypeDTO courseTypeDTO = modelMapper.map(courseType, CourseTypeDTO.class);
@@ -63,17 +64,72 @@ public class CourseTypeServiceImpl implements CourseTypeService {
     }
 
     @Override
-    public ApiResponse addCourseType(CourseType courseType) {
-        return null;
-    }
+    public ApiResponse CUCourseType(CourseTypeDTO courseTypeDTO) {
+        try {
+            Long id = courseTypeDTO.getId();
+            String nameType = courseTypeDTO.getNameType();
+            if (id == null) {
+                Optional<CourseType> courseType = courseTypeRepository.findByNameTypeAndActive(nameType, 1);
+                if (courseType.isPresent()) {
+                    return ApiResponse.builder()
+                            .status(HttpStatus.BAD_REQUEST.value())
+                            .message("Đã tồn tại khóa học này vui lòng kiểm tra lại thông tin")
+                            .build();
+                }else {
+                    Optional<CourseType> courseTypeDelete = courseTypeRepository.findByNameTypeAndActive(nameType, 0);
 
-    @Override
-    public ApiResponse updateCourseType(CourseType courseType) {
-        return null;
+                    if (courseTypeDelete.isPresent()) {
+                        courseTypeDelete.get().setActive(1);
+                        courseTypeRepository.save(courseTypeDelete.get());
+                        return ApiResponse.builder()
+                                .status(HttpStatus.CREATED.value())
+                                .message("Khởi tạo loại khóa hoc thành công")
+                                .build();
+                    }else {
+                        CourseType courseTypeEntity = new CourseType();
+                        courseTypeEntity.setNameType(nameType);
+                        courseTypeEntity.setActive(1);
+                        courseTypeRepository.save(courseTypeEntity);
+                        return ApiResponse.builder()
+                                .status(HttpStatus.CREATED.value())
+                                .message("Khởi tạo loại khóa hoc thành công")
+                                .build();
+                    }
+                }
+            }else {
+                courseTypeRepository.findByNameTypeAndActive(nameType, 1).orElseThrow(() -> new OurException("Đã tồn tại khóa định cập nhật vui lòng kiểm tra lại"));
+                CourseType courseType = courseTypeRepository.findByIdAndActive(id, 1).orElseThrow(() -> new OurException("Không tìm thấy loại khóa học, vui lòng kiểm tra lại"));
+                courseType.setNameType(nameType);
+                courseType.setActive(1);
+                courseTypeRepository.save(courseType);
+                return ApiResponse.builder()
+                        .status(HttpStatus.OK.value())
+                        .message("Cập nhật thông tin loại khóa học thành công")
+                        .build();
+            }
+        }catch (OurException ourException) {
+            throw ourException;
+        }
+        catch (Exception e) {
+            throw e;
+        }
     }
 
     @Override
     public ApiResponse deleteCourseType(Long ID) {
-        return null;
+        try {
+            CourseType courseType = courseTypeRepository.findByIdAndActive(ID, 1).orElseThrow(() -> new OurException("Không tìm thấy loại khóa học tương ứng"));
+            courseType.setActive(0);
+            courseTypeRepository.save(courseType);
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Xóa loại khóa học thành công")
+                    .build();
+        }catch (OurException ourException) {
+            throw ourException;
+        }catch (Exception e) {
+            throw e;
+        }
     }
+
 }

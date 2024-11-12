@@ -1,9 +1,6 @@
 package com.toilamanh.toilamanh.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +8,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "user_watch_video")
-public class UserWatchVideo extends BaseEntity {
-    @ManyToOne
+public class UserWatchVideo {
+    @EmbeddedId
+    private UserWatchVideoId id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("user")
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("video")
     @JoinColumn(name = "video_id")
     private Video video;
 }

@@ -58,7 +58,7 @@ public class User extends BaseEntity implements UserDetails {
     private List<UserRegisterCourse> registerCourseList;
 
 
-   @OneToMany(mappedBy = "user")
+   @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
    private List<UserWatchVideo> userWatchVideoList;
 
     @Override

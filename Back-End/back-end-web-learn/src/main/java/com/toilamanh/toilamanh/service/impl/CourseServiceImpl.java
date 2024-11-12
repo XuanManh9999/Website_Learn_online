@@ -37,7 +37,6 @@ public class CourseServiceImpl implements CourseService {
             for (ChapterRequest chapterRequest : courseRequest.getChapterList()) {
                 Chapter chapter = new Chapter();
                 modelMapper.map(chapterRequest, chapter);
-
                 chapter.setCourse(course);
                 chapter.setActive(1);
                 chapter.setOrderNumber(order_number_chapter);
