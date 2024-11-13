@@ -1,15 +1,6 @@
 server:
   port: 8080
 spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 47916404883-mi6ii5eh6fn82ulqdojrvjohg32fnkfr.apps.googleusercontent.com
-            client-secret: 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
-            scope: email, profile
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
   application:
     name: project-website-learn-online
   datasource:
@@ -22,7 +13,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
 #    config mail
   mail:
@@ -41,7 +32,6 @@ spring:
 jwt:
   EXPIRATION_TIME: 86400000   # 1000 * 60 * 60 * 24 (1 ngày tính bằng mili giây)
   SECRETE: "YFBRaoJ7LxB2VB10cGWI5MIua1/xHvnpcOXDLIephhzpmpS2qPb+ijVeiCVhT0dK"
-#86400000
 youtube:
   api_key: AIzaSyDsb5wa7fBTkow55HIvSVbrT1fBaS78b5o
   api_url: https://www.googleapis.com/youtube/v3/videos

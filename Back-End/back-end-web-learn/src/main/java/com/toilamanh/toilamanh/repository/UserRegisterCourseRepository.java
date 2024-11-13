@@ -9,4 +9,7 @@ public interface UserRegisterCourseRepository extends JpaRepository<UserRegister
     boolean  existsByUserIdAndCourseIdAndActive(Long userId, Long courseId, Integer active);
     Integer countByUserIdAndCourseId(Long userId, Long courseId);
     Integer countByCourseId(Long courseId);
+    boolean existsByUserIdAndCourseId(Long userId, Long courseId);
+
+
 }

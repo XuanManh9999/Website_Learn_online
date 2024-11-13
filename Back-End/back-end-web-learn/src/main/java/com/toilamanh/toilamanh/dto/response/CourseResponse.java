@@ -27,6 +27,7 @@ public class CourseResponse {
     private String author_img;
     private String icon;
     private Integer orderNumber = 0;
+    private Integer isPro;
     private Integer featuredCourse;
     private CourseTypeDTO courseType;
     private Integer active;

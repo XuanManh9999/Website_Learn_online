@@ -1,6 +1,5 @@
 package com.toilamanh.toilamanh.entity;
 
-import com.toilamanh.toilamanh.service.impl.CourseServiceImpl;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +29,7 @@ public class Course extends BaseEntity {
     private String level = "Cơ bản";
     @Column(name = "author")
     private String author = "Xuân Mạnh";
-    @Column(name = "author_img")
+    @Column(name = "author_img", columnDefinition = "TEXT")
     private String author_img;
     @Column(name = "icon_course")
     private String icon;
@@ -38,6 +37,9 @@ public class Course extends BaseEntity {
     private Integer orderNumber = 0;
     @Column(name = "featured_course")
     private Integer featuredCourse = 0;
+
+    @Column(name = "is_pro")
+    private Integer isPro = 0;
 
     @ManyToOne
     @JoinColumn(name = "id_type_code")

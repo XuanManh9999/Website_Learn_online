@@ -14,7 +14,7 @@ public class ChapterDTO {
     private String title;
     private String description;
     private Integer active;
-    private Integer total_lesson;
+    private Integer total_videos;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<VideoDTO> videos;

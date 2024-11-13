@@ -176,7 +176,7 @@ public class CourseServiceImpl implements CourseService {
     private ChapterDTO mapChapterToChapterDTO(Chapter chapter, Long IdUser) {
         ChapterDTO chapterDTO = new ChapterDTO();
         modelMapper.map(chapter, chapterDTO);
-        chapterDTO.setTotal_lesson(chapter.getVideos().size());
+        chapterDTO.setTotal_videos(chapter.getVideos().size());
 
         // Sắp xếp danh sách Video theo thứ tự `order` trước khi chuyển đổi
         List<VideoDTO> videoDTOs = chapter.getVideos().stream()
