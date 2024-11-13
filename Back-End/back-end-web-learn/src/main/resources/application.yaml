@@ -22,7 +22,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     show-sql: true
 #    config mail
   mail:
@@ -45,5 +45,8 @@ jwt:
 youtube:
   api_key: AIzaSyDsb5wa7fBTkow55HIvSVbrT1fBaS78b5o
   api_url: https://www.googleapis.com/youtube/v3/videos
+
+order_step: 10
+
 
 

@@ -30,9 +30,4 @@ public class UserController {
         ApiResponse response =  userService.deleteUser(IdUser);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
-    @GetMapping
-    public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(youTubeService.getVideoDetails("v3JuDg0rwZM"));
-    }
-
 }

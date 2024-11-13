@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT MAX (c.orderNumber) FROM Course c")
-    public Long findMaxOrderNumber();
+    public Integer findMaxOrderNumber();
 }

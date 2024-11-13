@@ -33,6 +33,20 @@ public class Video extends BaseEntity {
     @Column(name = "time")
     private String time;
 
+
+    @Column(name = "duration")
+    private Long duration;
+
+    @Column(name = "duration_text")
+    private String durationText;
+
+    @Column(name = "videos_count")
+    private Integer videosCount;
+
+    @Column(name = "students_count")
+    private Integer studentsCount;
+
+
     @Column(name = "prev_order")
     private Integer prevOrder = 0;
 

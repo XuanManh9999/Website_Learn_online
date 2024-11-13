@@ -6,11 +6,9 @@ import com.toilamanh.toilamanh.service.interfac.CourseService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -23,4 +21,13 @@ public class CourseController {
     public ResponseEntity<?> addCourse(@RequestBody CourseRequest courseRequest) {
         return ResponseEntity.ok(courseService.addCourse(courseRequest));
     }
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllCourses(
+            @RequestParam(value = "IdUser", required = false) Long ID,
+            @RequestParam(value = "IdCourse", required = false) Long IdCourse,
+            @RequestParam(value = "IsShowChapter", required = false) Integer isShowChapter
+    ) {
+        return ResponseEntity.ok(courseService.getAllCourses(ID, IdCourse, isShowChapter));
+    }
+
 }

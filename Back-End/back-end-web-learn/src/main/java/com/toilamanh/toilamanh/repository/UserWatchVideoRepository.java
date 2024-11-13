@@ -4,4 +4,5 @@ import com.toilamanh.toilamanh.entity.UserWatchVideo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserWatchVideoRepository extends JpaRepository<UserWatchVideo, Long> {
+    boolean existsByUserIdAndVideoId(Long userId, Long videoId);
 }

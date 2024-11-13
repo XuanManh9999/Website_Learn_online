@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRegisterCourseRepository extends JpaRepository<UserRegisterCourse, Long> {
+    boolean  existsByUserIdAndCourseIdAndActive(Long userId, Long courseId, Integer active);
+    Integer countByUserIdAndCourseId(Long userId, Long courseId);
+    Integer countByCourseId(Long courseId);
 }
