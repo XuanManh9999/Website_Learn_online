@@ -4,8 +4,7 @@ const URL = {
     },
     PUBLIC: {
         HOME: "/",
-        LEARNING: "/learning",
-        COURSE: "/course/*",
+        COURSE: "/courses/:slug",
         INFO: "/info",
         NOT_FOUND: "*",
     },
@@ -14,7 +13,7 @@ const URL = {
         SETTING: "/setting",
         MY_INFOR: "my-info",
         MY_PASSWORD: "change-password",
-        LEARNING: "/learning/",
+        LEARNING: "/learning/:slug",
     },
     ADMIN: {
         HOME: "/admin"  

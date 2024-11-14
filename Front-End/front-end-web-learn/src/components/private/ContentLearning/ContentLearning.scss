@@ -127,7 +127,7 @@
             align-items: center;
             width: 100%;
             padding: 10px 25px;
-            &:not(.active_learning__course):hover {
+            &:not(.active_video_course):hover {
               background: #f1f1f1;
               cursor: pointer;
             }
@@ -160,7 +160,13 @@
   }
 }
 
-.active_learning__course {
+.active_video_course {
   background: linear-gradient(90deg, #26a69a, #80deea);
   color: #fff;
+}
+
+.looked_video_course {
+  opacity: 0.6;
+  pointer-events: none;
+  background-color: #e7e7e7;
 }

@@ -118,7 +118,6 @@ export default function Header() {
                                                 <MyCourseItem img={"https://fullstack.edu.vn/assets/images/f8_avatar.png"} nameClass={"bell"} />
                                             </div>
                                         </div>
-
                                     </>
                                 }
                             >

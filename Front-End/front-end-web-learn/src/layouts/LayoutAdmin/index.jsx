@@ -1,7 +1,15 @@
 import React from "react";
-
+import NavBarAdmin from "../../components/private/NavBarAdmin";
+import { Outlet } from "react-router-dom";
 function LayoutHomeAdmin() {
-  return <div>LayoutHomeAdmin</div>;
+  return (
+    <>
+      <NavBarAdmin />
+      <main>
+        <Outlet />
+      </main>
+    </>
+  );
 }
 
 export default LayoutHomeAdmin;

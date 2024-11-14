@@ -1,0 +1,14 @@
+.home_admin {
+  padding: 7px 10px;
+  background-color: #fff;
+  .container__menu_home_admin {
+  }
+  .container__menu_home_admin__acount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    border-bottom: 1px solid rgba(5, 5, 5, 0.06);
+    cursor: pointer;
+  }
+}

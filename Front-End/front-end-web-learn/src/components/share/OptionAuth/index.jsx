@@ -153,6 +153,7 @@ export default function OptionAuth() {
               dispatch(hide_all());
             }, 1500);
             setTimeout(() => {
+               if (response?.role == "ADMIN")
                 navigate("/admin")
             }, 2000)
           } else {

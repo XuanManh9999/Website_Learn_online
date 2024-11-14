@@ -10,7 +10,7 @@ const publicRoutes = [
     element: <LayoutHome />,
     children: [
       {
-        path: "/course",
+        path: URL.PUBLIC.COURSE,
         element: <Romap />,
       },
       {

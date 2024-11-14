@@ -1,5 +1,4 @@
 import { notification } from 'antd';
-import { useState } from 'react';
 
 const useNotify = () => {
     const [api, contextHolder] = notification.useNotification();
