@@ -20,4 +20,6 @@ public class VideoRequest {
     private Integer orderNumber;
 
     private Integer featuredVideo;
+
+    private Integer preOrder;
 }

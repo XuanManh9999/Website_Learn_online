@@ -1,12 +1,10 @@
 package com.toilamanh.toilamanh.controller;
 
 import com.toilamanh.toilamanh.dto.request.CourseRequest;
-import com.toilamanh.toilamanh.entity.Course;
 import com.toilamanh.toilamanh.service.interfac.CourseService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

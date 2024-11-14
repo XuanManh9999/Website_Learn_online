@@ -1,5 +1,4 @@
 package com.toilamanh.toilamanh.service.impl;
-
 import com.toilamanh.toilamanh.dto.request.ChapterRequest;
 import com.toilamanh.toilamanh.dto.request.CourseRequest;
 import com.toilamanh.toilamanh.dto.request.VideoRequest;
@@ -23,7 +22,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -69,7 +67,6 @@ public class CourseServiceImpl implements CourseService {
                 for (VideoRequest videoRequest : chapterRequest.getVideos()) {
                     Video video = new Video();
                     modelMapper.map(videoRequest, video);
-
                     // lay du lieu tu video youtube
                     YouTubeResponse youTubeResponse = youTubeService.getVideoDetails(video.getUrlVideo());
                     for (var item : youTubeResponse.getItems()) {
@@ -147,12 +144,15 @@ public class CourseServiceImpl implements CourseService {
         if (IdUser != null) {
             Boolean isRegister = hasUserRegisterCourse(IdUser, course.getId(), 1);
             courseResponse.setIsUserRegister(isRegister ? 1 : 0);
+            Integer totalUserWatchVideo = userWatchVideoRepository.countUserWatchedVideos(IdUser, course.getId());
+            courseResponse.setTotalUserWatchVideo(totalUserWatchVideo);
         }
 
         Integer studentsCount = userRegisterCourseRepository.countByCourseId(course.getId());
         Integer totalVideoCourse = chapterRepository.countTotalVideosByCourseId(course.getId());
         Long duration = chapterRepository.getTotalDurationByCourseId(course.getId());
         String durationText = UtilsFunc.convertToDurationText(duration);
+
 
         courseResponse.setDurationText(durationText);
         courseResponse.setStudentsCount(studentsCount);

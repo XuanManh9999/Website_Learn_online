@@ -21,7 +21,8 @@ public class CourseRequest {
     private String icon;
     private Integer orderNumber ;
     private Integer featuredCourse ;
-//    private CourseType courseType;
+    private CourseType courseType;
+    private String slug;
     private List<ChapterRequest> chapterList;
 
 }

@@ -48,7 +48,7 @@ public class Video extends BaseEntity {
 
 
     @Column(name = "prev_order")
-    private Integer prevOrder = 0;
+    private Integer preOrder = 0;
 
     @ManyToOne
     @JoinColumn(name = "id_chapter")

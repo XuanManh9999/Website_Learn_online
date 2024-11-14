@@ -11,7 +11,6 @@ import java.util.Optional;
 public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT MAX (c.orderNumber) FROM Course c")
     public Integer findMaxOrderNumber();
-
     Optional<Course> findCourseByIdAndActive(Long id, Integer active);
 
 }

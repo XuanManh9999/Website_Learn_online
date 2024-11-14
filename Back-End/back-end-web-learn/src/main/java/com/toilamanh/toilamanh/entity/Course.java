@@ -23,8 +23,9 @@ public class Course extends BaseEntity {
     private Double prevPrice;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-    @Column(name = "study_time")
-    private Double studyTime;
+
+    @Column(name = "slug")
+    private String slug;
     @Column(name = "level_course")
     private String level = "Cơ bản";
     @Column(name = "author")
@@ -37,6 +38,9 @@ public class Course extends BaseEntity {
     private Integer orderNumber = 0;
     @Column(name = "featured_course")
     private Integer featuredCourse = 0;
+
+    @Column(name ="pre_order")
+    private Integer preOrder = 0;
 
     @Column(name = "is_pro")
     private Integer isPro = 0;

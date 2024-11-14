@@ -10,15 +10,29 @@ public  class UtilsFunc {
         return parsedDuration.getSeconds();  // Trả về số giây
     }
     public static String convertIsoToDurationText(String isoDuration) {
-        // Parse chuỗi ISO 8601 thành đối tượng Duration
-        Duration duration = Duration.parse(isoDuration);
+        // Loại bỏ phần "PT" khỏi chuỗi và tách ra các phần giờ, phút và giây
+        String[] parts = isoDuration.replace("PT", "").split("[HMS]");
 
-        // Lấy số giờ, phút và giây từ Duration
-        long hours = duration.toHours();
-        long minutes = duration.toMinutes() % 60;
+        // Nếu có giờ, chuyển đổi giờ thành phút
+        int hours = 0;
+        int minutes = 0;
+        int seconds = 0;
 
-        // Trả về chuỗi định dạng "XhYp"
-        return hours + "h" + minutes + "p";
+        if (isoDuration.contains("H")) {
+            hours = Integer.parseInt(parts[0]);
+        }
+        if (isoDuration.contains("M")) {
+            minutes = Integer.parseInt(parts[parts.length - 2]);
+        }
+        if (isoDuration.contains("S")) {
+            seconds = Integer.parseInt(parts[parts.length - 1]);
+        }
+
+        // Chuyển đổi giờ thành phút
+        minutes += hours * 60;
+
+        // Đảm bảo định dạng là MM:SS
+        return String.format("%02d:%02d", minutes, seconds);
     }
     public static String convertDuration(String duration) {
         // Sử dụng regex để lấy giá trị giờ, phút và giây

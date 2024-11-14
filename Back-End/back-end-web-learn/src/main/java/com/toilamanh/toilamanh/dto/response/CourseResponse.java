@@ -30,7 +30,9 @@ public class CourseResponse {
     private Integer isPro;
     private Integer featuredCourse;
     private CourseTypeDTO courseType;
+    private Integer totalUserWatchVideo;
     private Integer active;
+    private String slug;
     private List<ChapterDTO> chapterList;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
