@@ -1,6 +1,4 @@
 .layout__home {
-  overflow-y: auto;
-    height: 100vh;
   &::-webkit-scrollbar {
     width: 6px; /* Độ rộng của thanh cuộn dọc */
     height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */

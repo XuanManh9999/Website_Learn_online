@@ -9,7 +9,6 @@ import { getCourses } from "../../services/public/learn";
 
 function LayoutLearning() {
   const [course, setCourse] = useState({});
-
   const {
     payload: { id: IdUser },
   } = useSelector(selectorUser);
@@ -21,18 +20,23 @@ function LayoutLearning() {
       setCourse(result);
     }
   }, [IdCourse, IdUser]);
-
   useEffect(() => {
     fetchCourseData();
   }, [fetchCourseData]);
-
-  return (
-    <>
-      <HeaderLearning course={course}/>
-      <ContentLearning course={course} IdUser={IdUser}/>
-      <FooterLearning  course={course}/>
-    </>
-  );
+  if (IdUser != null && Object.keys(course).length > 0) {
+    return (
+      <>
+        <HeaderLearning course={course}  />
+        <ContentLearning
+          course={course}
+          IdUser={IdUser}
+          idChapter={course?.chapterList[0]?.id}
+          setCourseLayoutLearning={setCourse}
+        />
+        <FooterLearning course={course} />
+      </>
+    );
+  }
 }
 
 export default LayoutLearning;

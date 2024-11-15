@@ -102,12 +102,7 @@ const AppRoutes = () => {
     })),
   ];
   useEffect(() => {
-    console.log("Call scroot dau trang");
-
-    const scrollableElement = document.querySelector(".scrollable-content");
-    console.log("Xuan manh check scrollableElement", scrollableElement);
-
-    scrollableElement.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [routes]);
 
   return useRoutes(routes);

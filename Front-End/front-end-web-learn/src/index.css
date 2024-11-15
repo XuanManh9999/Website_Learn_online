@@ -2,18 +2,11 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-html,
 body {
-  overflow: hidden;
   padding-right: 6px;
 }
-.scrollable-content {
-  height: 100vh;
-  overflow-y: auto;
-}
 body {
-  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: 'Lexend', sans-serif !important;
   &::-webkit-scrollbar {
     width: 6px; /* Độ rộng của thanh cuộn dọc */
     height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
@@ -153,4 +146,14 @@ q:after {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
+/* Ghi đè font cho các thành phần của Ant Design */
+.ant-typography,
+.ant-btn,
+.ant-menu,
+.ant-form-item,
+.ant-input,
+.ant-select-selector,
+.ant-table {
+  font-family: 'Lexend', sans-serif !important;
 }

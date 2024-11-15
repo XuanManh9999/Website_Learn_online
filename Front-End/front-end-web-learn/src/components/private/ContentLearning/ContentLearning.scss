@@ -3,6 +3,7 @@
   width: 100%;
   margin-top: 60px;
   margin-bottom: 60px;
+  padding-right: 5px;
   .learning {
     .learning__left {
       overflow-y: auto;
@@ -77,10 +78,9 @@
         }
       }
     }
-
     .learning__right {
       overflow-y: auto;
-      max-height: calc(100vh - 120px); /* Điều chỉnh chiều cao để tránh tràn */
+      max-height: calc(100vh - 110px); /* Điều chỉnh chiều cao để tránh tràn */
       border-left: 1px solid #e7e7e7;
       &::-webkit-scrollbar {
         width: 6px; /* Độ rộng của thanh cuộn dọc */
