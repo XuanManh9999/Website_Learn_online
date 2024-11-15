@@ -15,6 +15,8 @@ public class ChapterDTO {
     private String description;
     private Integer active;
     private Integer total_videos;
+    private Integer total_video_user_watch;
+    private String total_time_video;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<VideoDTO> videos;

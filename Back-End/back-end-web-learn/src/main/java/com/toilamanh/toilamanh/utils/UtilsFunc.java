@@ -63,4 +63,9 @@ public  class UtilsFunc {
         // Định dạng kết quả thành chuỗi "XhYp"
         return String.format("%dh%dp", hours, minutes);
     }
+    public static String convertSecondsToMinutesSeconds(Long seconds) {
+        Long minutes = seconds / 60;
+        Long remainingSeconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
+    }
 }

@@ -14,4 +14,13 @@ public interface UserWatchVideoRepository extends JpaRepository<UserWatchVideo, 
             "JOIN c.course co " +
             "WHERE co.id = :courseId AND uwv.user.id = :userId")
     Integer countUserWatchedVideos(Long courseId, Long userId);
+
+
+    @Query("SELECT COUNT(uwv.id) " +
+            "FROM UserWatchVideo uwv " +
+            "JOIN uwv.video v " +
+            "JOIN v.chapter c " +
+            "WHERE c.id = :chapterId AND uwv.user.id = :userId")
+    Integer countUserWatchedVideosInChapter(Long chapterId, Long userId);
+
 }

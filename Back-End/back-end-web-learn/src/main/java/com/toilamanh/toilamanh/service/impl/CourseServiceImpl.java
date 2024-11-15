@@ -11,10 +11,7 @@ import com.toilamanh.toilamanh.entity.Chapter;
 import com.toilamanh.toilamanh.entity.Course;
 import com.toilamanh.toilamanh.entity.Video;
 import com.toilamanh.toilamanh.exception.custom.OurException;
-import com.toilamanh.toilamanh.repository.ChapterRepository;
-import com.toilamanh.toilamanh.repository.CourseRepository;
-import com.toilamanh.toilamanh.repository.UserRegisterCourseRepository;
-import com.toilamanh.toilamanh.repository.UserWatchVideoRepository;
+import com.toilamanh.toilamanh.repository.*;
 import com.toilamanh.toilamanh.service.interfac.CourseService;
 import com.toilamanh.toilamanh.service.interfac.YouTubeService;
 import com.toilamanh.toilamanh.utils.UtilsFunc;
@@ -22,6 +19,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,6 +35,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseServiceImpl implements CourseService {
 
+    private static final Logger log = LoggerFactory.getLogger(CourseServiceImpl.class);
     Environment environment;
 
     ModelMapper modelMapper;
@@ -44,6 +44,7 @@ public class CourseServiceImpl implements CourseService {
     UserRegisterCourseRepository userRegisterCourseRepository;
     YouTubeService youTubeService;
     ChapterRepository chapterRepository;
+    private final VideoRepository videoRepository;
 
     @Override
     public ApiResponse addCourse(CourseRequest courseRequest) {
@@ -144,7 +145,7 @@ public class CourseServiceImpl implements CourseService {
         if (IdUser != null) {
             Boolean isRegister = hasUserRegisterCourse(IdUser, course.getId(), 1);
             courseResponse.setIsUserRegister(isRegister ? 1 : 0);
-            Integer totalUserWatchVideo = userWatchVideoRepository.countUserWatchedVideos(IdUser, course.getId());
+            Integer totalUserWatchVideo = userWatchVideoRepository.countUserWatchedVideos(course.getId(), IdUser);
             courseResponse.setTotalUserWatchVideo(totalUserWatchVideo);
         }
 
@@ -177,6 +178,10 @@ public class CourseServiceImpl implements CourseService {
         ChapterDTO chapterDTO = new ChapterDTO();
         modelMapper.map(chapter, chapterDTO);
         chapterDTO.setTotal_videos(chapter.getVideos().size());
+        chapterDTO.setTotal_video_user_watch(userWatchVideoRepository.countUserWatchedVideos(IdUser, chapter.getId()));
+        Long duration = videoRepository.sumTotalDurationByChapter(chapter.getId());
+        String total_time_video = UtilsFunc.convertSecondsToMinutesSeconds(duration);
+        chapterDTO.setTotal_time_video(total_time_video);
 
         // Sắp xếp danh sách Video theo thứ tự `order` trước khi chuyển đổi
         List<VideoDTO> videoDTOs = chapter.getVideos().stream()
