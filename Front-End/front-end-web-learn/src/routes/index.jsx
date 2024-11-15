@@ -15,6 +15,7 @@ const PrivateUserRoute = ({ element }) => {
   const [isLoading, setIsLoading] = useState(true); // Trạng thái tải
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
+    document.querySelector("body").style.overflowY = "hidden";
     const fetchUserInfo = async () => {
       if (token) {
         const info = await apiGetInfo();
@@ -76,6 +77,7 @@ const PrivateAdminRoute = ({ element }) => {
 const PublicRoute = ({ element }) => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
+    document.querySelector("body").style.overflowY = "auto";
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);

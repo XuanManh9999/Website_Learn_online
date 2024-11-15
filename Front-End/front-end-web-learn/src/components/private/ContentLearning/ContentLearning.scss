@@ -39,7 +39,6 @@
         padding: 0 66px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
         .learning__left__mid--title {
           h2 {
             font-size: 28px;
@@ -169,4 +168,18 @@
   opacity: 0.6;
   pointer-events: none;
   background-color: #e7e7e7;
+}
+
+.nofity-modal-warning {
+  h1 {
+    font-weight: 700;
+    font-size: 20px;
+  }
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  strong {
+    font-weight: 500;
+  }
 }

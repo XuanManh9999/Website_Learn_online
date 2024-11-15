@@ -1,10 +1,9 @@
 import YouTube from "react-youtube";
 import "./ContentLearning.scss";
-import { Col, Layout, Row, Button, Collapse } from "antd";
+import { Col, Layout, Row, Button, Collapse, Modal } from "antd";
 import { formatDate } from "../../../utils/fuc";
 import { userCompeleteVideo } from "../../../services/public/learn";
-import { useDispatch, useSelector } from "react-redux";
-import { update_id_course } from "../../../redux/action/course";
+import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import {
   PlusOutlined,
@@ -12,99 +11,130 @@ import {
   CheckCircleOutlined,
   CoffeeOutlined,
   LockOutlined,
-} from "@ant-design/icons"; // Sử dụng icon tuỳ chỉnh từ Ant Design hoặc icon của riêng bạn
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { getCourses } from "../../../services/public/learn";
 import { selectCourse } from "../../../redux/selector";
+
+let xu_ly_khi_tua = 0;
+
 function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
+  const [open, setOpen] = useState(false);
+  const playerRef = useRef(null);
+  const [lastTime, setLastTime] = useState(0);
   const { id: IdCourse } = useSelector(selectCourse);
-  const dispatch = useDispatch();
   const titleVideo = useRef();
   const updateCourse = useRef();
-  let sttVideo = 0;
   const [activeIndex, setActiveIndex] = useState(null);
-  const [videoActive, setVideoActive] = useState();
-  const [lastVideoActive, setLastVideoActive] = useState();
+  const [videoActive, setVideoActive] = useState(null);
+  const [lastVideoActive, setLastVideoActive] = useState(null);
   const [course, setCourse] = useState({});
+
   const fetchingData = async () => {
     const { status, result } = await getCourses(1, IdUser, IdCourse);
     if (status === 200) {
       setCourse(result);
       setCourseLayoutLearning(result);
+    } else {
     }
   };
+
   useEffect(() => {
     fetchingData();
-  }, []);
+  }, [IdCourse, IdUser]);
+
   useEffect(() => {
-    let video_last = [];
-    (course?.chapterList || []).forEach((chapter) => {
-      let response = chapter?.videos.filter((video) => {
-        if (video?.isUserWatchVideo === 1) {
-          return (video.idChapter = chapter?.id);
-        }
+    if (course?.chapterList) {
+      let video_last = [];
+      course.chapterList.forEach((chapter) => {
+        video_last.push(
+          ...chapter.videos.filter((video) => video.isUserWatchVideo === 1)
+        );
       });
-      if (response?.length > 0) {
-        video_last.push(...response);
-      }
-    });
-    if (video_last.length == 0) {
-      if (course && Object.keys(course) != 0) {
-        const { id, title, urlVideo } = course?.chapterList[0]?.videos[0];
-        setLastVideoActive(id);
-        handleSubmidVideo(id, urlVideo, title);
-      }
-    } else {
-      // item cuoi cung la item duoc xem cuoi cung
-      const curr = video_last[video_last?.length - 1];
-      handleSubmidVideo(curr?.id, curr?.urlVideo, curr?.title);
-      for (const chapter of course?.chapterList || []) {
-        for (const video of chapter?.videos || []) {
-          if (video?.id > curr?.id) {
-            setLastVideoActive(video?.id);
-            return; // Dừng ngay lập tức sau khi tìm thấy video
+
+      if (video_last.length === 0) {
+        if (course.chapterList?.length) {
+          const { id, title, urlVideo } = course.chapterList[0]?.videos[0];
+          setLastVideoActive(id);
+          handleSubmidVideo(id, urlVideo, title);
+        }
+      } else {
+        const curr = video_last[video_last.length - 1];
+        handleSubmidVideo(curr?.id, curr?.urlVideo, curr?.title);
+        for (const chapter of course.chapterList) {
+          for (const video of chapter.videos) {
+            if (video.id > curr?.id) {
+              setLastVideoActive(video.id);
+              return;
+            }
           }
         }
       }
     }
   }, [course]);
+
   const handleSubmidVideo = (id, url_video, title) => {
-    setActiveIndex(id); // Cập nhật chỉ số của phần tử được chọn
+    setActiveIndex(id);
     setVideoActive(url_video);
     titleVideo.current.textContent = title;
-    updateCourse.current.textContent = course?.updatedAt
-      ? formatDate(course?.updatedAt)
-      : formatDate(course?.createdAt);
+    updateCourse.current.textContent = course.updatedAt
+      ? formatDate(course.updatedAt)
+      : formatDate(course.createdAt);
   };
 
-  const handleSubmidNote = () => {
-    dispatch(update_id_course(22));
+  const handleSubmidNote = () => {};
+
+  // Event handler for video end
+  const handleEnd = async () => {
+    const response = await userCompeleteVideo(IdUser, activeIndex);
+    if (response?.status === 200) {
+      fetchingData();
+    }
   };
-  // Hàm xử lý sự kiện khi video kết thúc
-  const handleEnd = (event) => {
-    const fetchingDataWatchingVideo = async () => {
-      const response = await userCompeleteVideo(IdUser, activeIndex);
-      if (response?.status == 200) {
-        fetchingData();
+
+  const handleOnPlay = () => {};
+
+  const onReady = (event) => {
+    playerRef.current = event.target;
+  };
+
+  const onStateChange = (event) => {
+    if (event.data === 1) {
+      const currentTime = playerRef.current.getCurrentTime();
+      if (Math.abs(currentTime - lastTime) > 1) {
+        xu_ly_khi_tua++;
+        if (xu_ly_khi_tua >= 7) {
+          setOpen(true);
+          playerRef.current.pauseVideo();
+          xu_ly_khi_tua = 0;
+        }
+        setLastTime(currentTime);
+      } else {
+        setLastTime(currentTime);
       }
-    };
-    fetchingDataWatchingVideo();
+    } else if (event.data === 2 || event.data === 0) {
+      setLastTime(0);
+    }
+  };
+
+  const hideModal = () => {
+    setOpen(false);
+    playerRef.current.playVideo();
   };
 
   return (
     <>
-      <Helmet>
-        <title>Tiêu đề mặc định của trang</title>
-        <meta name="description" content="Mô tả mặc định cho trang" />
-      </Helmet>
       <Layout className="content_learning">
         <Row className="learning">
           <Col xxl={18} xl={18} className="learning__left">
             <div className="learning__left__video">
               <YouTube
                 videoId={videoActive}
-                onEnd={handleEnd} // Sự kiện end
+                onPlay={handleOnPlay}
+                onEnd={handleEnd}
+                onReady={onReady}
+                onStateChange={onStateChange}
               />
             </div>
             <div className="learning__left__mid">
@@ -130,24 +160,6 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
                     https://www.facebook.com/f8vnofficial
                   </Link>
                 </li>
-                <li>
-                  Fanpage:{" "}
-                  <Link to={"https://www.facebook.com/f8vnofficial"}>
-                    https://www.facebook.com/f8vnofficial
-                  </Link>
-                </li>
-                <li>
-                  Fanpage:{" "}
-                  <Link to={"https://www.facebook.com/f8vnofficial"}>
-                    https://www.facebook.com/f8vnofficial
-                  </Link>
-                </li>
-                <li>
-                  Fanpage:{" "}
-                  <Link to={"https://www.facebook.com/f8vnofficial"}>
-                    https://www.facebook.com/f8vnofficial
-                  </Link>
-                </li>
               </ul>
             </div>
           </Col>
@@ -155,7 +167,6 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
             <h2 className="learning__right__title">Nội dung khóa học</h2>
             <Collapse
               defaultActiveKey={[idChapter]}
-              // activeKey={activeKeys}
               className="learning__right__list-item"
               items={(course?.chapterList || []).map((chapter, index) => ({
                 key: chapter?.id,
@@ -184,7 +195,7 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
                       >
                         <div
                           className={`learning__right__item__list_item ${
-                            activeIndex == video?.id
+                            activeIndex === video?.id
                               ? "active_video_course"
                               : ""
                           }`}
@@ -198,7 +209,7 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
                         >
                           <div className="learning__right__item__content__left">
                             <h3 className="learning__right__item__content__left__title">
-                              {++sttVideo}. {video?.title}
+                              {index + 1}. {video?.title}
                             </h3>
                             <span className="learning__right__item__content__left__time">
                               <CoffeeOutlined />
@@ -221,18 +232,33 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
                 ),
               }))}
               size="middle"
-              expandIcon={({ isActive }) =>
-                isActive ? (
-                  <MinusOutlined style={{ fontSize: "20px" }} /> // Kích thước icon khi thu gọn
-                ) : (
-                  <PlusOutlined style={{ fontSize: "20px" }} /> // Kích thước icon khi mở rộng
-                )
-              }
               expandIconPosition="end"
+              expandIcon={({ isActive }) =>
+                isActive ? <MinusOutlined /> : <PlusOutlined />
+              }
             />
           </Col>
         </Row>
       </Layout>
+      <Modal
+        title={<h1>Thông báo</h1>}
+        open={open}
+        onOk={hideModal}
+        onCancel={hideModal}
+        okText="Đồng ý"
+        className="nofity-modal-warning"
+        centered
+      >
+        <h2>
+          Chế độ học tập tại <strong>CODE ZEN</strong>:{" "}
+          <strong>
+            Tạo chế độ giúp học viên duy trì sự tập trung, chúng tôi chỉ cho
+            phép tua trong một phạm vi hợp lí. Hiện tại chúng tôi nhận thấy bạn
+            đang tua video quá nhiều khi học. Vui lòng hạn chế tua để trải
+            nghiệm học tập được tốt nhất
+          </strong>
+        </h2>
+      </Modal>
     </>
   );
 }
