@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import "./Romap.scss";
 import { Col, Layout, Row, Collapse, Button, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
 import {
   PlusOutlined,
   MinusOutlined,
@@ -27,7 +28,9 @@ import { Link } from "react-router-dom";
 import URL from "../../../utils/url-route";
 
 function Romap() {
+  const navigate = useNavigate();
   let stt = 0;
+  const playerRef = useRef(null);
   const [course, setCourse] = useState({});
   const { contextHolder, notify } = useNotify();
   const [videoPreOrder, setVideoPreOrder] = useState({});
@@ -41,6 +44,10 @@ function Romap() {
     payload: { id: IdUser },
   } = useSelector(selectorUser);
   const { id: IdCourse } = useSelector(selectCourse);
+
+  const onReady = (event) => {
+    playerRef.current = event.target;
+  };
 
   const dispatch = useDispatch();
   const refCollapse = useRef();
@@ -84,6 +91,7 @@ function Romap() {
         } else {
           setIsLoadingRegister(false);
           notify("error", message);
+          navigate(URL.PUBLIC.SERVER_ERROR);
         }
       }, 1000);
     }
@@ -132,8 +140,11 @@ function Romap() {
       )),
     }));
   }, [course]);
-  
 
+  const handleShowModel = () => {
+    setIsShowModel(false);
+    playerRef.current.pauseVideo();
+  };
 
   return (
     <>
@@ -234,7 +245,7 @@ function Romap() {
       <Modal
         className="container-preview-introduction-video"
         open={isShowModel}
-        onCancel={() => setIsShowModel(false)}
+        onCancel={handleShowModel}
         centered
         footer={null}
         width={800}
@@ -242,7 +253,11 @@ function Romap() {
         <h3>Giới thiệu khóa học</h3>
         <div className="container-preview-introduction-video__content">
           <h2>{course?.name}</h2>
-          <Video videoId={videoPreOrder?.urlVideo} />
+          <Video
+            videoId={videoPreOrder?.urlVideo}
+            playerRef={playerRef}
+            onReady={onReady}
+          />
         </div>
       </Modal>
     </>

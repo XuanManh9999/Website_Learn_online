@@ -1,19 +1,35 @@
-import React from 'react'
-import { Progress } from "antd"
-export default function MyCourseItem({ img, title = 'App "Đừng Chạm Tay Lên Mặt"', time, process, nameClass }) {
+import React from "react";
+import { Progress } from "antd";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { update_id_course } from "../../../redux/action/course";
+function MyCourseItem({ img, title, process, nameClass, id, slug }) {
+  const dispatch = useDispatch();
+  const handleDispatchLearning = () => {
+    dispatch(update_id_course(id));
+  };
   return (
-    <div className={`container-my-course__item-${nameClass}`}>
+    <Link
+      onClick={handleDispatchLearning}
+      to={`/learning/${slug}`}
+      className={`container-my-course__item-${nameClass}`}
+    >
       <img src={img} alt={title} />
       <div className={`container-my-course__item--desc-${nameClass}`}>
         {nameClass != "bell" ? <h3>{title}</h3> : <strong>{title}</strong>}
-
-        <span>Học cách đây một năm trước</span>
-        {nameClass != "bell" && <Progress status='active' strokeColor={{
-          from: '#108ee9',
-          to: '#87d068',
-        }} percent={80} size="small" />}
-
+        {nameClass != "bell" && (
+          <Progress
+            status="active"
+            strokeColor={{
+              from: "#108ee9",
+              to: "#87d068",
+            }}
+            percent={process}
+            size="small"
+          />
+        )}
       </div>
-    </div>
-  )
+    </Link>
+  );
 }
+export default MyCourseItem;

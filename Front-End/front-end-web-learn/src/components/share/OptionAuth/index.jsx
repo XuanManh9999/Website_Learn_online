@@ -145,6 +145,11 @@ export default function OptionAuth() {
           const response = await apiLogin(dataLogin);
           if (response?.status === 200) {
             const { token } = response;
+            const existingToken = Cookies.get("token");
+            if (existingToken) {
+              // Xóa token cũ
+              Cookies.remove("token");
+            }
             Cookies.set("token", token, { expires: 365, path: "/" });
             const info = await apiGetInfo();
             dispatch(save_user(info.user));
@@ -153,9 +158,8 @@ export default function OptionAuth() {
               dispatch(hide_all());
             }, 1500);
             setTimeout(() => {
-               if (response?.role == "ADMIN")
-                navigate("/admin")
-            }, 2000)
+              if (response?.role == "ADMIN") navigate("/admin");
+            }, 2000);
           } else {
             notify("error", response?.message);
           }

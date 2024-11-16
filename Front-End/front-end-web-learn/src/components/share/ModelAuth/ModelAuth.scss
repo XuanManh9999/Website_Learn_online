@@ -116,7 +116,7 @@
 
 .container-my-course {
   padding: 14px 20px 16px;
-  min-width: 380px;
+  width: 440px;
   padding-bottom: 12px;
   background: #fff;
   box-shadow: 0 -4px 32px #0003;
@@ -148,6 +148,13 @@
     min-height: 100px;
     max-height: 335px;
     overflow-y: auto;
+
+    .container-my-course-header__body--notfound {
+      font-size: 18px;
+      text-align: center;
+      line-height: 100px;
+      font-weight: 600;
+    }
     &::-webkit-scrollbar {
       width: 6px; /* Độ rộng của thanh cuộn dọc */
       height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
@@ -170,7 +177,6 @@
       border-radius: 10px;
       display: flex;
       gap: 12px;
-
       &:hover {
         background-color: #1618230d;
       }
@@ -181,6 +187,7 @@
         object-fit: cover;
       }
       .container-my-course__item--desc-course {
+        flex: 1;
         h3 {
           font-size: 16px;
           color: #333;

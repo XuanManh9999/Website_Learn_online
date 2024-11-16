@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import {
   RightOutlined,
   ClockCircleOutlined,
-  PlayCircleOutlined,
+  UsergroupAddOutlined
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -77,7 +77,7 @@ function Section() {
                       <span>{course.author}</span>
                     </div>
                     <div className="section-container-item__content-desc-center">
-                      <PlayCircleOutlined />
+                      <UsergroupAddOutlined />
                       <span>{course.studentsCount}</span>
                     </div>
                     <div className="section-container-item__content-desc-reight">

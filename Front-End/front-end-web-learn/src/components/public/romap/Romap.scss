@@ -111,18 +111,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 140px;
-        border-radius: 8px;
+        min-width: 180px;
+        border-radius: 99px;
         font-size: 16px;
-        font-weight: 600;
+        font-weight: 700;
         background: linear-gradient(90deg, #26a69a, #80deea);
+        border: none;
         &:hover {
           opacity: 0.8;
         }
       }
       .container-romap-item__right-header {
         position: relative;
-        // background-image: url(https://files.fullstack.edu.vn/f8-prod/courses/21/63e1bcbaed1dd.png);
         width: 100%;
         padding-top: 56.25%;
         background-repeat: no-repeat;
@@ -131,7 +131,6 @@
         border-radius: 16px;
         opacity: 0.74; /* Điều chỉnh độ mờ */
 
-       
         .container-romap-item__right-header-icon {
           font-size: 60px;
           position: absolute;
@@ -185,7 +184,7 @@
             font-weight: bold;
           }
           span {
-            min-width: 10pxs;
+            min-width: 10px;
             font-size: 14px;
           }
         }

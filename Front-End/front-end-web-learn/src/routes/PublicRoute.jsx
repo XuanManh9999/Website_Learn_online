@@ -4,6 +4,7 @@ import URL from "../utils/url-route";
 import Section from "../components/share/Section";
 import Romap from "../components/public/romap";
 import Introduction from "../components/share/Introduction";
+import Component500 from "../components/share/500";
 const publicRoutes = [
   {
     path: URL.PUBLIC.HOME,
@@ -23,6 +24,10 @@ const publicRoutes = [
         ),
       },
     ],
+  },
+  {
+    path: URL.PUBLIC.SERVER_ERROR,
+    element: <Component500 />,
   },
   {
     path: URL.PUBLIC.NOT_FOUND,

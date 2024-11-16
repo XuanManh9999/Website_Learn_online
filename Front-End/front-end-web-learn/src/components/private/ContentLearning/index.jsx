@@ -3,8 +3,8 @@ import "./ContentLearning.scss";
 import { Col, Layout, Row, Button, Collapse, Modal } from "antd";
 import { formatDate } from "../../../utils/fuc";
 import { userCompeleteVideo } from "../../../services/public/learn";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Helmet } from "react-helmet";
 import {
   PlusOutlined,
   MinusOutlined,
@@ -17,10 +17,12 @@ import { useEffect, useRef, useState } from "react";
 import { getCourses } from "../../../services/public/learn";
 import { selectCourse } from "../../../redux/selector";
 import FooterLearning from "../../share/FooterLearning";
+import URL from "../../../utils/url-route";
 
 let xu_ly_khi_tua = 0;
 
 function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
+  const navigate = useNavigate();
   let sttVideo = -1;
   const [open, setOpen] = useState(false);
   const playerRef = useRef(null);
@@ -46,6 +48,7 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
       setCourse(result);
       setCourseLayoutLearning(result);
     } else {
+      navigate(URL.PUBLIC.SERVER_ERROR);
     }
   };
 
@@ -170,9 +173,9 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
               </p>
               <ul>
                 <li>
-                  Fanpage:{" "}
-                  <Link to={"https://www.facebook.com/f8vnofficial"}>
-                    https://www.facebook.com/f8vnofficial
+                  Facebook:{" "}
+                  <Link target="_blank" to={"https://www.facebook.com/profile.php?id=100050105460828"}>
+                  https://www.facebook.com/profile.php?id=100050105460828
                   </Link>
                 </li>
               </ul>
@@ -270,9 +273,9 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
           Chế độ học tập tại <strong>CODE ZEN</strong>:{" "}
           <strong>
             Tạo chế độ giúp học viên duy trì sự tập trung, chúng tôi chỉ cho
-            phép tua, chuyển tới video tiếp theo trong một phạm vi hợp lí. Hiện tại chúng tôi nhận thấy bạn
-            vi phạm điều đó quá nhiều khi học. Vui lòng hạn chế để trải
-            nghiệm học tập tại CODE ZEN được tốt nhất
+            phép tua, chuyển tới video tiếp theo trong một phạm vi hợp lí. Hiện
+            tại chúng tôi nhận thấy bạn vi phạm điều đó quá nhiều khi học. Vui
+            lòng hạn chế để trải nghiệm học tập tại CODE ZEN được tốt nhất
           </strong>
         </h2>
       </Modal>
