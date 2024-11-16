@@ -23,9 +23,7 @@
       text-transform: uppercase;
       white-space: nowrap;
       overflow: hidden;
-      background-color: #5ebbff;
       color: #fff;
-      background: linear-gradient(#5ebbff80 40%, #a174ff80);
       transition: opacity 0.2s;
       outline: none;
       border: none;
@@ -59,9 +57,11 @@
       justify-content: flex-end;
       cursor: pointer;
       padding-right: 8px;
+      gap: 12px;
       h3 {
         font-size: 16px;
-        // overflow: hidden;
+        overflow: hidden;
+        line-height: 1.6;
         word-wrap: break-word;
         display: -webkit-box;
         -webkit-box-orient: vertical;

@@ -75,7 +75,6 @@ function LayoutLearning() {
           idChapter={idChapter}
           setCourseLayoutLearning={setCourse}
         />
-        <FooterLearning course={course} />
       </>
     );
   }

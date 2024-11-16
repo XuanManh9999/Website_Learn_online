@@ -2,11 +2,9 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+
 body {
-  padding-right: 6px;
-}
-body {
-  font-family: 'Lexend', sans-serif !important;
+  font-family: "Lexend", sans-serif !important;
   &::-webkit-scrollbar {
     width: 6px; /* Độ rộng của thanh cuộn dọc */
     height: 6px; /* Độ rộng của thanh cuộn ngang (nếu cần) */
@@ -155,5 +153,5 @@ table {
 .ant-input,
 .ant-select-selector,
 .ant-table {
-  font-family: 'Lexend', sans-serif !important;
-} 
+  font-family: "Lexend", sans-serif !important;
+}

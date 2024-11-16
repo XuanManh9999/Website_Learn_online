@@ -16,10 +16,12 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { getCourses } from "../../../services/public/learn";
 import { selectCourse } from "../../../redux/selector";
+import FooterLearning from "../../share/FooterLearning";
 
 let xu_ly_khi_tua = 0;
 
 function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
+  let sttVideo = -1;
   const [open, setOpen] = useState(false);
   const playerRef = useRef(null);
   const [lastTime, setLastTime] = useState(0);
@@ -28,6 +30,13 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   const updateCourse = useRef();
   const [activeIndex, setActiveIndex] = useState(null);
   const [videoActive, setVideoActive] = useState(null);
+  const [isShowOption, setIsShowOption] = useState(true);
+  // Trạng thái lưu video hiện tại
+  const [activeVideo, setActiveVideo] = useState({
+    id: null,
+    urlVideo: "",
+    title: "",
+  });
   const [lastVideoActive, setLastVideoActive] = useState(null);
   const [course, setCourse] = useState({});
 
@@ -77,6 +86,8 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   const handleSubmidVideo = (id, url_video, title) => {
     setActiveIndex(id);
     setVideoActive(url_video);
+    setActiveVideo({ id, urlVideo: url_video, title });
+
     titleVideo.current.textContent = title;
     updateCourse.current.textContent = course.updatedAt
       ? formatDate(course.updatedAt)
@@ -127,7 +138,11 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
     <>
       <Layout className="content_learning">
         <Row className="learning">
-          <Col xxl={18} xl={18} className="learning__left">
+          <Col
+            xxl={isShowOption ? 18 : 24}
+            xl={isShowOption ? 18 : 24}
+            className="learning__left"
+          >
             <div className="learning__left__video">
               <YouTube
                 videoId={videoActive}
@@ -163,81 +178,83 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
               </ul>
             </div>
           </Col>
-          <Col xxl={6} xl={6} className="learning__right">
-            <h2 className="learning__right__title">Nội dung khóa học</h2>
-            <Collapse
-              defaultActiveKey={[idChapter]}
-              className="learning__right__list-item"
-              items={(course?.chapterList || []).map((chapter, index) => ({
-                key: chapter?.id,
-                label: (
-                  <div className="learning__right__item">
-                    <h3 className="learning__right__item__name_chapter">
-                      ({index + 1}). {chapter?.title}
-                    </h3>
-                    <span className="learning__right__item__desc">
-                      {chapter?.total_video_user_watch}/{chapter?.total_videos}{" "}
-                      | {chapter?.total_time_video}
-                    </span>
-                  </div>
-                ),
-                children: (
-                  <>
-                    {(chapter.videos || []).map((video) => (
-                      <div
-                        key={video?.id}
-                        className={`learning__right__item__content ${
-                          video?.isUserWatchVideo === 0 &&
-                          video?.id !== lastVideoActive
-                            ? "looked_video_course"
-                            : ""
-                        }`}
-                      >
+          {isShowOption && (
+            <Col xxl={6} xl={6} className="learning__right">
+              <h2 className="learning__right__title">Nội dung khóa học</h2>
+              <Collapse
+                defaultActiveKey={[idChapter]}
+                className="learning__right__list-item"
+                items={(course?.chapterList || []).map((chapter, index) => ({
+                  key: chapter?.id,
+                  label: (
+                    <div className="learning__right__item">
+                      <h3 className="learning__right__item__name_chapter">
+                        ({index + 1}). {chapter?.title}
+                      </h3>
+                      <span className="learning__right__item__desc">
+                        {chapter?.total_video_user_watch}/
+                        {chapter?.total_videos} | {chapter?.total_time_video}
+                      </span>
+                    </div>
+                  ),
+                  children: (
+                    <>
+                      {(chapter.videos || []).map((video) => (
                         <div
-                          className={`learning__right__item__list_item ${
-                            activeIndex === video?.id
-                              ? "active_video_course"
+                          key={video?.id}
+                          className={`learning__right__item__content ${
+                            video?.isUserWatchVideo === 0 &&
+                            video?.id !== lastVideoActive
+                              ? "looked_video_course"
                               : ""
                           }`}
-                          onClick={() =>
-                            handleSubmidVideo(
-                              video?.id,
-                              video?.urlVideo,
-                              video?.title
-                            )
-                          }
                         >
-                          <div className="learning__right__item__content__left">
-                            <h3 className="learning__right__item__content__left__title">
-                              {index + 1}. {video?.title}
-                            </h3>
-                            <span className="learning__right__item__content__left__time">
-                              <CoffeeOutlined />
-                              {video?.durationText}
-                            </span>
-                          </div>
-                          <div className="learning__right__item__content__right">
-                            {video?.isUserWatchVideo === 1 ? (
-                              <CheckCircleOutlined />
-                            ) : video?.id === lastVideoActive ? (
-                              ""
-                            ) : (
-                              <LockOutlined />
-                            )}
+                          <div
+                            className={`learning__right__item__list_item ${
+                              activeIndex === video?.id
+                                ? "active_video_course"
+                                : ""
+                            }`}
+                            onClick={() =>
+                              handleSubmidVideo(
+                                video?.id,
+                                video?.urlVideo,
+                                video?.title
+                              )
+                            }
+                          >
+                            <div className="learning__right__item__content__left">
+                              <h3 className="learning__right__item__content__left__title">
+                                {++sttVideo + 1}. {video?.title}
+                              </h3>
+                              <span className="learning__right__item__content__left__time">
+                                <CoffeeOutlined />
+                                {video?.durationText}
+                              </span>
+                            </div>
+                            <div className="learning__right__item__content__right">
+                              {video?.isUserWatchVideo === 1 ? (
+                                <CheckCircleOutlined />
+                              ) : video?.id === lastVideoActive ? (
+                                ""
+                              ) : (
+                                <LockOutlined />
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                  </>
-                ),
-              }))}
-              size="middle"
-              expandIconPosition="end"
-              expandIcon={({ isActive }) =>
-                isActive ? <MinusOutlined /> : <PlusOutlined />
-              }
-            />
-          </Col>
+                      ))}
+                    </>
+                  ),
+                }))}
+                size="middle"
+                expandIconPosition="end"
+                expandIcon={({ isActive }) =>
+                  isActive ? <MinusOutlined /> : <PlusOutlined />
+                }
+              />
+            </Col>
+          )}
         </Row>
       </Layout>
       <Modal
@@ -253,12 +270,19 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
           Chế độ học tập tại <strong>CODE ZEN</strong>:{" "}
           <strong>
             Tạo chế độ giúp học viên duy trì sự tập trung, chúng tôi chỉ cho
-            phép tua trong một phạm vi hợp lí. Hiện tại chúng tôi nhận thấy bạn
-            đang tua video quá nhiều khi học. Vui lòng hạn chế tua để trải
-            nghiệm học tập được tốt nhất
+            phép tua, chuyển tới video tiếp theo trong một phạm vi hợp lí. Hiện tại chúng tôi nhận thấy bạn
+            vi phạm điều đó quá nhiều khi học. Vui lòng hạn chế để trải
+            nghiệm học tập tại CODE ZEN được tốt nhất
           </strong>
         </h2>
       </Modal>
+      <FooterLearning
+        chapters={course.chapterList}
+        activeIndex={activeVideo.id}
+        handleSubmidVideo={handleSubmidVideo}
+        setIsShowOption={setIsShowOption}
+        isShowOption={isShowOption}
+      />
     </>
   );
 }
