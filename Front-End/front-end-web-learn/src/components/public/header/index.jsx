@@ -43,7 +43,7 @@ export default function Header() {
   const [courses, setCourses] = useState([]);
   const {
     isLoggedIn,
-    payload: { id },
+    payload: { id, avatar, user_name, email },
   } = useSelector(selectorUser);
 
   const dispatch = useDispatch();
@@ -140,7 +140,9 @@ export default function Header() {
                           ))
                         ) : (
                           <>
-                            <h1 className="container-my-course-header__body--notfound">Bạn chưa học khóa học nào</h1>
+                            <h1 className="container-my-course-header__body--notfound">
+                              Bạn chưa học khóa học nào
+                            </h1>
                           </>
                         )}
                       </div>
@@ -201,14 +203,14 @@ export default function Header() {
                     {
                       key: "1",
                       label: (
-                        <Link className="wrapper-layout-header-home__right-dropdown-account-header">
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/public-images/671cf6b5a9133.png"
-                            alt="Avatar"
-                          />
+                        <Link
+                          to={"/setting/my-info"}
+                          className="wrapper-layout-header-home__right-dropdown-account-header"
+                        >
+                          <img src={avatar} alt="Avatar" />
                           <div className="wrapper-layout-header-home__right-dropdown-account-section">
-                            <span>Nguyễn Xuân Mạnh</span>
-                            <span>@manhnguyen36</span>
+                            <span>{user_name}</span>
+                            <span>{email.split("@")[0]}</span>
                           </div>
                         </Link>
                       ),
@@ -283,7 +285,7 @@ export default function Header() {
                 <Avatar
                   onClick={(e) => e.preventDefault()}
                   className="wrapper-layout-header-home__right-img"
-                  src="https://files.fullstack.edu.vn/f8-prod/public-images/671cf6b5a9133.png"
+                  src={avatar}
                   alt="avatar"
                 />
               </Dropdown>

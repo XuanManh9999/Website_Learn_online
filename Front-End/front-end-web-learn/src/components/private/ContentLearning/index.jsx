@@ -87,6 +87,7 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   }, [course]);
 
   const handleSubmidVideo = (id, url_video, title) => {
+    xu_ly_khi_tua = 0
     setActiveIndex(id);
     setVideoActive(url_video);
     setActiveVideo({ id, urlVideo: url_video, title });

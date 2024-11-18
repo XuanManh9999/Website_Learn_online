@@ -29,7 +29,7 @@ function Section() {
 
   return (
     <>
-      <div className="section-containner">
+      <div className="section-containner" id="section">
         <div className="section-header">
           <h2 className="section-header-left">
             <Link>Khóa học miễn phí</Link>

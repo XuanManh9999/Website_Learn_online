@@ -26,7 +26,7 @@ export const userRegisterCourse = async (idUser, idCourse) => {
   }
 };
 
-export const userCompeleteVideo  = async (idUser, idVideo) => {
+export const userCompeleteVideo = async (idUser, idVideo) => {
   try {
     let url = `/api/v1/users/dispatch-done-video`;
     const response = await api.post(url, { idUser, idVideo });
@@ -34,5 +34,4 @@ export const userCompeleteVideo  = async (idUser, idVideo) => {
   } catch (err) {
     return err?.response?.data;
   }
-}
-
+};
