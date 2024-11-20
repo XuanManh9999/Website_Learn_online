@@ -182,6 +182,9 @@ export default function OptionAuth() {
                 id="user-name"
                 name="username"
                 onChange={hanelOnChangeInputRegister}
+                showCount
+                maxLength={50}
+                minLength={4}
                 placeholder="Tên người dùng..."
                 className="container__option-auth--login__input"
               />
@@ -193,6 +196,9 @@ export default function OptionAuth() {
                 size="large"
                 type="email"
                 id="email"
+                showCount
+                maxLength={100}
+                minLength={6}
                 name="email"
                 onChange={hanelOnChangeInputRegister}
                 placeholder="Nhập vào email..."
@@ -208,6 +214,9 @@ export default function OptionAuth() {
                 placeholder="Nhập vào mật khẩu..."
                 onChange={hanelOnChangeInputRegister}
                 name="password"
+                showCount
+                maxLength={50}
+                minLength={6}
                 visibilityToggle={{
                   visible: passwordVisible,
                   onVisibleChange: setPasswordVisible,
@@ -223,6 +232,9 @@ export default function OptionAuth() {
                 placeholder="Xác nhận mật khẩu..."
                 name="confirmPassword"
                 onChange={hanelOnChangeInputRegister}
+                showCount
+                maxLength={50}
+                minLength={6}
                 visibilityToggle={{
                   visible: passwordConfirm,
                   onVisibleChange: setPasswordConfirm,
@@ -239,6 +251,9 @@ export default function OptionAuth() {
                 size="large"
                 id="user-name"
                 name="userName"
+                showCount
+                maxLength={50}
+                minLength={4}
                 onChange={handleOnchangeInputLogin}
                 placeholder="Tên đăng nhập..."
                 className="container__option-auth--login__input"
@@ -251,6 +266,9 @@ export default function OptionAuth() {
                 id="password"
                 placeholder="Nhập vào mật khẩu..."
                 name="password"
+                showCount
+                maxLength={50}
+                minLength={6}
                 onChange={handleOnchangeInputLogin}
                 visibilityToggle={{
                   visible: passwordVisible,
@@ -268,6 +286,9 @@ export default function OptionAuth() {
               <Input
                 size="large"
                 id="user-name"
+                showCount
+                maxLength={100}
+                minLength={6}
                 name="email"
                 onChange={(e) => setDataForgotPassword(e.target.value)}
                 placeholder="Nhập vào email..."

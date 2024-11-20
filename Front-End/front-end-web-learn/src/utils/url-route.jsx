@@ -18,6 +18,7 @@ const URL = {
   },
   ADMIN: {
     HOME: "/admin",
+    MANAGE_ADMIN: "manage-user"
   },
 };
 export default URL;

@@ -13,7 +13,7 @@ import {
   LockOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { getCourses } from "../../../services/public/learn";
 import { selectCourse } from "../../../redux/selector";
 import FooterLearning from "../../share/FooterLearning";
@@ -23,7 +23,7 @@ let xu_ly_khi_tua = 0;
 
 function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   const navigate = useNavigate();
-  let sttVideo = -1;
+  let sttVideo = -1;  
   const [open, setOpen] = useState(false);
   const playerRef = useRef(null);
   const [lastTime, setLastTime] = useState(0);
@@ -33,12 +33,7 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   const [activeIndex, setActiveIndex] = useState(null);
   const [videoActive, setVideoActive] = useState(null);
   const [isShowOption, setIsShowOption] = useState(true);
-  // Trạng thái lưu video hiện tại
-  const [activeVideo, setActiveVideo] = useState({
-    id: null,
-    urlVideo: "",
-    title: "",
-  });
+  const [activeKey, setActiveKeys] = useState([idChapter]);
   const [lastVideoActive, setLastVideoActive] = useState(null);
   const [course, setCourse] = useState({});
 
@@ -58,40 +53,51 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
 
   useEffect(() => {
     if (course?.chapterList) {
-      let video_last = [];
-      course.chapterList.forEach((chapter) => {
-        video_last.push(
-          ...chapter.videos.filter((video) => video.isUserWatchVideo === 1)
+      let lastWatchedVideo = null;
+      for (const chapter of course.chapterList) {
+        const watchedVideos = chapter.videos.filter(
+          (video) => video.isUserWatchVideo === 1
         );
-      });
+        if (watchedVideos.length) {
+          lastWatchedVideo = watchedVideos[watchedVideos.length - 1];
+        }
+      }
 
-      if (video_last.length === 0) {
-        if (course.chapterList?.length) {
-          const { id, title, urlVideo } = course.chapterList[0]?.videos[0];
-          setLastVideoActive(id);
-          handleSubmidVideo(id, urlVideo, title);
+      if (!lastWatchedVideo) {
+        // Nếu chưa có video nào được xem
+        const firstVideo = course.chapterList[0]?.videos[0];
+        if (firstVideo) {
+          setTimeout(() => {
+            setLastVideoActive(firstVideo.id);
+            handleSubmidVideo(
+              firstVideo.id,
+              firstVideo.urlVideo,
+              firstVideo.title
+            );
+          }, 300);
         }
       } else {
-        const curr = video_last[video_last.length - 1];
-        handleSubmidVideo(curr?.id, curr?.urlVideo, curr?.title);
-        for (const chapter of course.chapterList) {
-          for (const video of chapter.videos) {
-            if (video.id > curr?.id) {
-              setLastVideoActive(video.id);
-              return;
-            }
-          }
+        // Cập nhật video cuối cùng được xem
+        if (lastWatchedVideo) {
+          setTimeout(() => {
+            handleSubmidVideo(
+              lastWatchedVideo.id,
+              lastWatchedVideo.urlVideo,
+              lastWatchedVideo.title
+            );
+          }, 300);
         }
+        setTimeout(() => {
+          setLastVideoActive(lastWatchedVideo.id + 1);
+        }, 300);
       }
     }
   }, [course]);
 
   const handleSubmidVideo = (id, url_video, title) => {
-    xu_ly_khi_tua = 0
+    xu_ly_khi_tua = 0;
     setActiveIndex(id);
     setVideoActive(url_video);
-    setActiveVideo({ id, urlVideo: url_video, title });
-
     titleVideo.current.textContent = title;
     updateCourse.current.textContent = course.updatedAt
       ? formatDate(course.updatedAt)
@@ -115,8 +121,8 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   };
 
   const onStateChange = (event) => {
-    if (event.data === 1) {
-      const currentTime = playerRef.current.getCurrentTime();
+    if (event.data === 1 && playerRef.current) {
+      const currentTime = playerRef.current.getCurrentTime() || 0;
       if (Math.abs(currentTime - lastTime) > 1) {
         xu_ly_khi_tua++;
         if (xu_ly_khi_tua >= 7) {
@@ -128,8 +134,6 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
       } else {
         setLastTime(currentTime);
       }
-    } else if (event.data === 2 || event.data === 0) {
-      setLastTime(0);
     }
   };
 
@@ -138,6 +142,9 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
     playerRef.current.playVideo();
   };
 
+  const handleOnchangeCollapse = useCallback((keys) => {
+    setActiveKeys(keys); // Cập nhật trực tiếp `activeKeys` với các key được mở
+  }, []);
   return (
     <>
       <Layout className="content_learning">
@@ -175,8 +182,13 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
               <ul>
                 <li>
                   Facebook:{" "}
-                  <Link target="_blank" to={"https://www.facebook.com/profile.php?id=100050105460828"}>
-                  https://www.facebook.com/profile.php?id=100050105460828
+                  <Link
+                    target="_blank"
+                    to={
+                      "https://www.facebook.com/profile.php?id=100050105460828"
+                    }
+                  >
+                    https://www.facebook.com/profile.php?id=100050105460828
                   </Link>
                 </li>
               </ul>
@@ -187,11 +199,13 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
               <h2 className="learning__right__title">Nội dung khóa học</h2>
               <Collapse
                 defaultActiveKey={[idChapter]}
+                activeKey={activeKey}
+                onChange={handleOnchangeCollapse}
                 className="learning__right__list-item"
                 items={(course?.chapterList || []).map((chapter, index) => ({
                   key: chapter?.id,
                   label: (
-                    <div className="learning__right__item">
+                    <div key={chapter?.id} className="learning__right__item">
                       <h3 className="learning__right__item__name_chapter">
                         ({index + 1}). {chapter?.title}
                       </h3>
@@ -281,11 +295,13 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
         </h2>
       </Modal>
       <FooterLearning
-        chapters={course.chapterList}
-        activeIndex={activeVideo.id}
+        chapters={course?.chapterList}
+        activeIndex={activeIndex}
         handleSubmidVideo={handleSubmidVideo}
         setIsShowOption={setIsShowOption}
         isShowOption={isShowOption}
+        lastVideoActive={lastVideoActive}
+        setActiveKeys={setActiveKeys}
       />
     </>
   );

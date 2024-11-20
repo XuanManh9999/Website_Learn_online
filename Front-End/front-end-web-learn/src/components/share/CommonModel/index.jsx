@@ -63,6 +63,7 @@ function CommonModel({
       <Modal
         className="modal-common"
         open={open}
+        centered
         onCancel={() => {
           setIsShowModel(false);
         }}

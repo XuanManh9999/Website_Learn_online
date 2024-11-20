@@ -1,0 +1,54 @@
+.manage-user {
+  margin: 10px;
+  .manage-user__title {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+  }
+  .manage-user__infoes {
+    margin-top: 40px;
+  }
+  .manage-user__list-user {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+  }
+  .manage-user__content {
+    margin-top: 80px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 10px;
+    row-gap: 20px;
+    .manage-user__item {
+      label {
+        display: block;
+      }
+      .ant-input-outlined {
+        margin-top: 5px;
+      }
+      .ant-select-show-arrow {
+        margin-top: 5px;
+        width: 100% !important;
+      }
+      .preview_avatar,
+      .preview_cover_photo {
+        display: none;
+      }
+    }
+  }
+  .manage-user__button {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+  }
+
+  .manage-user__list {
+    margin-top: 20px;
+    .manage-user__list__table {
+    }
+  }
+}

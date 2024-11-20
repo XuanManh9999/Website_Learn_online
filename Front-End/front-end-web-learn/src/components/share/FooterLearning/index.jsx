@@ -14,11 +14,14 @@ function FooterLearning({
   handleSubmidVideo,
   setIsShowOption,
   isShowOption,
+  lastVideoActive,
+  setActiveKeys,
 }) {
   // Gộp tất cả video từ các chapter
   const videos = chapters?.flatMap((chapter) =>
     chapter.videos.map((video) => ({
       ...video,
+      idChapter: chapter?.id,
       chapterTitle: chapter.title,
     }))
   );
@@ -28,14 +31,16 @@ function FooterLearning({
 
   // Tìm bài trước và bài tiếp theo
   const prevVideo = currentIndex > 0 ? videos[currentIndex - 1] : null;
+
   const nextVideo =
-    currentIndex < videos?.length - 1 ? videos[currentIndex + 1] : null;
+    currentIndex < videos?.length - 1 && activeIndex < lastVideoActive
+      ? videos[currentIndex + 1]
+      : null;
 
   // Lấy tiêu đề chương và số thứ tự chương hiện tại
   const currentChapterTitle =
     videos?.[currentIndex]?.chapterTitle || "Chưa chọn chương học";
-  const currentChapterIndex =
-    currentIndex >= 0 ? videos?.[currentIndex]?.chapterTitle : null;
+
   const chapterIndex = chapters?.findIndex((chapter) =>
     chapter.videos.some((video) => video.id === activeIndex)
   );
@@ -43,6 +48,43 @@ function FooterLearning({
   const handleToggleOption = () => {
     setIsShowOption((prev) => !prev);
   };
+
+  const handleNextVideo = () => {
+    if (nextVideo) {
+      setTimeout(() => {
+        if (nextVideo?.id && nextVideo?.urlVideo && nextVideo?.title) {
+          handleSubmidVideo(nextVideo.id, nextVideo.urlVideo, nextVideo.title);
+          setActiveKeys((prev) => {
+            const isExits = prev?.some((item) => item === nextVideo?.idChapter);
+            if (!isExits) {
+              return [...prev, nextVideo?.idChapter];
+            } else {
+              return prev;
+            }
+          });
+        }
+      }, 300);
+    }
+  };
+
+  const handlePrevVideo = () => {
+    if (prevVideo) {
+      setTimeout(() => {
+        if (prevVideo?.id && prevVideo?.urlVideo && prevVideo?.title) {
+          handleSubmidVideo(prevVideo.id, prevVideo.urlVideo, prevVideo.title);
+          setActiveKeys((prev) => {
+            let isExits = prev?.some((item) => item === prevVideo?.idChapter);
+            if (!isExits) {
+              return [...prev, prevVideo?.idChapter];
+            } else {
+              return prev;
+            }
+          });
+        }
+      }, 300);
+    }
+  };
+
   return (
     <footer className="container-footer-learning">
       <Button
@@ -50,10 +92,7 @@ function FooterLearning({
         icon={<LeftOutlined />}
         type="primary"
         disabled={!prevVideo}
-        onClick={() =>
-          prevVideo &&
-          handleSubmidVideo(prevVideo.id, prevVideo.urlVideo, prevVideo.title)
-        }
+        onClick={handlePrevVideo}
       >
         {"Bài trước"}
       </Button>
@@ -61,10 +100,7 @@ function FooterLearning({
         className="container-footer-learning__next-subject"
         type="primary"
         disabled={!nextVideo}
-        onClick={() =>
-          nextVideo &&
-          handleSubmidVideo(nextVideo.id, nextVideo.urlVideo, nextVideo.title)
-        }
+        onClick={handleNextVideo}
       >
         {"Bài tiếp theo"}
         <RightOutlined />

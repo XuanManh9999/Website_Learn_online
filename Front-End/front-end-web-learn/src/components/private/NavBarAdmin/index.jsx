@@ -1,5 +1,6 @@
 import "./NavBarAdmin.scss";
 import React, { useState } from "react";
+import URL from "../../../utils/url-route"
 import {
   AppstoreOutlined,
   UserOutlined,
@@ -12,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 const items = [
   {
-    label: "Quản lý người dùng",
+    label: <Link to={URL.ADMIN.MANAGE_ADMIN}>Quản lý người dùng</Link>,
     key: "user",
     icon: <UserOutlined />,
   },

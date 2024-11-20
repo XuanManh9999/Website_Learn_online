@@ -123,7 +123,7 @@ function Romap() {
           <span>{chapter.total_videos} bài học</span>
         </div>
       ),
-      children: (chapter?.videos || []).map((video, videoIndex) => (
+      children: (chapter?.videos || []).map((video) => (
         <div className="chapter_video" key={video.id}>
           <div className="container-romap-item__left-course--romap__content">
             <div className="container-romap-item__left-course--romap__content-left">

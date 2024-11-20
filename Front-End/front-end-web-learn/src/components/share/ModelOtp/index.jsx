@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectorShowHide } from '../../../redux/selector';
 import { default_show_hide, hide_model_otp } from '../../../redux/action/show_hide';
 export default function ModelOtp({ email }) {
-
-
     const state = useSelector(selectorShowHide)
     const dispatch = useDispatch()
     const [isLoading, setIsLoading] = useState(false)
@@ -113,6 +111,7 @@ export default function ModelOtp({ email }) {
                 open={state.isShowModelOTP}
                 onCancel={closeModal}
                 footer={null}
+                centered
             >
                 <strong>Vui lòng nhập OTP trong {secondsToGo} giây.</strong>
                 {/* <p className='otp-message-error'>Mã OTP không đúng vui lòng thử lại.</p> */}

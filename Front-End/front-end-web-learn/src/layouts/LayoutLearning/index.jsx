@@ -1,6 +1,5 @@
 import HeaderLearning from "../../components/share/HeaderLearning";
 import ContentLearning from "../../components/private/ContentLearning";
-import FooterLearning from "../../components/share/FooterLearning";
 import { useSelector } from "react-redux";
 import { selectCourse, selectorUser } from "../../redux/selector";
 import { useCallback, useEffect, useState } from "react";
