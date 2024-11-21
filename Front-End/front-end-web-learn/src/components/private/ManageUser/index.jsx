@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { fetchUsers } from "../../../services/private/user";
 import {
   Input,
   Select,
@@ -16,64 +17,61 @@ import "./ManageUser.scss";
 const columns = [
   {
     title: "ID",
-    dataIndex: "key",
-    key: "key",
+    dataIndex: "id",
     width: 150,
-    render: (text) => <a>{text}</a>,
   },
   {
     title: "Tên người dùng",
     dataIndex: "user_name",
-    key: "user_name",
     width: 100,
   },
   {
     title: "Giới tính",
     dataIndex: "gender",
-    key: "gender",
     width: 200,
   },
   {
     title: "Email",
     dataIndex: "email",
-    key: "email",
     width: 200,
   },
   {
     title: "Số Điện Thoại",
     dataIndex: "phonenumber",
-    key: "phonenumber",
     width: 150,
   },
   {
     title: "Ảnh đại diện",
     dataIndex: "avatar",
-    key: "avatar",
     width: 200,
+    render: (_, object) => {
+      return <img src={object?.avatar} alt={object?.user_name} />;
+    },
   },
   {
     title: "Ảnh bìa",
     dataIndex: "cover_photo",
-    key: "cover_photo",
     width: 200,
-  },
-  {
-    title: "Ảnh bìa",
-    key: "tags",
-    dataIndex: "tags",
-    width: 150,
+    render: (_, object) => {
+      return <img src={object?.cover_photo} alt={object?.cover_photo} />;
+    },
   },
   {
     title: "Số điểm tích lũy",
     dataIndex: "point",
-    key: "point",
     width: 200,
   },
   {
     title: "Trạng thái tài khoản",
-    dataIndex: "point",
-    key: "point",
+    dataIndex: "actice",
     width: 200,
+    render: (_, { actice }) => (
+      <>
+        <Tag color={actice == 1 ? "success" : "error"}>
+          {actice == 1 ? "Hoạt động" : "Không hoạt động"}
+        </Tag>
+      </>
+    ),
   },
   {
     title: "Quyền",
@@ -83,14 +81,12 @@ const columns = [
   },
   {
     title: "Ngày tạo tài khoản",
-    dataIndex: "created_at",
-    key: "created_at",
+    dataIndex: "createAt",
     width: 200,
   },
   {
     title: "Ngày cập nhật gần nhất",
-    dataIndex: "updated_at",
-    key: "updated_at",
+    dataIndex: "updateAt",
     width: 200,
   },
   {
@@ -98,106 +94,19 @@ const columns = [
     key: "action",
     width: 150,
     render: (_, record) => (
-      <Space size="middle">
-        <Button>Cập nhật người dùng</Button>
-        <Button>Xóa người dùng</Button>
-      </Space>
+      <>
+        <Space size="middle">
+          <Button>Chi tiết người dùng</Button>
+          <Button>Cập nhật người dùng</Button>
+        </Space>
+        <Space>
+          <Button>Xóa người dùng</Button>
+        </Space>
+      </>
     ),
   },
 ];
 
-const data = [
-  {
-    key: 1,
-    user_name: "Nguyễn Xuân Mạnh",
-    gender: "Nam",
-    email: "20210794@eaut.edu.vn",
-    phonenumber: "0559517003",
-    description: "Tôi là mạnh tôi 20 tuổi",
-    avatar: "img",
-    cover_photo: "cover_photo",
-    point: 0,
-    role: "ADMIN",
-    active: "Hoạt động",
-    created_at: "20/11/2024",
-    updated_at: "21/11/2024",
-  },
-  {
-    key: 1,
-    user_name: "Nguyễn Xuân Mạnh",
-    gender: "Nam",
-    email: "20210794@eaut.edu.vn",
-    phonenumber: "0559517003",
-    description: "Tôi là mạnh tôi 20 tuổi",
-    avatar: "img",
-    cover_photo: "cover_photo",
-    point: 0,
-    role: "ADMIN",
-    active: "Hoạt động",
-    created_at: "20/11/2024",
-    updated_at: "21/11/2024",
-  },
-  {
-    key: 1,
-    user_name: "Nguyễn Xuân Mạnh",
-    gender: "Nam",
-    email: "20210794@eaut.edu.vn",
-    phonenumber: "0559517003",
-    description: "Tôi là mạnh tôi 20 tuổi",
-    avatar: "img",
-    cover_photo: "cover_photo",
-    point: 0,
-    role: "ADMIN",
-    active: "Hoạt động",
-    created_at: "20/11/2024",
-    updated_at: "21/11/2024",
-  },
-  {
-    key: 1,
-    user_name: "Nguyễn Xuân Mạnh",
-    gender: "Nam",
-    email: "20210794@eaut.edu.vn",
-    phonenumber: "0559517003",
-    description: "Tôi là mạnh tôi 20 tuổi",
-    avatar: "img",
-    cover_photo: "cover_photo",
-    point: 0,
-    role: "ADMIN",
-    active: "Hoạt động",
-    created_at: "20/11/2024",
-    updated_at: "21/11/2024",
-  },
-  {
-    key: 1,
-    user_name: "Nguyễn Xuân Mạnh",
-    gender: "Nam",
-    email: "20210794@eaut.edu.vn",
-    phonenumber: "0559517003",
-    description: "Tôi là mạnh tôi 20 tuổi",
-    avatar: "img",
-    cover_photo: "cover_photo",
-    point: 0,
-    role: "ADMIN",
-    active: "Hoạt động",
-    created_at: "20/11/2024",
-    updated_at: "21/11/2024",
-  },
-  {
-    key: 1,
-    user_name: "Nguyễn Xuân Mạnh",
-    gender: "Nam",
-    email: "20210794@eaut.edu.vn",
-    phonenumber: "0559517003",
-    description: "Tôi là mạnh tôi 20 tuổi",
-    avatar: "img",
-    cover_photo: "cover_photo",
-    point: 0,
-    role: "ADMIN",
-    active: "Hoạt động",
-    created_at: "20/11/2024",
-    updated_at: "21/11/2024",
-  },
-];
 function ManageUser() {
   const [formData, setFormData] = useState({
     username: "",
@@ -212,6 +121,41 @@ function ManageUser() {
     description: "",
   });
 
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 5,
+    total: 0, // Tổng số bản ghi
+  });
+
+  const fetchData = async (page, pageSize) => {
+    setLoading(true);
+    try {
+      const response = await fetchUsers(page, pageSize);
+      // Giả sử server trả về { data, total }
+      setUsers(response);
+      setPagination({
+        ...pagination,
+        current: page,
+        pageSize: pageSize,
+        total: response.result.total_user, // Tổng số bản ghi
+      });
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTableChange = (pagination) => {
+    fetchData(pagination.current, pagination.pageSize);
+  };
+
+  useEffect(() => {
+    fetchData(pagination.current, pagination.pageSize);
+  }, []);
+
   const handleOnchangeInput = (value, option) => {
     if (option) {
       const name = option.name || option.props.name;
@@ -220,13 +164,15 @@ function ManageUser() {
         [name]: value,
       }));
     } else {
-      const { name, value:valueData } = value?.target;
+      const { name, value: valueData } = value?.target;
       setFormData((prev) => ({
         ...prev,
         [name]: valueData,
       }));
     }
   };
+
+  console.log("Xuan manh check ", users);
 
   return (
     <div className="manage-user">
@@ -237,7 +183,7 @@ function ManageUser() {
             <Card>
               <Statistic
                 title="Tổng số người dùng trong hệ thống"
-                value={300}
+                value={users?.result?.total_user || 0}
                 valueStyle={{
                   color: "#3f8600",
                 }}
@@ -248,7 +194,7 @@ function ManageUser() {
             <Card>
               <Statistic
                 title="Số người dùng đã đăng ký khóa học"
-                value={200}
+                value={users?.result?.total_register_course || 0}
                 valueStyle={{
                   color: "#3f8600",
                 }}
@@ -259,7 +205,7 @@ function ManageUser() {
             <Card>
               <Statistic
                 title="Số tài khoản chưa đăng ký khóa học"
-                value={100}
+                value={users?.result?.total_unregister_course || 0}
                 valueStyle={{
                   color: "#cf1322",
                 }}
@@ -270,7 +216,7 @@ function ManageUser() {
             <Card>
               <Statistic
                 title="Số tài khoản bị vô hiệu hóa"
-                value={100}
+                value={users?.result?.total_user_disable || 0}
                 valueStyle={{
                   color: "#cf1322",
                 }}
@@ -418,16 +364,21 @@ function ManageUser() {
       <h2 className="manage-user__list-user">Danh sách người dùng</h2>
       <div className="manage-user__list">
         <Table
-          pagination={{
-            pageSize: 5, // Hiển thị 5 hàng mỗi trang
-          }}
           className="manage-user__list__table"
           bordered
           columns={columns}
-          dataSource={data}
+          dataSource={users?.result?.users ?? []}
           scroll={{
-            x: 50,
+            x: 100,
           }}
+          rowKey={(record) => record.id} // Khóa duy nhất cho từng hàng
+          pagination={{
+            current: pagination.current,
+            pageSize: pagination.pageSize,
+            total: pagination.total,
+          }}
+          loading={loading}
+          onChange={handleTableChange}
         />
       </div>
     </div>
