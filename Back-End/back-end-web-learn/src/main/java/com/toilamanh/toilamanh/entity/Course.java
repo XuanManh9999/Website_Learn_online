@@ -45,7 +45,7 @@ public class Course extends BaseEntity {
     @Column(name = "is_pro")
     private Integer isPro = 0;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type_code")
     private CourseType courseType;
     @ManyToOne

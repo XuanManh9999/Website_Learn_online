@@ -5,5 +5,7 @@ import com.toilamanh.toilamanh.dto.response.ApiResponse;
 
 public interface CourseService {
     ApiResponse addCourse(CourseRequest courseRequest);
-    ApiResponse getAllCourses(Long IdUser, Long idCourse, Integer isShowChapter);
+    ApiResponse getAllCourses(Long IdUser);
+    ApiResponse getCourseById(Long Id);
+    ApiResponse getCourseByIdUserAndIdCourse(Long IdUser, Long IdCourse);
 }

@@ -1,7 +1,10 @@
 package com.toilamanh.toilamanh.service.impl;
 
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
+import com.toilamanh.toilamanh.dto.response.CourseResponse;
 import com.toilamanh.toilamanh.dto.response.CourseTypeDTO;
+import com.toilamanh.toilamanh.dto.response.CourseTypeResponse;
+import com.toilamanh.toilamanh.entity.Course;
 import com.toilamanh.toilamanh.entity.CourseType;
 import com.toilamanh.toilamanh.exception.custom.OurException;
 import com.toilamanh.toilamanh.repository.CourseTypeRepository;
@@ -15,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,20 +31,39 @@ import java.util.Optional;
 public class CourseTypeServiceImpl implements CourseTypeService {
     CourseTypeRepository courseTypeRepository;
     ModelMapper modelMapper;
+    CourseServiceImpl courseServiceImpl;
+
 
     @Override
     public ApiResponse getAllCourseTypes() {
         try {
+            CourseTypeResponse courseTypeResponse = new CourseTypeResponse();
+            List<CourseTypeDTO> courseTypeDTOs = new ArrayList<>();
+
             List<CourseType> courseTypes = courseTypeRepository.findAllByActive(1);
-            List<CourseTypeDTO> courseTypeDTOS =  new ArrayList<>();
+
             for (CourseType courseType : courseTypes) {
-                CourseTypeDTO courseTypeDTO = modelMapper.map(courseType, CourseTypeDTO.class);
-                courseTypeDTOS.add(courseTypeDTO);
+                CourseTypeDTO courseTypeDTO = new CourseTypeDTO();
+                courseTypeDTO.setId(courseType.getId());
+                courseTypeDTO.setNameType(courseType.getNameType());
+                courseTypeDTO.setOrderNumber(courseType.getOrderNumber());
+
+                List<CourseResponse> courseResponses = new ArrayList<>();
+                for (Course course : courseType.getCourses()) {
+                    CourseResponse courseResponse = courseServiceImpl.mapCourseToCourseResponse(course, null, 0, 0);
+                    courseResponses.add(courseResponse);
+                }
+                courseTypeDTO.setCourseResponseList(courseResponses);
+                courseTypeDTOs.add(courseTypeDTO);
             }
+            List<CourseTypeDTO> sortOrderNumber =  courseTypeDTOs.stream()
+                    .sorted(Comparator.comparing(CourseTypeDTO::getOrderNumber)) // Sắp xếp khóa học theo `order_number`
+                    .collect(Collectors.toList());
+            courseTypeResponse.setCourseTypeDTOList(sortOrderNumber);
             return ApiResponse.builder()
                     .status(HttpStatus.OK.value())
-                    .message("Lấy thông tin loại khóa học thành công")
-                    .result(courseTypeDTOS)
+                    .message("Lấy thông tin khóa học thành công")
+                    .result(courseTypeResponse)
                     .build();
         }catch (Exception e) {
             throw e;
@@ -78,9 +102,14 @@ public class CourseTypeServiceImpl implements CourseTypeService {
                             .build();
                 }else {
                     Optional<CourseType> courseTypeDelete = courseTypeRepository.findByNameTypeAndActive(nameType, 0);
-
+                    Integer max_order = courseTypeRepository.findMaxOrderNumber();
                     if (courseTypeDelete.isPresent()) {
                         courseTypeDelete.get().setActive(1);
+                        if (max_order == null) {
+                            courseTypeDelete.get().setOrderNumber(0);
+                        }else {
+                            courseTypeDelete.get().setOrderNumber(max_order + 10);
+                        }
                         courseTypeRepository.save(courseTypeDelete.get());
                         return ApiResponse.builder()
                                 .status(HttpStatus.CREATED.value())
@@ -90,6 +119,11 @@ public class CourseTypeServiceImpl implements CourseTypeService {
                         CourseType courseTypeEntity = new CourseType();
                         courseTypeEntity.setNameType(nameType);
                         courseTypeEntity.setActive(1);
+                        if (max_order == null) {
+                            courseTypeEntity.setOrderNumber(0);
+                        }else {
+                            courseTypeEntity.setOrderNumber(max_order + 10);
+                        }
                         courseTypeRepository.save(courseTypeEntity);
                         return ApiResponse.builder()
                                 .status(HttpStatus.CREATED.value())

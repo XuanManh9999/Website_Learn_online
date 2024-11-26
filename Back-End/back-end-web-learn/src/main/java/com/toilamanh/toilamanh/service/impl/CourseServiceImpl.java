@@ -2,14 +2,10 @@ package com.toilamanh.toilamanh.service.impl;
 import com.toilamanh.toilamanh.dto.request.ChapterRequest;
 import com.toilamanh.toilamanh.dto.request.CourseRequest;
 import com.toilamanh.toilamanh.dto.request.VideoRequest;
-import com.toilamanh.toilamanh.dto.response.ApiResponse;
-import com.toilamanh.toilamanh.dto.response.ChapterDTO;
-import com.toilamanh.toilamanh.dto.response.CourseResponse;
-import com.toilamanh.toilamanh.dto.response.VideoDTO;
+import com.toilamanh.toilamanh.dto.response.*;
 import com.toilamanh.toilamanh.dto.youtube.YouTubeResponse;
-import com.toilamanh.toilamanh.entity.Chapter;
-import com.toilamanh.toilamanh.entity.Course;
-import com.toilamanh.toilamanh.entity.Video;
+import com.toilamanh.toilamanh.entity.*;
+import com.toilamanh.toilamanh.exception.custom.BadException;
 import com.toilamanh.toilamanh.exception.custom.OurException;
 import com.toilamanh.toilamanh.repository.*;
 import com.toilamanh.toilamanh.service.interfac.CourseService;
@@ -28,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,9 +34,9 @@ public class CourseServiceImpl implements CourseService {
 
     private static final Logger log = LoggerFactory.getLogger(CourseServiceImpl.class);
     Environment environment;
-
     ModelMapper modelMapper;
     CourseRepository courseRepository;
+    CourseTypeRepository courseTypeRepository;
     UserWatchVideoRepository userWatchVideoRepository;
     UserRegisterCourseRepository userRegisterCourseRepository;
     YouTubeService youTubeService;
@@ -55,6 +52,11 @@ public class CourseServiceImpl implements CourseService {
             Integer order_number_chapter = 0;
             Course course = new Course();
             modelMapper.map(courseRequest, course);
+            // find chapterid
+            Optional<CourseType> courseType = courseTypeRepository.findById(courseRequest.getCourseTypeID());
+            if (courseType.isPresent()) {
+                course.setCourseType(courseType.get());
+            }
             course.setActive(1);
             course.setOrderNumber(max_order_course);
             List<Chapter> chapters = new ArrayList<>();
@@ -108,37 +110,65 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public ApiResponse getAllCourses(Long IdUser, Long idCourse, Integer isShowChapter) {
-        if (idCourse == null) {
-            List<Course> courses = courseRepository.findAll().stream()
-                    .filter(course -> course.getActive() == 1)
-                    .sorted(Comparator.comparing(Course::getOrderNumber)) // Sắp xếp khóa học theo `order_number`
-                    .collect(Collectors.toList());
+    public ApiResponse getAllCourses(Long IdUser) {
+        List<Course> courses = courseRepository.findAll().stream()
+                .filter(course -> course.getActive() == 1)
+                .sorted(Comparator.comparing(Course::getOrderNumber)) // Sắp xếp khóa học theo `order_number`
+                .collect(Collectors.toList());
 
-            List<CourseResponse> courseResponses = courses.stream()
-                    .map(course -> mapCourseToCourseResponse(course, IdUser, isShowChapter))
-                    .collect(Collectors.toList());
+        List<CourseResponse> courseResponses = courses.stream()
+                .map(course -> mapCourseToCourseResponse(course, IdUser, 1, 0))
+                .collect(Collectors.toList());
 
-            return ApiResponse.builder()
+        return ApiResponse.builder()
+                .status(HttpStatus.OK.value())
+                .result(courseResponses)
+                .message("Get courses Done")
+                .build();
+    }
+
+    @Override
+    public ApiResponse getCourseById(Long Id) {
+        try {
+            Course course = courseRepository.findById(Id).orElseThrow(() -> new OurException("Không tìm thấy khóa học tương ứng, vui lòng kiểm tra lại"));
+            CourseResponse courseResponse = mapCourseToCourseResponse(course, null, 1, 1);
+
+            return  ApiResponse.builder()
                     .status(HttpStatus.OK.value())
-                    .result(courseResponses)
-                    .message("Get courses Done")
-                    .build();
-        } else {
-            Course course = courseRepository.findById(idCourse)
-                    .orElseThrow(() -> new OurException("Không tồn tại khóa học tương ứng"));
-
-            CourseResponse courseResponse = mapCourseToCourseResponse(course, IdUser, isShowChapter);
-            return ApiResponse.builder()
-                    .status(HttpStatus.OK.value())
+                    .message("Lấy thông tin khóa học thành công")
                     .result(courseResponse)
-                    .message("Get courses Done")
                     .build();
+        }catch (OurException e) {
+            throw e;
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public ApiResponse getCourseByIdUserAndIdCourse(Long IdUser, Long IdCourse) {
+        try {
+            Course course = courseRepository.findById(IdCourse).orElseThrow(() -> new OurException("Không tìm thấy khóa học tương ứng, vui lòng kiểm tra lại"));
+            CourseResponse courseResponse = mapCourseToCourseResponse(course, IdUser, 1, 1);
+            return  ApiResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Lấy thông tin khóa học thành công")
+                    .result(courseResponse)
+                    .build();
+        }catch (OurException e) {
+            throw e;
+        }
+        catch (BadException e) {
+            throw e;
+        }
+        catch (Exception ex) {
+            throw ex;
         }
     }
 
 
-    private CourseResponse mapCourseToCourseResponse(Course course, Long IdUser, Integer isShowChapter) {
+    public CourseResponse mapCourseToCourseResponse(Course course, Long IdUser, Integer isShowChapter,Integer isShowVideo) {
         CourseResponse courseResponse = new CourseResponse();
         modelMapper.map(course, courseResponse);
 
@@ -165,7 +195,7 @@ public class CourseServiceImpl implements CourseService {
             List<ChapterDTO> chapterDTOs = course.getChapterList().stream()
                     .filter(chapter -> chapter.getActive() == 1)
                     .sorted(Comparator.comparing(Chapter::getOrderNumber)) // Sắp xếp các Chapter theo thứ tự `order`
-                    .map(chapter -> mapChapterToChapterDTO(chapter, IdUser))
+                    .map(chapter -> mapChapterToChapterDTO(chapter, IdUser, isShowVideo))
                     .collect(Collectors.toList());
             courseResponse.setChapterList(chapterDTOs);
         } else {
@@ -174,22 +204,29 @@ public class CourseServiceImpl implements CourseService {
 
         return courseResponse;
     }
-    private ChapterDTO mapChapterToChapterDTO(Chapter chapter, Long IdUser) {
+    private ChapterDTO mapChapterToChapterDTO(Chapter chapter, Long IdUser, Integer isShowVideo) {
         ChapterDTO chapterDTO = new ChapterDTO();
         modelMapper.map(chapter, chapterDTO);
-        chapterDTO.setTotal_videos(chapter.getVideos().size());
-        chapterDTO.setTotal_video_user_watch(userWatchVideoRepository.countUserWatchedVideos(IdUser, chapter.getId()));
-        Long duration = videoRepository.sumTotalDurationByChapter(chapter.getId());
-        String total_time_video = UtilsFunc.convertSecondsToMinutesSeconds(duration);
-        chapterDTO.setTotal_time_video(total_time_video);
+        if (isShowVideo == 1) {
+            chapterDTO.setTotal_videos(chapter.getVideos().size());
+            chapterDTO.setTotal_video_user_watch(userWatchVideoRepository.countUserWatchedVideos(IdUser, chapter.getId()));
+            Long duration = videoRepository.sumTotalDurationByChapter(chapter.getId());
+            String total_time_video = UtilsFunc.convertSecondsToMinutesSeconds(duration);
+            Integer total_user_watch_video_chapter = chapterRepository.countWatchedVideosByChapterIdAndUserId(chapter.getId(), IdUser);
+            chapterDTO.setTotal_video_user_watch(total_user_watch_video_chapter);
+            chapterDTO.setTotal_time_video(total_time_video);
 
-        // Sắp xếp danh sách Video theo thứ tự `order` trước khi chuyển đổi
-        List<VideoDTO> videoDTOs = chapter.getVideos().stream()
-                .sorted(Comparator.comparing(Video::getOrderNumber)) // Sắp xếp các Video theo thứ tự `order`
-                .map(video -> mapVideoToVideoDTO(video, IdUser))
-                .collect(Collectors.toList());
+            // Sắp xếp danh sách Video theo thứ tự `order` trước khi chuyển đổi
+            List<VideoDTO> videoDTOs = chapter.getVideos().stream()
+                    .sorted(Comparator.comparing(Video::getOrderNumber)) // Sắp xếp các Video theo thứ tự `order`
+                    .map(video -> mapVideoToVideoDTO(video, IdUser))
+                    .collect(Collectors.toList());
 
-        chapterDTO.setVideos(videoDTOs);
+            chapterDTO.setVideos(videoDTOs);
+        }else {
+            chapterDTO.setVideos(null);
+        }
+
         return chapterDTO;
     }
 

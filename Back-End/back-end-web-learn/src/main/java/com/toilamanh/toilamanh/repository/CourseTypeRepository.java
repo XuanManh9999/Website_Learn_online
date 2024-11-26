@@ -11,9 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface CourseTypeRepository extends JpaRepository<CourseType, Long> {
-    // Hoặc nếu muốn dùng tham số:
-    @Query("SELECT c FROM CourseType c WHERE c.active = :active")
-    List<CourseType> findAllByActive(@Param("active") Integer active);
     Optional<CourseType> findByIdAndActive(Long id, Integer active);
     Optional<CourseType> findByNameTypeAndActive(String name, Integer active);
-}
+    List<CourseType> findAllByActive(Integer active);
+    @Query("SELECT MAX(ct.orderNumber) FROM CourseType ct")
+    Integer findMaxOrderNumber();
+ }

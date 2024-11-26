@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,13 +20,22 @@ public class CourseController {
     public ResponseEntity<?> addCourse(@RequestBody CourseRequest courseRequest) {
         return ResponseEntity.ok(courseService.addCourse(courseRequest));
     }
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<?> getAllCourses(
-            @RequestParam(value = "IdUser", required = false) Long ID,
-            @RequestParam(value = "IdCourse", required = false) Long IdCourse,
-            @RequestParam(value = "IsShowChapter", required = false) Integer isShowChapter
-    ) {
-        return ResponseEntity.ok(courseService.getAllCourses(ID, IdCourse, isShowChapter));
+    public ResponseEntity<?> getAllCourses(@RequestParam(name = "IdUser", required = false) Long IdUser) {
+        return ResponseEntity.ok(courseService.getAllCourses(IdUser));
     }
 
-}
+    @GetMapping("/{IdCourse}")
+    public ResponseEntity<?> getCourseById(@PathVariable(name = "IdCourse") Long Id) {
+        return ResponseEntity.ok().body(courseService.getCourseById(Id));
+    }
+
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    @GetMapping("/{IdCourse}/{IdUser}")
+    public ResponseEntity<?> getCourseByIdUser(@PathVariable(name = "IdCourse") Long IdCourse, @PathVariable(name = "IdUser") Long IdUser) {
+        return ResponseEntity.ok().body(courseService.getCourseByIdUserAndIdCourse(IdUser, IdCourse));
+    }
+
+
+ }

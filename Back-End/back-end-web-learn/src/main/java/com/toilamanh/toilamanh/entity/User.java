@@ -40,7 +40,7 @@ public class User extends BaseEntity implements UserDetails {
     private String phonenumber;
 
     @Column(name = "avatar", columnDefinition = "TEXT")
-    private String avatar = "https://i.ibb.co/NZrHmQB/avatar-default.png";
+    private String avatar = "https://files.fullstack.edu.vn/f8-prod/user_photos/255858/63400e2b8f323.jpg";
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
@@ -60,6 +60,8 @@ public class User extends BaseEntity implements UserDetails {
 
    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
    private List<UserWatchVideo> userWatchVideoList;
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

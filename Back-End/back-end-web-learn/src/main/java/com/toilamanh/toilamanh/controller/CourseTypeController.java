@@ -2,7 +2,6 @@ package com.toilamanh.toilamanh.controller;
 
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.CourseTypeDTO;
-import com.toilamanh.toilamanh.entity.CourseType;
 import com.toilamanh.toilamanh.service.interfac.CourseTypeService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -13,4 +13,18 @@ public interface ChapterRepository extends JpaRepository<Chapter, Long> {
 
     @Query("SELECT SUM(v.duration) FROM Chapter c JOIN c.videos v WHERE c.course.id = :courseId")
     Long getTotalDurationByCourseId(@Param("courseId") Long courseId);
+
+    @Query("""
+        SELECT COUNT(uwv)
+        FROM Chapter c 
+        JOIN c.videos v 
+        JOIN UserWatchVideo uwv ON uwv.video = v
+        WHERE c.id = :chapterId 
+          AND uwv.user.id = :userId 
+    """)
+    Integer countWatchedVideosByChapterIdAndUserId(
+            @Param("chapterId") Long chapterId,
+            @Param("userId") Long userId
+    );
+
 }
