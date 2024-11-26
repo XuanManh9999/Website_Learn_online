@@ -1,8 +1,12 @@
 package com.toilamanh.toilamanh.service.impl;
+
 import com.toilamanh.toilamanh.dto.request.ChapterRequest;
 import com.toilamanh.toilamanh.dto.request.CourseRequest;
 import com.toilamanh.toilamanh.dto.request.VideoRequest;
-import com.toilamanh.toilamanh.dto.response.*;
+import com.toilamanh.toilamanh.dto.response.ApiResponse;
+import com.toilamanh.toilamanh.dto.response.ChapterDTO;
+import com.toilamanh.toilamanh.dto.response.CourseResponse;
+import com.toilamanh.toilamanh.dto.response.VideoDTO;
 import com.toilamanh.toilamanh.dto.youtube.YouTubeResponse;
 import com.toilamanh.toilamanh.entity.*;
 import com.toilamanh.toilamanh.exception.custom.BadException;
@@ -41,7 +45,8 @@ public class CourseServiceImpl implements CourseService {
     UserRegisterCourseRepository userRegisterCourseRepository;
     YouTubeService youTubeService;
     ChapterRepository chapterRepository;
-    private final VideoRepository videoRepository;
+    MapRepository mapRepository;
+    VideoRepository videoRepository;
 
     @Override
     public ApiResponse addCourse(CourseRequest courseRequest) {
@@ -53,9 +58,13 @@ public class CourseServiceImpl implements CourseService {
             Course course = new Course();
             modelMapper.map(courseRequest, course);
             // find chapterid
-            Optional<CourseType> courseType = courseTypeRepository.findById(courseRequest.getCourseTypeID());
+            Optional<CourseType> courseType = courseTypeRepository.findByIdAndActive(courseRequest.getCourseTypeID(), 1);
             if (courseType.isPresent()) {
                 course.setCourseType(courseType.get());
+            }
+            Optional<Map> map = mapRepository.findByIdAndActive(courseRequest.getMapID(), 1);
+            if (map.isPresent()) {
+                course.setMap(map.get());
             }
             course.setActive(1);
             course.setOrderNumber(max_order_course);

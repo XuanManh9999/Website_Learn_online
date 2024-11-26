@@ -14,7 +14,10 @@ import java.util.Optional;
 public interface MapRepository extends JpaRepository<Map,Long> {
     @Query("SELECT m FROM Map m WHERE m.active = :active")
     List<Map> findAllMapByActive(@Param("active") Integer active);
+
     Optional<Map> findByIdAndActive(Long id, Integer active);
+
     Optional<Map> findByNameAndActive(String name, Integer active);
 
+    List<Map> findAllByActive(Integer active);
 }

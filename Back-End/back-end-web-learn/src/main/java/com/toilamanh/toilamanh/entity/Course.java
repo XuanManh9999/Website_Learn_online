@@ -52,7 +52,7 @@ public class Course extends BaseEntity {
     @JoinColumn(name = "id_map")
     private Map map;
 
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapterList;
 
     @OneToMany(mappedBy = "course")

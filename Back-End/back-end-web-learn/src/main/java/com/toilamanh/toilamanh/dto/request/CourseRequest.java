@@ -22,6 +22,7 @@ public class CourseRequest {
     private Integer orderNumber ;
     private Integer featuredCourse ;
     private Long courseTypeID;
+    private Long mapID;
     private String slug;
     private List<ChapterRequest> chapterList;
 }

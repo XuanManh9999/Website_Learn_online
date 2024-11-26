@@ -1,10 +1,10 @@
 package com.toilamanh.toilamanh.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "map")
@@ -16,4 +16,9 @@ public class Map extends BaseEntity {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
+
+    @OneToMany(mappedBy = "map", fetch = FetchType.EAGER)
+    private List<Course> courseList;
+
+
 }
