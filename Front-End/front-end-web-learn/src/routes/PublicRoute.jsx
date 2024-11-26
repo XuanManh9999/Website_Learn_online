@@ -5,6 +5,7 @@ import Section from "../components/share/Section";
 import Romap from "../components/public/romap";
 import Introduction from "../components/share/Introduction";
 import Component500 from "../components/share/500";
+import LearningMap from "../components/public/LearningMap";
 const publicRoutes = [
   {
     path: URL.PUBLIC.HOME,
@@ -13,6 +14,10 @@ const publicRoutes = [
       {
         path: URL.PUBLIC.COURSE,
         element: <Romap />,
+      },
+      {
+        path: URL.PUBLIC.LEARNING_MAP,
+        element: <LearningMap />,
       },
       {
         index: true, // Đặt Section là phần tử mặc định

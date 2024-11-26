@@ -8,6 +8,7 @@ const URL = {
     INFO: "/info",
     SERVER_ERROR: "/loi-he-thong",
     NOT_FOUND: "*",
+    LEARNING_MAP: "/learning-paths"
   },
   PRIVATE: {
     HOME: "/admin",

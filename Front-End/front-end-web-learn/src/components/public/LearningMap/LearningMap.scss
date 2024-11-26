@@ -1,0 +1,157 @@
+.learning-map {
+  margin-top: 86px;
+  padding: 0 28px;
+  background-color: #fff;
+  margin-bottom: 60px;
+  .learning-map__wrapper {
+    .learning-map__top {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin: 32px 0 80px;
+      .learning-map__top__title {
+        font-size: 24px;
+        color: #242424;
+        font-weight: 700;
+      }
+      .learning-map__top__desc {
+        margin-top: 16px;
+        font-size: 16px;
+        color: #292929;
+        line-height: 1.6;
+      }
+    }
+    .learning-map__mid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 20px;
+      row-gap: 20px;
+      justify-content: center;
+      .learning-map__mid__item {
+        min-width: 500px;
+        padding: 24px;
+        border-radius: 16px;
+        border: 2px solid #e8e8e8;
+        .learning-map__mid__wapper {
+          display: grid;
+          grid-template-columns: 1.8fr 1fr;
+          .learning-map__mid__left {
+            .learning-map__mid__left__content {
+              .learning-map__mid__left__content__title {
+                text-decoration: none;
+                font-size: 20px;
+                color: #242424;
+                font-weight: 700;
+              }
+              .learning-map__mid__left__content__desc {
+                margin-top: 14px;
+                font-size: 16px;
+                color: #000;
+                line-height: 1.6;
+              }
+            }
+          }
+          .learning-map__mid__right {
+            padding-left: 24px;
+            display: flex;
+            align-items: center;
+            justify-self: center;
+            .learning-map__mid__left__img {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 122px;
+              height: 122px;
+              border: 5px solid #f05123;
+              border-radius: 50%;
+              img {
+                width: 98px;
+                height: 98px;
+                object-fit: cover;
+                border-radius: 50%;
+              }
+            }
+          }
+        }
+        .learning-map__mid__bot {
+          margin-top: 40px;
+          .learning-map__mid__bot__wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 26px;
+            .learning-map__mid__bot__wrapper_content {
+              display: flex;
+              gap: 8px;
+              span {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                img {
+                  width: 22px;
+                  height: 22px;
+                  object-fit: cover;
+                }
+              }
+            }
+            .learning-map__mid__bot__wrapper__view_more {
+            }
+          }
+        }
+        .learning-map__mid__bot__wrapper__view_more {
+          button {
+            width: 148px;
+            height: 32px;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-radius: 99px;
+          }
+        }
+      }
+    }
+    .learning-map__bot {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .learning-map__bot__left {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        .learning-map__bot__left__title {
+          font-size: 20px;
+          font-weight: 900;
+          line-height: 1.6;
+        }
+        .learning-map__bot__left__desc {
+          color: #000;
+          font-size: 16px;
+          line-height: 1.6;
+        }
+        button {
+          border: 2px solid #292929;
+          padding: 10px 16px;
+          font-size: 15px;
+          font-weight: 600;
+          border-radius: 999px;
+          min-height: 40px;
+          transition: ease 0.2s;
+          &:hover {
+            color: #fff;
+            background-color: #292929;
+          }
+        }
+      }
+      .learning-map__bot__reight {
+        img {
+          width: 420px;
+          height: 420px;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+}

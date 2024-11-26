@@ -15,7 +15,7 @@ const items = [
     key: "trang-chu",
   },
   {
-    label: <Link to={"/lo-trinh"}>Lộ trình</Link>,
+    label: <Link to={"/learning-paths"}>Lộ trình</Link>,
     key: "lo-trinh",
   },
   {
