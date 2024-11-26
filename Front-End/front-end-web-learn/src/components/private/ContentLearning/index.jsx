@@ -2,7 +2,10 @@ import YouTube from "react-youtube";
 import "./ContentLearning.scss";
 import { Col, Layout, Row, Button, Collapse, Modal } from "antd";
 import { formatDate } from "../../../utils/fuc";
-import { userCompeleteVideo } from "../../../services/public/learn";
+import {
+  getCourseByIdUserAndIdCourse,
+  userCompeleteVideo,
+} from "../../../services/public/learn";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
@@ -14,7 +17,6 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getCourses } from "../../../services/public/learn";
 import { selectCourse } from "../../../redux/selector";
 import FooterLearning from "../../share/FooterLearning";
 import URL from "../../../utils/url-route";
@@ -23,7 +25,7 @@ let xu_ly_khi_tua = 0;
 
 function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   const navigate = useNavigate();
-  let sttVideo = -1;  
+  let sttVideo = -1;
   const [open, setOpen] = useState(false);
   const playerRef = useRef(null);
   const [lastTime, setLastTime] = useState(0);
@@ -38,7 +40,10 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   const [course, setCourse] = useState({});
 
   const fetchingData = async () => {
-    const { status, result } = await getCourses(1, IdUser, IdCourse);
+    const { status, result } = await getCourseByIdUserAndIdCourse(
+      IdCourse,
+      IdUser
+    );
     if (status === 200) {
       setCourse(result);
       setCourseLayoutLearning(result);
@@ -104,8 +109,6 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
       : formatDate(course.createdAt);
   };
 
-  const handleSubmidNote = () => {};
-
   // Event handler for video end
   const handleEnd = async () => {
     const response = await userCompeleteVideo(IdUser, activeIndex);
@@ -145,6 +148,9 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
   const handleOnchangeCollapse = useCallback((keys) => {
     setActiveKeys(keys); // Cập nhật trực tiếp `activeKeys` với các key được mở
   }, []);
+
+  console.log("Xuan manh check course", course);
+
   return (
     <>
       <Layout className="content_learning">
@@ -169,7 +175,7 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
                 <p ref={updateCourse}>Cập nhật tháng 11 năm 2022</p>
               </div>
               <div className="learning__left__mid--note">
-                <Button onClick={handleSubmidNote}>
+                <Button>
                   Thêm ghi chú tại <strong>00:08</strong>
                 </Button>
               </div>

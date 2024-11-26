@@ -63,9 +63,12 @@ export default function Header() {
   useEffect(() => {
     if (isLoggedIn) {
       const fetchingData = async () => {
-        const response = await getCourses(0, id);
+        const response = await getCourses(id);
         if (response?.status == 200) {
-          setCourses(response?.result);
+          const newResponse = response.result.filter(
+            (course) => course.isUserRegister === 1
+          );
+          setCourses(newResponse);
         }
       };
       fetchingData();

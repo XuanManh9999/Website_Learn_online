@@ -1,25 +1,25 @@
 import api from "../../axios/nontoken/AxiosConfig";
+import apiToken from "../../axios/token/AxiosToken";
 
-export const getCourses = async (IsShowChapter = 0, IdUser, IdCourse) => {
+export const getCourses = async (IdUser) => {
   try {
-    let url = `/api/v1/course/all?IsShowChapter=${IsShowChapter}`;
+    let url;
     if (IdUser) {
-      url += "&IdUser=" + IdUser;
+      url = `/api/v1/course/all?IdUser=${IdUser}`;
+    } else {
+      url = `/api/v1/course/all`;
     }
-    if (IdCourse) {
-      url += "&IdCourse=" + IdCourse;
-    }
-    const response = await api.get(url);
+    const response = await apiToken.get(url);
     return response?.data;
   } catch (err) {
     return err?.response?.data;
   }
 };
 
-export const userRegisterCourse = async (idUser, idCourse) => {
+export const userRegisterCourse = async (IdUser, IdCourse) => {
   try {
     let url = `/api/v1/users/register-course`;
-    const response = await api.post(url, { idUser, idCourse });
+    const response = await apiToken.post(url, { IdUser, IdCourse });
     return response?.data;
   } catch (err) {
     return err?.response?.data;
@@ -29,7 +29,46 @@ export const userRegisterCourse = async (idUser, idCourse) => {
 export const userCompeleteVideo = async (idUser, idVideo) => {
   try {
     let url = `/api/v1/users/dispatch-done-video`;
-    const response = await api.post(url, { idUser, idVideo });
+    const response = await apiToken.post(url, { idUser, idVideo });
+    return response?.data;
+  } catch (err) {
+    return err?.response?.data;
+  }
+};
+
+export const getCoursesDB = async () => {
+  try {
+    let url = `/api/v1/course-type/all`;
+    const response = await api.get(url);
+    return response?.data;
+  } catch (err) {
+    return err?.response?.data;
+  }
+};
+export const getCourseById = async (idCourse) => {
+  try {
+    let url = `/api/v1/course/${idCourse}`;
+    const response = await api.get(url);
+    return response?.data;
+  } catch (err) {
+    return err?.response?.data;
+  }
+};
+
+export const getCourseByIdUserAndIdCourse = async (idCourse, idUser) => {
+  try {
+    let url = `/api/v1/course/${idCourse}/${idUser}`;
+    const response = await apiToken.get(url);
+    return response?.data;
+  } catch (err) {
+    return err?.response?.data;
+  }
+};
+
+export const checkUserRegisterCourse = async (body) => {
+  try {
+    let url = `/api/v1/users/check-register-course`;
+    const response = await apiToken.post(url, body);
     return response?.data;
   } catch (err) {
     return err?.response?.data;

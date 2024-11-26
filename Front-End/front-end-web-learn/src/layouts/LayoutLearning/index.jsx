@@ -3,10 +3,13 @@ import ContentLearning from "../../components/private/ContentLearning";
 import { useSelector } from "react-redux";
 import { selectCourse, selectorUser } from "../../redux/selector";
 import { useCallback, useEffect, useState } from "react";
-import { getCourses } from "../../services/public/learn";
+import { getCourseByIdUserAndIdCourse } from "../../services/public/learn";
 import useNotify from "../../components/share/Notification";
 import "./LayoutLearning.scss";
+import URL from "../../utils/url-route";
+import { useNavigate } from "react-router-dom";
 function LayoutLearning() {
+  const navigate = useNavigate()
   const { contextHolder, notify } = useNotify();
   const [course, setCourse] = useState({});
   const [idChapter, setIdChapter] = useState();
@@ -15,11 +18,18 @@ function LayoutLearning() {
   } = useSelector(selectorUser);
   const { id: IdCourse } = useSelector(selectCourse);
   const fetchCourseData = useCallback(async () => {
-    const { status, result } = await getCourses(1, IdUser, IdCourse);
+    const { status, result } = await getCourseByIdUserAndIdCourse(
+      IdCourse,
+      IdUser
+    );
     if (status === 200) {
+      if (result?.isUserRegister === 0) {
+        navigate("/");
+      }
       setCourse(result);
     } else {
       notify("warning", "Đã xảy lỗi từ hệ thống, vui lòng truy cập lại sau");
+      navigate(URL.PUBLIC.SERVER_ERROR);
     }
   }, [IdCourse, IdUser]);
   useEffect(() => {
@@ -62,6 +72,7 @@ function LayoutLearning() {
       }
     }
   }, [course]);
+  
 
   if (IdUser != null && Object.keys(course).length > 0 && idChapter) {
     return (

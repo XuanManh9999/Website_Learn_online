@@ -1,8 +1,6 @@
 import axios from "axios";
 
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
-import { clear_user } from "../../redux/action/auth";
 
 const api = axios.create({
   baseURL: "http://localhost:8080", // Cần thêm http:// để axios nhận diện đúng địa chỉ

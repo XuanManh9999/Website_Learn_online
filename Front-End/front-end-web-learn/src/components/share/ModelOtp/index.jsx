@@ -21,9 +21,9 @@ export default function ModelOtp({ email }) {
         onChange,
     };
     const closeModal = () => {
+        setOtp("");
         dispatch(hide_model_otp())
         clearInterval(timerRef.current);
-        setOtp('');
         setSecondsToGo(90);
     };
 
@@ -111,7 +111,6 @@ export default function ModelOtp({ email }) {
                 open={state.isShowModelOTP}
                 onCancel={closeModal}
                 footer={null}
-                centered
             >
                 <strong>Vui lòng nhập OTP trong {secondsToGo} giây.</strong>
                 {/* <p className='otp-message-error'>Mã OTP không đúng vui lòng thử lại.</p> */}

@@ -19,7 +19,11 @@ import {
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCourse, selectorUser } from "../../../redux/selector";
-import { getCourses, userRegisterCourse } from "../../../services/public/learn";
+import {
+  getCourseById,
+  userRegisterCourse,
+  checkUserRegisterCourse,
+} from "../../../services/public/learn";
 import Video from "../../share/Video";
 import { show_login } from "../../../redux/action/show_hide";
 import { getVideo, convertDurationCourse } from "../../../utils/fuc";
@@ -81,6 +85,7 @@ function Romap() {
         const { status, message } = await userRegisterCourse(IdUser, IdCourse);
         if (status === 200) {
           setIsLoadingRegister(false);
+          setIsRegister(1);
           notify("success", message, true);
           setTimeout(() => {
             fetchCourseData();
@@ -98,19 +103,31 @@ function Romap() {
   };
 
   const fetchCourseData = useCallback(async () => {
-    const { status, result } = await getCourses(1, IdUser, IdCourse);
+    const { status, result } = await getCourseById(IdCourse);
     if (status === 200) {
       setCourse(result);
       const videoPre = getVideo(result?.chapterList);
       setActiveKeys([result?.chapterList[0]?.id]);
       setVideoPreOrder(videoPre);
-      setIsRegister(result?.isUserRegister);
     }
   }, [IdCourse]);
 
+  const fetchCheckCouseRegister = useCallback(async () => {
+    const { status } = await checkUserRegisterCourse({
+      IdUser,
+      IdCourse,
+    });
+    if (status === 200) {
+      setIsRegister(1);
+    } else if (status === 404) {
+      setIsRegister(0);
+    } 
+  }, [IdUser, IdCourse]);
+
   useEffect(() => {
     fetchCourseData();
-  }, [fetchCourseData]);
+    fetchCheckCouseRegister();
+  }, [fetchCourseData, fetchCheckCouseRegister]);
 
   const renderedChapters = useMemo(() => {
     return (course?.chapterList || []).map((chapter, index) => ({
