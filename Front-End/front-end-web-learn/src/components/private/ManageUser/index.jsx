@@ -9,8 +9,8 @@ import {
   fetchUsers,
   createUser,
   updateUser,
-  getUserById,
   deleteUser,
+  searchUserByUserName,
 } from "../../../services/private/user";
 import {
   Input,
@@ -19,20 +19,17 @@ import {
   Tag,
   Table,
   Space,
-  Card,
-  Col,
-  Row,
-  Statistic,
   Modal,
 } from "antd";
+import StatisticView from "../share/StatisticView";
 const { TextArea } = Input;
 import "./ManageUser.scss";
 
 function ManageUser() {
   const [isShowModal, setIsShowModal] = useState(false);
+  const [inputSearch, setInputSearch] = useState("");
   const { contextHolder, notify } = useNotify();
   const [currId, setCurrId] = useState();
-
   const inputRefSubmid = useRef();
   const [formData, setFormData] = useState({
     id: "",
@@ -61,6 +58,7 @@ function ManageUser() {
     setLoading(true);
     try {
       const response = await fetchUsers(page, pageSize);
+
       setUsers(response);
       setPagination({
         ...pagination,
@@ -199,59 +197,70 @@ function ManageUser() {
       }
     }
   };
+
+  const handleOnchangeInputSearch = (event) => {
+    setInputSearch(event.target.value);
+  };
+
+  const handleSearch = async () => {
+    const { status, message, result } = await searchUserByUserName(inputSearch);
+    if (status === 200) {
+      setUsers((prev) => ({
+        ...prev,
+        result: {
+          ...prev.result,
+          users: result,
+        },
+      }));
+
+      setPagination({
+        ...pagination,
+        current: pagination.current,
+        pageSize: pagination.pageSize,
+        total: result.length, // Tổng số bản ghi
+      });
+    } else {
+      notify("error", message);
+    }
+  };
+
   return (
     <>
       {contextHolder}
       <div className="manage-user">
         <h1 className="manage-user__title">Quản lý người dùng</h1>
-        <div className="manage-user__infoes">
-          <Row gutter={16}>
-            <Col span={6}>
-              <Card>
-                <Statistic
-                  title="Tổng số người dùng trong hệ thống"
-                  value={users?.result?.total_user || 0}
-                  valueStyle={{
-                    color: "#3f8600",
-                  }}
-                />
-              </Card>
-            </Col>
-            <Col span={6}>
-              <Card>
-                <Statistic
-                  title="Số người dùng đã đăng ký khóa học"
-                  value={users?.result?.total_register_course || 0}
-                  valueStyle={{
-                    color: "#3f8600",
-                  }}
-                />
-              </Card>
-            </Col>
-            <Col span={6}>
-              <Card>
-                <Statistic
-                  title="Số tài khoản chưa đăng ký khóa học"
-                  value={users?.result?.total_unregister_course || 0}
-                  valueStyle={{
-                    color: "#cf1322",
-                  }}
-                />
-              </Card>
-            </Col>
-            <Col span={6}>
-              <Card>
-                <Statistic
-                  title="Số tài khoản bị vô hiệu hóa"
-                  value={users?.result?.total_user_disable || 0}
-                  valueStyle={{
-                    color: "#cf1322",
-                  }}
-                />
-              </Card>
-            </Col>
-          </Row>
-        </div>
+        <StatisticView
+          data={[
+            {
+              title: "Tổng số người dùng trong hệ thống",
+              value:
+                users && users?.result?.users?.length > 0
+                  ? users.result.total_user
+                  : 0,
+            },
+            {
+              title: "Số người dùng đã đăng ký khóa học",
+              value:
+                users && users?.result?.users?.length > 0
+                  ? users.result.total_register_course
+                  : 0,
+            },
+            {
+              title: "Số tài khoản chưa đăng ký khóa học",
+              value:
+                users && users?.result?.users?.length > 0
+                  ? users.result.total_unregister_course
+                  : 0,
+            },
+            {
+              title: "Số tài khoản bị vô hiệu hóa",
+              value:
+                users && users?.result?.users?.length > 0
+                  ? users.result.total_user_disable
+                  : 0,
+            },
+          ]}
+        />
         <div className="manage-user__content">
           <div className="manage-user__item">
             <label htmlFor="username">Tên đăng nhập</label>
@@ -405,7 +414,16 @@ function ManageUser() {
           <Button type="primary" ref={inputRefSubmid} onClick={handleSubmid}>
             Tạo mới người dùng
           </Button>
-          <Button type="primary">Tìm kiếm</Button>
+        </div>
+        <div className="manage-user__search">
+          <Input
+            placeholder="Nhập vào tên người dùng..."
+            value={inputSearch}
+            onChange={handleOnchangeInputSearch}
+          />
+          <Button type="primary" onClick={handleSearch}>
+            Tìm kiếm
+          </Button>
         </div>
         <h2 className="manage-user__list-user">Danh sách người dùng</h2>
         <div className="manage-user__list">

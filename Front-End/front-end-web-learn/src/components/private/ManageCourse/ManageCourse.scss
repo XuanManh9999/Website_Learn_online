@@ -1,26 +1,28 @@
-.manage-user {
+.manage-course {
   margin: 10px;
-  .manage-user__title {
+  .manage-course__title {
     margin-top: 20px;
     text-align: center;
     font-size: 26px;
     font-weight: bold;
   }
-  
-  .manage-user__list-user {
+  .manage-course__infoes {
+    margin-top: 40px;
+  }
+  .manage-course__list-user {
     margin-top: 20px;
     text-align: center;
     font-size: 26px;
     font-weight: bold;
   }
-  .manage-user__content {
+  .manage-course__content {
     margin-top: 80px;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     column-gap: 10px;
     row-gap: 20px;
-    .manage-user__item {
+    .manage-course__item {
       label {
         display: block;
       }
@@ -37,13 +39,22 @@
       }
     }
   }
-  .manage-user__button {
+  .editor-course-desc-detail {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    .ql-editor {
+      min-height: 200px;
+    }
+  }
+  .manage-course__button {
     margin-top: 20px;
     display: flex;
     gap: 10px;
     justify-content: end;
   }
-  .manage-user__search {
+  .manage-course__search {
     margin-top: 20px;
     display: flex;
     gap: 10px;
@@ -55,9 +66,9 @@
     }
   }
 
-  .manage-user__list {
+  .manage-course__list {
     margin-top: 20px;
-    .manage-user__list__table {
+    .manage-course__list__table {
       th {
         text-align: center;
         min-width: 150px;
@@ -72,6 +83,43 @@
       }
     }
   }
+  .manage-course__chapter {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    .manage-course__chapter__title {
+      min-width: 130px;
+    }
+    button {
+    }
+  }
+  .manage-course__chapter_container {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 25px 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    .manage-course__chapter_item {
+      margin-top: 10px;
+      label {
+        margin-bottom: 10px;
+        display: block;
+      }
+    }
+    .manage-course__chapter_item__videos {
+      margin-top: 10px;
+      label {
+        margin-bottom: 10px;
+        display: block;
+      }
+      button {
+        margin-top: 15px;
+      }
+    }
+  }
+
 }
 .manage-warn {
   h1 {

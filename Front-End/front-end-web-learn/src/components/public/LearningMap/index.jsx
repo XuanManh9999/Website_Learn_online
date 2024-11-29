@@ -53,6 +53,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -73,6 +77,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -93,6 +101,7 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        v
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -113,6 +122,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -133,6 +146,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -153,6 +170,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -206,6 +227,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/1/6200ad9d8a2d8.png"
@@ -226,6 +251,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -246,6 +275,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -266,6 +299,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -286,6 +323,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
@@ -306,6 +347,10 @@ function LearningMap() {
                         className="learning-map__mid__bot__wrapper_content-language"
                         percent={50}
                         size={40}
+                        strokeColor={{
+                          "0%": "#108ee9",
+                          "100%": "#87d068",
+                        }}
                         format={() => (
                           <img
                             src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"

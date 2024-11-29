@@ -19,7 +19,8 @@ const URL = {
   },
   ADMIN: {
     HOME: "/admin",
-    MANAGE_ADMIN: "manage-user"
+    MANAGE_ADMIN: "manage-user",
+    MANAGE_COURSE: "manage-course"
   },
 };
 export default URL;

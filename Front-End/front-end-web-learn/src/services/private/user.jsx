@@ -44,4 +44,20 @@ const deleteUser = async (idUser) => {
   }
 };
 
-export { fetchUsers, createUser, updateUser, getUserById, deleteUser };
+const searchUserByUserName = async (userName) => {
+  try {
+    const response = await api.get(`/api/v1/users/search?userName=${userName}`);
+    return response.data;
+  } catch (error) {
+    return error?.response?.data;
+  }
+};
+
+export {
+  fetchUsers,
+  createUser,
+  updateUser,
+  getUserById,
+  deleteUser,
+  searchUserByUserName,
+};

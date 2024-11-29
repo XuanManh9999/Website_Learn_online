@@ -18,17 +18,17 @@ const items = [
     icon: <UserOutlined />,
   },
   {
-    label: "Quản lý khóa học",
+    label:<Link to={URL.ADMIN.MANAGE_COURSE}>Quản lý khóa học</Link>,
     key: "course",
     icon: <AppstoreOutlined />,
   },
   {
-    label: "Quản lý câu hỏi",
-    key: "SubMenu",
+    label: "Quản lý loại khóa học",
+    key: "TypeCourse",
     icon: <SettingOutlined />,
   },
   {
-    label: "Quản lý menu",
+    label: "Quản lý lộ trình học",
     key: "menu",
     icon: <AppstoreOutlined />,
   },
