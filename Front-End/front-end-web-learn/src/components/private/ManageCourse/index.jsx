@@ -25,6 +25,8 @@ function ManageCourse() {
     chapterList: [],
   });
 
+  const refAddChapter = useRef();
+
   const [dataChapter, setDataChapter] = useState([]);
 
   const [isOpenModalVideo, setIsOpenModalVideo] = useState({
@@ -34,6 +36,13 @@ function ManageCourse() {
   const [isShowChapter, setIsShowChapter] = useState(false);
   const refQuantityChapter = useRef();
   const handleAddChapter = () => {
+    if (isShowChapter) {
+      refAddChapter.current.textContent = "Tiến hành thêm chương học";
+      setDataChapter([]);
+    } else {
+      refAddChapter.current.textContent = "Hủy quá trình thêm chương học";
+    }
+
     setIsShowChapter(!isShowChapter);
   };
 
@@ -78,16 +87,23 @@ function ManageCourse() {
     });
   };
 
-  const handleShowModalVideos = (event) => {
+  const handleShowModalVideos = (event, index) => {
     const father = event.target.parentNode.parentNode;
     setIsOpenModalVideo({
       open: true,
       quantityVideo:
         father?.querySelector(".manage-course__chapter_item__videos__quantity")
           ?.value || 1,
+      indexChapter: index,
     });
   };
-  console.log(dataChapter);
+
+  const handleMargeToCourse = () => {
+    setData((prev) => ({
+      ...prev,
+      chapterList: dataChapter,
+    }));
+  };
 
   return (
     <>
@@ -286,7 +302,9 @@ function ManageCourse() {
             placeholder="Nhập vào số lượng chương học, lưu ý số chương phải lớn hơn 1"
           />
 
-          <Button onClick={handleAddChapter}>Tiến hành thêm chương học</Button>
+          <Button onClick={handleAddChapter} ref={refAddChapter}>
+            Tiến hành thêm chương học
+          </Button>
         </div>
         {isShowChapter &&
           [...Array(Number(refQuantityChapter.current?.input?.value))].map(
@@ -329,7 +347,7 @@ function ManageCourse() {
                       placeholder="Nhập vào số lượng video, sẽ có trong chương"
                     />
                     <Button
-                      onClick={handleShowModalVideos}
+                      onClick={(event) => handleShowModalVideos(event, index)}
                       className="manage-course__chapter_item__addvideo"
                     >
                       Tiến hành thêm video
@@ -339,10 +357,16 @@ function ManageCourse() {
               );
             }
           )}
+        {isShowChapter && (
+          <div className="manage-course__chapter__save">
+            <Button onClick={handleMargeToCourse}>Hoàn tất</Button>
+          </div>
+        )}
       </div>
       <ModalVideos
         isOpen={isOpenModalVideo}
         setIsOpenModalVideo={setIsOpenModalVideo}
+        setDataChapter={setDataChapter}
       />
     </>
   );

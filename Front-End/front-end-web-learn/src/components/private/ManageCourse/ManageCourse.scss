@@ -120,6 +120,17 @@
     }
   }
 
+  .manage-course__chapter__save {
+    margin-top: 10px;
+    display: flex;
+    justify-content: end;
+    button {
+      min-width: 150px;
+      font-size: 16px;
+    }
+  }
+
+
 }
 .manage-warn {
   h1 {
