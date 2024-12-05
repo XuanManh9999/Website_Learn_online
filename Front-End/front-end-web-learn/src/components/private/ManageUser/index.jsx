@@ -12,15 +12,7 @@ import {
   deleteUser,
   searchUserByUserName,
 } from "../../../services/private/user";
-import {
-  Input,
-  Select,
-  Button,
-  Tag,
-  Table,
-  Space,
-  Modal,
-} from "antd";
+import { Input, Select, Button, Tag, Table, Space, Modal } from "antd";
 import StatisticView from "../share/StatisticView";
 const { TextArea } = Input;
 import "./ManageUser.scss";
@@ -263,7 +255,10 @@ function ManageUser() {
         />
         <div className="manage-user__content">
           <div className="manage-user__item">
-            <label htmlFor="username">Tên đăng nhập</label>
+            <label htmlFor="username">
+              Tên đăng nhập
+              <span>*</span>
+            </label>
             <Input
               key={"username"}
               onChange={handleOnchangeInput}
@@ -275,7 +270,10 @@ function ManageUser() {
             />
           </div>
           <div className="manage-user__item">
-            <label htmlFor="password">Mật khẩu</label>
+            <label htmlFor="password">
+              Mật khẩu
+              <span>*</span>
+            </label>
             <Input.Password
               value={formData.password}
               onChange={handleOnchangeInput}
@@ -285,7 +283,10 @@ function ManageUser() {
             />
           </div>
           <div className="manage-user__item">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              Email
+              <span>*</span>
+            </label>
             <Input
               onChange={handleOnchangeInput}
               value={formData.email}
@@ -330,7 +331,13 @@ function ManageUser() {
               value={formData.avatar}
               name="avatar"
             />
-            <img src="" className="preview_avatar" alt="preview_avatar" />
+            {formData.avatar && (
+              <img
+                src={formData.avatar}
+                className="preview_avatar"
+                alt="preview_avatar"
+              />
+            )}
           </div>
           <div className="manage-user__item">
             <label htmlFor="cover_photo">Ảnh bìa</label>
@@ -343,14 +350,19 @@ function ManageUser() {
               value={formData.cover_photo}
               name="cover_photo"
             />
-            <img
-              src=""
-              className="preview_cover_photo"
-              alt="preview_cover_photo"
-            />
+            {formData.cover_photo && (
+              <img
+                src={formData.cover_photo}
+                className="preview_cover_photo"
+                alt="preview_cover_photo"
+              />
+            )}
           </div>
           <div className="manage-user__item">
-            <label htmlFor="role">Vai trò</label>
+            <label htmlFor="role">
+              Vai trò
+              <span>*</span>
+            </label>
             <Select
               name={"role"}
               onChange={(value) => handleOnchangeInput(value, { name: "role" })}
@@ -372,7 +384,10 @@ function ManageUser() {
             />
           </div>
           <div className="manage-user__item">
-            <label htmlFor="active">Trạng thái tài khoản</label>
+            <label htmlFor="active">
+              Trạng thái tài khoản
+              <span>*</span>
+            </label>
             <Select
               name={"active"}
               onChange={(value) =>
@@ -428,7 +443,7 @@ function ManageUser() {
         <h2 className="manage-user__list-user">Danh sách người dùng</h2>
         <div className="manage-user__list">
           <Table
-            className="manage-user__list__table"
+            className="manage-course__list__table"
             bordered
             columns={[
               {
@@ -560,7 +575,7 @@ function ManageUser() {
       >
         <strong>
           Việc bạn vô hiệu hóa tài khoản sẽ dẫn tới tài khoản đó sẽ không thể
-          tham gia học tập cũng như trải nhiệm các dịch vụ của hệ thống. Bản có
+          tham gia học tập cũng như trải nhiệm các dịch vụ của hệ thống. Bạn có
           chắc chắn điều này không?
         </strong>
       </Modal>

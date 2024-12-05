@@ -132,12 +132,15 @@ function ModalVideos({ isOpen, setIsOpenModalVideo, setDataChapter }) {
             Video {index + 1}
           </h2>
           <div className="container__modal_video__item__urlvideo">
-            <label htmlFor="urlVideo">Đường dẫn của video</label>
+            <label htmlFor="urlVideo">
+              Đường dẫn của video
+              <span className="obligatory">*</span>
+            </label>
             <Input
               name="urlVideo"
               onChange={(event) => handleOnchangeVideo(event, index)}
               placeholder="Nhập vào đường dẫn của video"
-              value={dataVideo[index]?.urlVideo || ""}  // Lấy giá trị từ state
+              value={dataVideo[index]?.urlVideo || ""} // Lấy giá trị từ state
             />
             <Checkbox
               name="preOder"
@@ -148,7 +151,7 @@ function ModalVideos({ isOpen, setIsOpenModalVideo, setDataChapter }) {
             </Checkbox>
           </div>
           <div className="container__modal_video__item__desc">
-            <label htmlFor="docMore">Đường dẫn tài liệu</label>
+            <label htmlFor="docMore">Đường dẫn tài liệu </label>
             <Input
               name="docMore"
               onChange={(event) => handleOnchangeVideo(event, index)}
@@ -167,7 +170,7 @@ function ModalVideos({ isOpen, setIsOpenModalVideo, setDataChapter }) {
             />
           </div>
           <div className="container__modal_video__item__desc_detail">
-            <label htmlFor="docMore">Mô tả</label>
+            <label htmlFor="docMore">Mô tả </label>
             <ReactQuill
               theme="snow"
               onChange={(text) => {

@@ -1,5 +1,11 @@
 .manage-course {
   margin: 10px;
+  label {
+    span {
+      margin-left: 3px;
+      color: red;
+    }
+  }
   .manage-course__title {
     margin-top: 20px;
     text-align: center;
@@ -36,6 +42,11 @@
       .preview_avatar,
       .preview_cover_photo {
         display: none;
+        margin-top: 3px;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
       }
     }
   }
@@ -125,12 +136,44 @@
     display: flex;
     justify-content: end;
     button {
-      min-width: 150px;
-      font-size: 16px;
+      min-width: 220px;
     }
   }
 
+  .manage-course__actions {
+    margin-top: 10px;
+    .manage-course__actions__add-course {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+      button {
+        min-width: 220px;
+      }
+    }
+    .manage-course__actions__search {
+      margin-top: 12px;
+    }
+    .manage-course__actions__search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      button {
+        min-width: 220px;
+      }
+    }
+  }
 
+  .manage-course__list-course {
+    margin-top: 20px;
+    .manage-course__list-course__title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    .manage-course__list-course__table {
+      margin-top: 20px;
+    }
+  }
 }
 .manage-warn {
   h1 {
@@ -139,5 +182,23 @@
   }
   strong {
     font-size: 16px;
+  }
+}
+.manage-course__list-course__table {
+  tr {
+    
+    // display: flex;
+    // align-items: center;
+    th {
+      text-align: center !important;
+    }
+    td {
+      text-align: center;
+    }
+    img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
   }
 }

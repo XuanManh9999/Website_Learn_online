@@ -5,7 +5,7 @@ export const getCourses = async (IdUser) => {
   try {
     let url;
     if (IdUser) {
-      url = `/api/v1/course/all?IdUser=${IdUser}`;
+      url = `/api/v1/courses/all?IdUser=${IdUser}`;
     } else {
       url = `/api/v1/course/all`;
     }
@@ -47,7 +47,7 @@ export const getCoursesDB = async () => {
 };
 export const getCourseById = async (idCourse) => {
   try {
-    let url = `/api/v1/course/${idCourse}`;
+    let url = `/api/v1/courses/${idCourse}`;
     const response = await api.get(url);
     return response?.data;
   } catch (err) {
@@ -57,7 +57,7 @@ export const getCourseById = async (idCourse) => {
 
 export const getCourseByIdUserAndIdCourse = async (idCourse, idUser) => {
   try {
-    let url = `/api/v1/course/${idCourse}/${idUser}`;
+    let url = `/api/v1/courses/${idCourse}/${idUser}`;
     const response = await apiToken.get(url);
     return response?.data;
   } catch (err) {

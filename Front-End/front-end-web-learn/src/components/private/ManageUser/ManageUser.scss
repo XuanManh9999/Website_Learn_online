@@ -23,6 +23,10 @@
     .manage-user__item {
       label {
         display: block;
+        span {
+          margin-left: 3px;
+          color: red;
+        }
       }
       .ant-input-outlined {
         margin-top: 5px;
@@ -33,7 +37,11 @@
       }
       .preview_avatar,
       .preview_cover_photo {
-        display: none;
+        margin-top: 3px;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
       }
     }
   }
