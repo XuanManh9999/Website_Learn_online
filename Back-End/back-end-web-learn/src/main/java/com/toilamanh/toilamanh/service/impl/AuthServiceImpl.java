@@ -95,7 +95,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         try {
-            var user = userRepository.findByUserNameAndActive(loginRequest.getUserName(), 1).orElseThrow(() -> new UserAciveNotFound("Tên người dùng: " + loginRequest.getUserName() + " Không tồn tại"));
+            var user = userRepository.findByUserNameAndActive(loginRequest.getUserName(), 1).orElseThrow(() ->
+                    new UserAciveNotFound("Tên người dùng: " + loginRequest.getUserName() + " Không tồn tại"));
             boolean isPassword = objectFactory.getObject().matches(loginRequest.getPassword(), user.getPassword());
             if (!isPassword) {
                 throw new ServerException("Sai mật khẩu vui lòng kiểm tra lại");

@@ -21,6 +21,11 @@ public class CourseTypeController {
     public ResponseEntity<?> getAllCourseTypes() {
        return ResponseEntity.ok(courseTypeService.getAllCourseTypes());
     }
+    @GetMapping
+    public ResponseEntity<?> getAllCourseTypesData() {
+        return ResponseEntity.ok().body(courseTypeService.getAllCourseTypeData());
+    }
+    
     @GetMapping(value = "/{IdTypeCourse}")
     public ResponseEntity<?> getCourseById(@PathVariable(value = "IdTypeCourse", required = false) Long Id) {
         if (Id != null) {
@@ -31,8 +36,6 @@ public class CourseTypeController {
                 .message("Vui lòng cung cấp ID để tìm loại khóa học")
                 .build());
     }
-
-
     @PostMapping
     public ResponseEntity<?> CU_CourseType(@RequestBody CourseTypeDTO courseTypeDTO) {
         if (!courseTypeDTO.getNameType().equals("")) {
@@ -59,4 +62,7 @@ public class CourseTypeController {
             );
         }
     }
+    
+    
+    
 }

@@ -22,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -142,6 +143,7 @@ public class UserServiceImpl implements UserService {
             Page<User> users = userRepository.findAll(pageable);
 
             Long count_user_not_active = userRepository.countAllByActive(0);
+
             Integer total_register_course_system = userRegisterCourseRepository.countDistinctUsers();
             List<UserDTO> userDTOS = users.getContent().stream()
                     .map(user -> {
@@ -270,6 +272,25 @@ public class UserServiceImpl implements UserService {
                         .message("User is not registerCourse")
                         .build();
             }
+        }catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public ApiResponse searchUserByUserName(String userName) {
+        try {
+            List<User> users = userRepository.searchUsersByUserName(userName);
+            List<UserDTO> userDTOS = new ArrayList<>();
+            for (User user : users) {
+                UserDTO userDTO =  modelMapper.map(user, UserDTO.class);
+                userDTOS.add(userDTO);
+            }
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Search thông tin người dùng thành công")
+                    .result(userDTOS)
+                    .build();
         }catch (Exception ex) {
             throw ex;
         }

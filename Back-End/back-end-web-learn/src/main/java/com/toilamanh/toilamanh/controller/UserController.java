@@ -120,4 +120,10 @@ public class UserController {
         return ResponseEntity.ok().body(userService.checkUserRegisterCourse(IdUser, IdCourse));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/search")
+    public ResponseEntity<?> searchUserByUserName(@RequestParam(name = "userName") String name) {
+        return ResponseEntity.ok().body(userService.searchUserByUserName(name));
+    }
+
 }

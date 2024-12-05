@@ -3,10 +3,7 @@ package com.toilamanh.toilamanh.service.impl;
 import com.toilamanh.toilamanh.dto.request.ChapterRequest;
 import com.toilamanh.toilamanh.dto.request.CourseRequest;
 import com.toilamanh.toilamanh.dto.request.VideoRequest;
-import com.toilamanh.toilamanh.dto.response.ApiResponse;
-import com.toilamanh.toilamanh.dto.response.ChapterDTO;
-import com.toilamanh.toilamanh.dto.response.CourseResponse;
-import com.toilamanh.toilamanh.dto.response.VideoDTO;
+import com.toilamanh.toilamanh.dto.response.*;
 import com.toilamanh.toilamanh.dto.youtube.YouTubeResponse;
 import com.toilamanh.toilamanh.entity.*;
 import com.toilamanh.toilamanh.exception.custom.BadException;
@@ -19,9 +16,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -35,8 +34,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CourseServiceImpl implements CourseService {
-
-    private static final Logger log = LoggerFactory.getLogger(CourseServiceImpl.class);
     Environment environment;
     ModelMapper modelMapper;
     CourseRepository courseRepository;
@@ -84,7 +81,7 @@ public class CourseServiceImpl implements CourseService {
                     for (var item : youTubeResponse.getItems()) {
                         video.setTitle(item.getSnippet().getTitle());
                         video.setDescription(item.getSnippet().getDescription());
-                        Long duration = UtilsFunc.convertDurationToSeconds(item.getContentDetails().getDuration());
+                        Long duration = UtilsFunc.convertDurationToSeconds(item.getContentDetails().getDuration()) ;
                         String durationText = UtilsFunc.convertIsoToDurationText(item.getContentDetails().getDuration());
                         video.setDuration(duration);
                         video.setDurationText(durationText);
@@ -115,6 +112,41 @@ public class CourseServiceImpl implements CourseService {
                     .build();
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    @Override
+    public ApiResponse getAllCourse(Integer page, Integer limit) {
+        try {
+            // Kiểm tra nếu page hoặc limit không hợp lệ
+            if (page == null || page < 1) page = 1;
+            if (limit == null || limit < 1) limit = 10;
+            Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(Sort.Direction.ASC, "id"));
+            Page<Course> courses = courseRepository.findAll(pageable);
+            CourseResponseAll courseResponseAll = new CourseResponseAll();
+            Integer totalCourseFree = courseTypeRepository.countQuantityByNameType("Khóa học miễn phí");
+            Integer totalCoursePro = courseTypeRepository.countQuantityByNameType("Khóa học trả phí");
+            Integer totalCourseNoneActive = courseRepository.allCourseByNoneActive();
+            List<CourseResponse> courseResponses = new ArrayList<>();
+            for (Course course : courses.getContent()) {
+                CourseResponse courseResponse = mapCourseToCourseResponse(course, null, 1, 1);
+                courseResponses.add(courseResponse);
+            }
+            courseResponseAll.setTotal(courses.getTotalPages());
+            courseResponseAll.setCourses(courseResponses);
+            courseResponseAll.setPageNumber(courses.getPageable().getPageNumber());
+            courseResponseAll.setPageSize(courses.getPageable().getPageSize());
+            courseResponseAll.setTotalCourseAvailable(totalCoursePro);
+            courseResponseAll.setTotalCourseFree(totalCourseFree);
+            courseResponseAll.setTotalCourseNonActive(totalCourseNoneActive);
+
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Lấy thông tin khóa học thành công")
+                    .result(courseResponseAll)
+                    .build();
+        }catch (Exception ex) {
+            throw ex;
         }
     }
 
@@ -176,6 +208,31 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
+    @Override
+    public ApiResponse deleteCourse(Long IdCourse) {
+        try {
+            // find course
+            Course course = courseRepository.findById(IdCourse).orElseThrow(() -> new OurException("Không tìm thấy khóa học tương ứng, vui lòng kiểm tra lại"));
+            course.setActive(0);
+            courseRepository.save(course);
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Xóa khóa học thành công")
+                    .build();
+        }catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+    @Override
+    public ApiResponse updateCourse(CourseRequest courseRequest) {
+        try {
+           return null;
+        }catch (Exception ex) {
+            throw ex;
+        }
+    }
+
 
     public CourseResponse mapCourseToCourseResponse(Course course, Long IdUser, Integer isShowChapter,Integer isShowVideo) {
         CourseResponse courseResponse = new CourseResponse();
@@ -190,7 +247,7 @@ public class CourseServiceImpl implements CourseService {
 
         Integer studentsCount = userRegisterCourseRepository.countByCourseId(course.getId());
         Integer totalVideoCourse = chapterRepository.countTotalVideosByCourseId(course.getId());
-        Long duration = chapterRepository.getTotalDurationByCourseId(course.getId());
+        Long duration = chapterRepository.getTotalDurationByCourseId(course.getId()) == null ? 0L : chapterRepository.getTotalDurationByCourseId(course.getId());
         String durationText = UtilsFunc.convertToDurationText(duration);
 
 

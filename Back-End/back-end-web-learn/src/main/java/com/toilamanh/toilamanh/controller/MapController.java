@@ -18,9 +18,13 @@ public class MapController {
     public ResponseEntity<?> getMaps () {
         return ResponseEntity.ok().body(mapService.getAllMaps());
     }
+    @GetMapping("/data")
+    public ResponseEntity<?> getMapsData () {
+        return ResponseEntity.ok().body(mapService.getMapData());
+    }
 
     @GetMapping("/{IdMap}")
-    public ResponseEntity<?> getMapById(@PathVariable(name = "IdMap", required = true) Long IdMap) {
+    public ResponseEntity<?> getMapById(@PathVariable(name = "IdMap") Long IdMap) {
         return ResponseEntity.ok().body(mapService.getMapById(IdMap));
     }
     @PostMapping
@@ -28,15 +32,14 @@ public class MapController {
         return ResponseEntity.ok().body(mapService.addMap(mapRequest));
     }
 
-
     @PutMapping("/{IdMap}")
-    public ResponseEntity<?> updateMap(@RequestBody MapRequest mapRequest) {
-        return ResponseEntity.ok().body(null);
+    public ResponseEntity<?> updateMap(@PathVariable Long IdMap, @RequestBody MapRequest mapRequest) {
+        return ResponseEntity.ok().body(mapService.updateMapById(IdMap, mapRequest));
     }
 
     @DeleteMapping
     public ResponseEntity<?> deleteMap(@RequestBody MapRequest mapRequest) {
-        return ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(mapService.deleteMapById(mapRequest.getId()));
     }
 
 }

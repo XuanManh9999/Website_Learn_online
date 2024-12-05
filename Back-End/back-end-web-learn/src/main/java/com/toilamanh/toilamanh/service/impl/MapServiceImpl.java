@@ -14,7 +14,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -60,10 +59,32 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
+    public ApiResponse getMapData() {
+       try {
+            List<Map> maps = mapRepository.findAllByActive(1);
+            List<MapResponse> mapResponses = new ArrayList<>();
+            for (Map map : maps) {
+                MapResponse mapResponse = new MapResponse();
+                mapResponse.setId(map.getId());
+                mapResponse.setName(map.getName());
+                mapResponse.setDescription(map.getDescription());
+                mapResponses.add(mapResponse);
+            }
+          return ApiResponse.builder()
+                  .status(HttpStatus.OK.value())
+                  .message("Lấy dữ liệu map thành công")
+                  .result(mapResponses)
+                  .build();
+       }catch (Exception ex) {
+           throw ex;
+       }
+    }
+
+    @Override
     public ApiResponse getMapById(Long id) {
       try {
         MapResponse mapResponse = new MapResponse();
-          Map optionalMap = mapRepository.findById(id).orElseThrow(() -> new UserAciveNotFound("Không tìm thấy lộ trình tương ứng"));
+          Map optionalMap = mapRepository.findByIdAndActive(id, 1).orElseThrow(() -> new UserAciveNotFound("Không tìm thấy lộ trình tương ứng"));
           mapResponse.setId(optionalMap.getId());
           mapResponse.setName(optionalMap.getName());
           mapResponse.setDescription(optionalMap.getDescription());
@@ -98,12 +119,15 @@ public class MapServiceImpl implements MapService {
             if (mapItem_1.isPresent()) {
                 throw new ExitsException("Đã tồn tại tên lộ trình này rồi");
             }
+            Integer maxOrder = mapRepository.findMaxOrder();
             if (mapItem_0.isPresent()) {
                 mapItem_0.get().setActive(1);
+                mapItem_0.get().setOrderNumber(maxOrder > 0 ? maxOrder + 10 : maxOrder);
                 mapRepository.save(mapItem_0.get());
             }else {
                 Map newMap = new Map();
                 newMap.setName(name);
+                newMap.setOrderNumber(maxOrder > 0 ? maxOrder + 10 : maxOrder);
                 newMap.setDescription(description);
                 newMap.setActive(1);
                 mapRepository.save(newMap);
@@ -122,11 +146,38 @@ public class MapServiceImpl implements MapService {
 
     @Override
     public ApiResponse updateMapById(Long id, MapRequest mapRequest) {
-        return null;
+        try {
+            Map mapUpdate = mapRepository.findByIdAndActive(id, 1).orElseThrow(() -> new UserAciveNotFound("Không tìm thấy lộ trình tương ứng"));
+            modelMapper.map(mapRequest, mapUpdate);
+            mapRepository.save(mapUpdate);
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Cập nhật lộ trình học thành công")
+                    .build();
+        }
+        catch (UserAciveNotFound ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
     }
 
     @Override
     public ApiResponse deleteMapById(Long id) {
-        return null;
+        try {
+            Map map = mapRepository.findByIdAndActive(id, 1).orElseThrow(() -> new UserAciveNotFound("Không tìm thấy lộ trình tương ứng"));
+            map.setActive(0);
+            mapRepository.save(map);
+            return ApiResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("Xóa lộ trình học thành công")
+                    .build();
+        }catch (UserAciveNotFound ex) {
+            throw ex;
+        }
+        catch (Exception ex) {
+            throw ex;
+        }
     }
 }

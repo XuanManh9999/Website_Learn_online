@@ -18,7 +18,6 @@ public class CourseRequest {
     private String level ;
     private String author ;
     private String author_img;
-    private String icon;
     private Integer orderNumber ;
     private Integer featuredCourse ;
     private Long courseTypeID;

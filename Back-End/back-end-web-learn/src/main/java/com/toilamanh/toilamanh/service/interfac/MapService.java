@@ -5,6 +5,7 @@ import com.toilamanh.toilamanh.dto.response.ApiResponse;
 
 public interface MapService {
     ApiResponse getAllMaps();
+    ApiResponse getMapData();
     ApiResponse getMapById(Long id);
     ApiResponse addMap(MapRequest mapRequest);
     ApiResponse updateMapById(Long id, MapRequest mapRequest);

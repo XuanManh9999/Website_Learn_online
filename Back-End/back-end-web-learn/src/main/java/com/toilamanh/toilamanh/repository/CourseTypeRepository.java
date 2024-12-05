@@ -16,4 +16,11 @@ public interface CourseTypeRepository extends JpaRepository<CourseType, Long> {
     List<CourseType> findAllByActive(Integer active);
     @Query("SELECT MAX(ct.orderNumber) FROM CourseType ct")
     Integer findMaxOrderNumber();
+
+    @Query(value = "SELECT ct FROM CourseType ct WHERE ct.active = :active")
+    List<CourseType> allCourseTypes(@Param("active") Integer active);
+
+    @Query("SELECT DISTINCT COUNT(ct.id)  FROM CourseType ct INNER JOIN Course c ON ct.id = c.courseType.id WHERE  ct.nameType = :nameType")
+    Integer countQuantityByNameType(@Param("nameType") String nameType);
+
  }

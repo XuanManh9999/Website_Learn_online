@@ -12,4 +12,5 @@ public interface UserService {
     ApiResponse updateUser(UserRequest userRequest, Long idUser);
     ApiResponse getUserById(Long id);
     ApiResponse checkUserRegisterCourse(Long IdUser, Long IdCourse);
+    ApiResponse searchUserByUserName(String userName);
 }

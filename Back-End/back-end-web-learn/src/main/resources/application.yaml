@@ -38,6 +38,6 @@ youtube:
 
 order_step: 10
 
-
+#root
 
 #docker run --name mysql-8.0.36 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0.36-debian

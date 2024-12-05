@@ -23,7 +23,6 @@ public class Course extends BaseEntity {
     private Double prevPrice;
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
     @Column(name = "slug")
     private String slug;
     @Column(name = "level_course")
@@ -32,29 +31,21 @@ public class Course extends BaseEntity {
     private String author = "Xuân Mạnh";
     @Column(name = "author_img", columnDefinition = "TEXT")
     private String author_img;
-    @Column(name = "icon_course")
-    private String icon;
-    @Column(name = "order_number")
     private Integer orderNumber = 0;
     @Column(name = "featured_course")
     private Integer featuredCourse = 0;
-
     @Column(name ="pre_order")
     private Integer preOrder = 0;
-
-    @Column(name = "is_pro")
-    private Integer isPro = 0;
-
+    @Column(name ="desc_html", columnDefinition = "TEXT")
+    private String descHtml = "";
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type_code")
     private CourseType courseType;
     @ManyToOne
     @JoinColumn(name = "id_map")
     private Map map;
-
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapterList;
-
     @OneToMany(mappedBy = "course")
     private List<UserRegisterCourse> userRegisterCourses;
 }
