@@ -6,6 +6,7 @@ import Romap from "../components/public/romap";
 import Introduction from "../components/share/Introduction";
 import Component500 from "../components/share/500";
 import LearningMap from "../components/public/LearningMap";
+import LearningMapDetail from "../components/public/LearningMapDetail";
 const publicRoutes = [
   {
     path: URL.PUBLIC.HOME,
@@ -27,6 +28,10 @@ const publicRoutes = [
             <Section />
           </>
         ),
+      },
+      {
+        path: URL.PUBLIC.LEARNING_MAP_DETAIL,
+        element: <LearningMapDetail />,
       },
     ],
   },
