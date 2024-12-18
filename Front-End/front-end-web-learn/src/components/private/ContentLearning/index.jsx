@@ -149,7 +149,6 @@ function ContentLearning({ IdUser, idChapter, setCourseLayoutLearning }) {
     setActiveKeys(keys); // Cập nhật trực tiếp `activeKeys` với các key được mở
   }, []);
 
-  console.log("Xuan manh check course", course);
 
   return (
     <>

@@ -50,7 +50,6 @@ function ManageUser() {
     setLoading(true);
     try {
       const response = await fetchUsers(page, pageSize);
-
       setUsers(response);
       setPagination({
         ...pagination,
@@ -449,32 +448,31 @@ function ManageUser() {
               {
                 title: "ID",
                 dataIndex: "id",
-                width: 150,
               },
               {
                 title: "Tên người dùng",
                 dataIndex: "user_name",
-                width: 100,
+                minWidth: 150,
               },
               {
                 title: "Giới tính",
                 dataIndex: "gender",
-                width: 200,
+                minWidth: 100,
               },
               {
                 title: "Email",
                 dataIndex: "email",
-                width: 200,
+                minWidth: 200,
               },
               {
                 title: "Số Điện Thoại",
                 dataIndex: "phonenumber",
-                width: 150,
+                minWidth: 150,
               },
               {
                 title: "Ảnh đại diện",
                 dataIndex: "avatar",
-                width: 200,
+                minWidth: 150,
                 render: (_, object) => {
                   return <img src={object?.avatar} alt={object?.user_name} />;
                 },
@@ -482,7 +480,7 @@ function ManageUser() {
               {
                 title: "Ảnh bìa",
                 dataIndex: "cover_photo",
-                width: 200,
+                minWidth: 150,
                 render: (_, object) => {
                   return (
                     <img src={object?.cover_photo} alt={object?.cover_photo} />
@@ -492,12 +490,12 @@ function ManageUser() {
               {
                 title: "Số điểm tích lũy",
                 dataIndex: "point",
-                width: 200,
+                minWidth: 100,
               },
               {
                 title: "Trạng thái tài khoản",
                 dataIndex: "active",
-                width: 200,
+                minWidth: 100,
                 render: (_, { active }) => (
                   <>
                     <Tag color={active == 1 ? "success" : "error"}>
@@ -510,28 +508,28 @@ function ManageUser() {
                 title: "Quyền",
                 key: "role",
                 dataIndex: "role",
-                width: 150,
+                minWidth: 100,
               },
               {
                 title: "Mô tả",
                 key: "description",
                 dataIndex: "description",
-                width: 150,
+                minWidth: 200,
               },
               {
                 title: "Ngày tạo tài khoản",
                 dataIndex: "createAt",
-                width: 200,
+                minWidth: 200,
               },
               {
                 title: "Ngày cập nhật gần nhất",
                 dataIndex: "updateAt",
-                width: 200,
+                minWidth: 200,
               },
               {
                 title: "Hành động",
                 key: "action",
-                width: 150,
+                minWidth: 200,
                 render: (_, record) => (
                   <>
                     <Space size="middle">

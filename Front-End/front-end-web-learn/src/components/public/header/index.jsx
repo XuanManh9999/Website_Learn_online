@@ -1,5 +1,5 @@
 import { Badge, Button, Col, Dropdown, Layout, Menu, Avatar, Row } from "antd";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { BellOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import MyCourseItem from "../../share/MyCourseItem";

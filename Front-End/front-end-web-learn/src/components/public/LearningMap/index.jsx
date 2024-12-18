@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./LearningMap.scss";
 import { Link } from "react-router-dom";
 import { Button, Progress, Tooltip } from "antd";
+import { getMaps } from "../../../services/public/ro-map";
 
 function LearningMap() {
+  const [dataMap, setDataMap] = useState([]);
+
+  const fetchingData = useCallback(async () => {
+    const response = await getMaps();
+    setDataMap(response?.result);
+  }, []);
+  useEffect(() => {
+    fetchingData();
+  }, []);
+
+  console.log("xuan manh check datamap", dataMap);
+
   return (
     <div className="learning-map">
       <div className="learning-map__wrapper">
@@ -16,357 +29,167 @@ function LearningMap() {
           </p>
         </div>
         <div className="learning-map__mid">
-          <div className="learning-map__mid__item">
-            <div className="learning-map__mid__wapper">
-              <div className="learning-map__mid__left">
-                <div className="learning-map__mid__left__content">
-                  <Link className="learning-map__mid__left__content__title">
-                    Lộ trình học Front-end
-                  </Link>
-                  <p className="learning-map__mid__left__content__desc">
-                    Lập trình viên Front-end là người xây dựng ra giao diện
-                    websites. Trong phần này CODE ZEN sẽ chia sẻ cho bạn lộ
-                    trình để trở thành lập trình viên Front-end nhé.
-                  </p>
+          {dataMap &&
+            dataMap.map((map) => (
+              <div className="learning-map__mid__item">
+                <div className="learning-map__mid__wapper" key={map.id}>
+                  <div className="learning-map__mid__left">
+                    <div className="learning-map__mid__left__content">
+                      <Link
+                        to={`/lo-trinh-hoc/${map.name}`}
+                        className="learning-map__mid__left__content__title"
+                      >
+                        {map.name}
+                      </Link>
+                      <p className="learning-map__mid__left__content__desc">
+                        {map.description}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="learning-map__mid__right">
+                    <Link className="learning-map__mid__left__img">
+                      <img
+                        src="https://files.fullstack.edu.vn/f8-prod/learning-paths/2/63b4642136f3e.png"
+                        alt=""
+                      />
+                    </Link>
+                  </div>
+                </div>
+                <div className="learning-map__mid__bot">
+                  <div className="learning-map__mid__bot__wrapper">
+                    <div className="learning-map__mid__bot__wrapper_content">
+                      <Link>
+                        <Tooltip
+                          className="learning-map__mid__bot__wrapper_content__tooltip"
+                          placement="top"
+                          title={"Học Javascript"}
+                        ></Tooltip>
+                      </Link>
+                      <Link>
+                        <Tooltip
+                          className="learning-map__mid__bot__wrapper_content__tooltip"
+                          placement="top"
+                          title={"Học Javascript"}
+                        >
+                          <Progress
+                            type="circle"
+                            className="learning-map__mid__bot__wrapper_content-language"
+                            percent={50}
+                            size={40}
+                            strokeColor={{
+                              "0%": "#108ee9",
+                              "100%": "#87d068",
+                            }}
+                            format={() => (
+                              <img
+                                src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
+                                alt=""
+                              />
+                            )}
+                          ></Progress>
+                        </Tooltip>
+                      </Link>
+                      <Link>
+                        <Tooltip
+                          className="learning-map__mid__bot__wrapper_content__tooltip"
+                          placement="top"
+                          title={"Học Javascript"}
+                        >
+                          <Progress
+                            type="circle"
+                            className="learning-map__mid__bot__wrapper_content-language"
+                            percent={50}
+                            size={40}
+                            v
+                            format={() => (
+                              <img
+                                src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
+                                alt=""
+                              />
+                            )}
+                          ></Progress>
+                        </Tooltip>
+                      </Link>
+                      <Link>
+                        <Tooltip
+                          className="learning-map__mid__bot__wrapper_content__tooltip"
+                          placement="top"
+                          title={"Học Javascript"}
+                        >
+                          <Progress
+                            type="circle"
+                            className="learning-map__mid__bot__wrapper_content-language"
+                            percent={50}
+                            size={40}
+                            strokeColor={{
+                              "0%": "#108ee9",
+                              "100%": "#87d068",
+                            }}
+                            format={() => (
+                              <img
+                                src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
+                                alt=""
+                              />
+                            )}
+                          ></Progress>
+                        </Tooltip>
+                      </Link>
+                      <Link>
+                        <Tooltip
+                          className="learning-map__mid__bot__wrapper_content__tooltip"
+                          placement="top"
+                          title={"Học Javascript"}
+                        >
+                          <Progress
+                            type="circle"
+                            className="learning-map__mid__bot__wrapper_content-language"
+                            percent={50}
+                            size={40}
+                            strokeColor={{
+                              "0%": "#108ee9",
+                              "100%": "#87d068",
+                            }}
+                            format={() => (
+                              <img
+                                src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
+                                alt=""
+                              />
+                            )}
+                          ></Progress>
+                        </Tooltip>
+                      </Link>
+                      <Link>
+                        <Tooltip
+                          className="learning-map__mid__bot__wrapper_content__tooltip"
+                          placement="top"
+                          title={"Học Javascript"}
+                        >
+                          <Progress
+                            type="circle"
+                            className="learning-map__mid__bot__wrapper_content-language"
+                            percent={50}
+                            size={40}
+                            strokeColor={{
+                              "0%": "#108ee9",
+                              "100%": "#87d068",
+                            }}
+                            format={() => (
+                              <img
+                                src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
+                                alt=""
+                              />
+                            )}
+                          ></Progress>
+                        </Tooltip>
+                      </Link>
+                    </div>
+                    <div className="learning-map__mid__bot__wrapper__view_more">
+                      <Button type="primary">Xem chi tiết</Button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className="learning-map__mid__right">
-                <Link className="learning-map__mid__left__img">
-                  <img
-                    src="https://files.fullstack.edu.vn/f8-prod/learning-paths/2/63b4642136f3e.png"
-                    alt=""
-                  />
-                </Link>
-              </div>
-            </div>
-            <div className="learning-map__mid__bot">
-              <div className="learning-map__mid__bot__wrapper">
-                <div className="learning-map__mid__bot__wrapper_content">
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        v
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                </div>
-                <div className="learning-map__mid__bot__wrapper__view_more">
-                  <Button type="primary">Xem chi tiết</Button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="learning-map__mid__item">
-            <div className="learning-map__mid__wapper">
-              <div className="learning-map__mid__left">
-                <div className="learning-map__mid__left__content">
-                  <Link className="learning-map__mid__left__content__title">
-                    Lộ trình học Back-end
-                  </Link>
-                  <p className="learning-map__mid__left__content__desc">
-                    Trái với Front-end thì lập trình viên Back-end là người làm
-                    việc với dữ liệu, công việc thường nặng tính logic hơn.
-                    Chúng ta sẽ cùng tìm hiểu thêm về lộ trình học Back-end nhé.
-                  </p>
-                </div>
-              </div>
-              <div className="learning-map__mid__right">
-                <Link className="learning-map__mid__left__img">
-                  <img
-                    src="https://files.fullstack.edu.vn/f8-prod/learning-paths/3/63b4641535b16.png"
-                    alt=""
-                  />
-                </Link>
-              </div>
-            </div>
-            <div className="learning-map__mid__bot">
-              <div className="learning-map__mid__bot__wrapper">
-                <div className="learning-map__mid__bot__wrapper_content">
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/1/6200ad9d8a2d8.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                  <Link>
-                    <Tooltip
-                      className="learning-map__mid__bot__wrapper_content__tooltip"
-                      placement="top"
-                      title={"Học Javascript"}
-                    >
-                      <Progress
-                        type="circle"
-                        className="learning-map__mid__bot__wrapper_content-language"
-                        percent={50}
-                        size={40}
-                        strokeColor={{
-                          "0%": "#108ee9",
-                          "100%": "#87d068",
-                        }}
-                        format={() => (
-                          <img
-                            src="https://files.fullstack.edu.vn/f8-prod/courses/7/6200b81f52d83.png"
-                            alt=""
-                          />
-                        )}
-                      ></Progress>
-                    </Tooltip>
-                  </Link>
-                </div>
-                <div className="learning-map__mid__bot__wrapper__view_more">
-                  <Button type="primary">Xem chi tiết</Button>
-                </div>
-              </div>
-            </div>
-          </div>
+            ))}
         </div>
         <div className="learning-map__bot">
           <div className="learning-map__bot__left">
