@@ -3,6 +3,7 @@ package com.toilamanh.toilamanh.service.impl;
 import com.toilamanh.toilamanh.dto.request.ChangePasswordRequest;
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
+import com.toilamanh.toilamanh.dto.request.SocialRequest;
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
 import com.toilamanh.toilamanh.dto.response.RegisterResponse;
@@ -49,7 +50,6 @@ public class AuthServiceImpl implements AuthService {
             Optional<User> user_ = userRepository.findByUserNameAndActive(registerRequest.getUsername(), 1);
             Optional<User> userNotActive = userRepository.findByUserNameAndActiveAndEmail(registerRequest.getUsername(), 0, registerRequest.getEmail());
             Optional<User> checkAccount = userRepository.findByEmail(registerRequest.getEmail());
-
             if (userNotActive.isPresent()) {
                 String OTP = Utils.generateOTP();
                 otpRepositoryObjectFactory.getObject().deleteAllByEmail(registerRequest.getEmail());
@@ -57,7 +57,6 @@ public class AuthServiceImpl implements AuthService {
                 sendOTPEmail(registerRequest.getEmail(), OTP);
                 throw new UserNotActive("Người dùng chưa được kích hoạt vui lòng kích hoạt tài khoản thông qua OTP được gửi trong email.");
             }
-
             if (checkAccount.isPresent()) {
                 throw new ExitsException("Email này đã tồn tại tài khoản trong hệ thống vui lòng kiểm tra lại.");
             }
@@ -70,14 +69,9 @@ public class AuthServiceImpl implements AuthService {
             newUser.setPassword(objectFactory.getObject().encode(registerRequest.getPassword()));
             User saveUser = userRepository.save(newUser);
             UserDTO userDTO = mapperObjectFactory.getObject().map(saveUser, UserDTO.class);
-
             String OTP = Utils.generateOTP();
-            // Save OTP WITH DB
             saveOTP(registerRequest.getEmail(), OTP);
-
-            // SEND OTP WITH EMAIL
             sendOTPEmail(registerRequest.getEmail(), OTP);
-
             return RegisterResponse.builder()
                     .status(HttpStatus.CREATED.value())
                     .message("Thêm người dùng thành công. Chúng tôi đã gửi OTP tới email của bạn vui lòng xác nhận OTP để hoàn tất quá trình đăng ký")
@@ -173,6 +167,63 @@ public class AuthServiceImpl implements AuthService {
             throw new ServerException("An error from server with api handleChangePassword: " + e.getMessage());
         }
     }
+
+    @Override
+    public LoginResponse handleLoginSocial(SocialRequest socialRequest) {
+        try {
+            Optional<User> user = userRepository.findUserByEmailAndProviderId(socialRequest.getEmail(), socialRequest.getProviderId());
+            if (user.isPresent()) {
+                var token = jwtUtilsObjectFactory.getObject().generateToken(user.get());
+                return LoginResponse.builder()
+                        .token(token)
+                        .status(HttpStatus.OK.value())
+                        .role(user.get().getRole())
+                        .expirationTime("60 Days")
+                        .message("Đăng nhập tài khoản thành công.")
+                        .build();
+            }else {
+                // tim xem co email do chua
+                Optional<User> findUserEqualsEmail = userRepository.findByEmailAndActive(socialRequest.getEmail(), 1);
+                if (findUserEqualsEmail.isPresent()) {
+                    findUserEqualsEmail.get().setProviderId(socialRequest.getProviderId());
+                    if (findUserEqualsEmail.get().getAvatar().isEmpty()) {
+                        findUserEqualsEmail.get().setAvatar(socialRequest.getAvatar());
+                    }
+                    userRepository.save(findUserEqualsEmail.get());
+                }else {
+                    User user1 = new User();
+                    user1.setAvatar(socialRequest.getAvatar());
+                    user1.setProviderId(socialRequest.getProviderId());
+                    user1.setEmail(socialRequest.getEmail());
+                    user1.setUserName(socialRequest.getFullName());
+                    user1.setActive(1);
+                    userRepository.save(user1);
+
+                }
+                Optional<User> userFind = userRepository.findUserByEmailAndProviderId(socialRequest.getEmail(), socialRequest.getProviderId());
+                if (userFind.isPresent()) {
+                    var token = jwtUtilsObjectFactory.getObject().generateToken(userFind.get());
+                    return LoginResponse.builder()
+                            .token(token)
+                            .status(HttpStatus.OK.value())
+                            .role(userFind.get().getRole())
+                            .expirationTime("60 Days")
+                            .message("Đăng nhập tài khoản thành công.")
+                            .build();
+                }else {
+                    return LoginResponse.builder()
+                            .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                            .message("Đăng nhập không thành công, đã xảy ra lỗi từ phía máy chủ")
+                            .build();
+                }
+
+            }
+        }catch (Exception ex) {
+            throw ex;
+        }
+    }
+
+
     @Override
     public void sendOTPEmail(String toEmail, String otp) {
         try {

@@ -33,8 +33,10 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/auth/**",  "/api/v1/**").permitAll()
+                        .requestMatchers("/","/auth/**",  "/api/v1/**").permitAll()
                         .anyRequest().authenticated())
+                .oauth2Login(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

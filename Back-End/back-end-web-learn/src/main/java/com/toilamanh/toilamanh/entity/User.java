@@ -18,7 +18,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "user_name", nullable = false,  unique = true)
     private String userName;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Column(name = "gender")
@@ -30,11 +30,8 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "point")
     private Double point = 0D;
 
-    @Column(name = "facebook")
-    private String facebook;
-
-    @Column(name = "google")
-    private String google;
+    @Column(name = "providerId")
+    private String providerId;
 
     @Column(name = "phonenumber")
     private String phonenumber;

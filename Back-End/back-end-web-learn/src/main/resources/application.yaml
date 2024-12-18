@@ -1,6 +1,16 @@
 server:
   port: 8080
 spring:
+  main:
+    banner-mode: off
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 47916404883-mi6ii5eh6fn82ulqdojrvjohg32fnkfr.apps.googleusercontent.com
+            client-secret: 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
+            scope: email,profile
   application:
     name: project-website-learn-online
   datasource:
@@ -37,7 +47,10 @@ youtube:
   api_url: https://www.googleapis.com/youtube/v3/videos
 
 order_step: 10
-
+logging:
+  level:
+    root:
+      warn
 #root
 
 #docker run --name mysql-8.0.36 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root -d mysql:8.0.36-debian

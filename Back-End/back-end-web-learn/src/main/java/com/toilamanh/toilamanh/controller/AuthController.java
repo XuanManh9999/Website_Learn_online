@@ -198,5 +198,15 @@ public class AuthController {
 
 
 
+    @PostMapping(value = "/social-login")
+    public ResponseEntity<?> handleLoginSocial(@RequestBody SocialRequest socialRequest) {
+        if (socialRequest.getEmail().isEmpty() || socialRequest.getProviderId().isEmpty()) {
+            return ResponseEntity.badRequest().body(ApiResponse.builder()
+                    .status(HttpStatus.BAD_REQUEST.value())
+                    .message("Email/ProviderId Không được rỗng")
+                    .build());
+        }
+        return ResponseEntity.ok().body(authService.handleLoginSocial(socialRequest));
+    }
 }
 

@@ -3,6 +3,7 @@ package com.toilamanh.toilamanh.service.interfac;
 import com.toilamanh.toilamanh.dto.request.ChangePasswordRequest;
 import com.toilamanh.toilamanh.dto.request.LoginRequest;
 import com.toilamanh.toilamanh.dto.request.RegisterRequest;
+import com.toilamanh.toilamanh.dto.request.SocialRequest;
 import com.toilamanh.toilamanh.dto.response.ApiResponse;
 import com.toilamanh.toilamanh.dto.response.LoginResponse;
 import com.toilamanh.toilamanh.dto.response.RegisterResponse;
@@ -20,4 +21,5 @@ public interface AuthService {
     void sendPasswordUser(String email, String otp);
     ApiResponse handleChangePassword(ChangePasswordRequest changePasswordRequest, String token);
 
+    LoginResponse handleLoginSocial(SocialRequest socialRequest);
 }
